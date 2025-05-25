@@ -167,8 +167,10 @@
         </div>
     </header>
     <!-- Header Section End -->
-
+<div class="container">
     @yield('main')
+</div>
+    
 
     <!-- Footer Section Begin -->
     <footer class="footer spad">
