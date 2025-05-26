@@ -18,4 +18,7 @@ Route::get('/', function () {
 Route::get('/contact', function () {
     return view('viewers.blog.blog-detail');
 });
+Route::get('/admin', function () {
+    return view('admin.stastic.stastic');
+});
 
