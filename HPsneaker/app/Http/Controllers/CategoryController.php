@@ -9,12 +9,18 @@ class CategoryController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        //
-        $categories = Category::all();
-        return view('admin.category.index', compact('categories'));
+public function index(Request $request)
+{
+    $query = Category::query();
+
+    if ($request->filled('keyword')) {
+        $query->where('name', 'like', '%' . $request->keyword . '%');
     }
+
+    $categories = $query->orderBy('id', 'desc')->paginate(10);
+
+    return view('admin.category.index', compact('categories'));
+}
 
     /**
      * Show the form for creating a new resource.

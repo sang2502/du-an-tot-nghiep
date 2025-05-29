@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ProductController;
 // Route cho Admin
 Route::prefix('admin')->group(function () {
     Route::get('', [CategoryController::class, 'index'])->name('category.index');
@@ -15,7 +16,16 @@ Route::prefix('admin')->group(function () {
         Route::get('delete/{id}', [CategoryController::class, 'destroy'])->name('category.delete');
     });
 
-    // ... các resource khác cho admin
+    // Route cho Sản phẩm
+    Route::prefix('product')->group(function () {
+        Route::get('', [ProductController::class, 'index'])->name('product.index');
+        Route::get('create', [ProductController::class, 'create'])->name('product.create');
+        Route::post('store', [ProductController::class, 'store'])->name('product.store');
+        Route::get('show/{id}', [ProductController::class, 'show'])->name('product.show');
+        Route::get('edit/{id}', [ProductController::class, 'edit'])->name('product.edit');
+        Route::post('update/{id}', [ProductController::class, 'update'])->name('product.update');
+        Route::get('delete/{id}', [ProductController::class, 'destroy'])->name('product.delete');
+    });
 });
 // Route cho Trang chủ
 Route::get('/', function () {
