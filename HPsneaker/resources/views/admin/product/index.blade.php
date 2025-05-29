@@ -12,21 +12,20 @@
     {{-- end Thông báo thành công --}}
 
     <div class="page-heading">
-        <h3>Danh mục sản phẩm</h3>
+        <h3>Danh sách sản phẩm</h3>
     </div>
-    <!-- Bảng Danh mục sản phẩm -->
+    <!-- Bảng Danh sách sản phẩm -->
     <section class="section">
         <div class="row" id="table-head">
             <div class="col-12">
                 <div class="card-content">
                     {{-- Nút thêm --}}
                     <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap">
-                        <a href="#" class="btn btn-primary mb-2 mb-md-0" data-bs-toggle="modal"
-                            data-bs-target="#addCategoryModal">
-                            + Thêm danh mục
+                        <a href="{{route('product.create')}}" class="btn btn-primary mb-2 mb-md-0" data-bs-toggle="modal">
+                            + Thêm sản phẩm
                         </a>
                         {{-- Nút tìm kiếm --}}
-                        <form action="{{ route('category.index') }}" method="GET" class="d-flex w-auto"
+                        <form action="{{ route('product.index') }}" method="GET" class="d-flex w-auto"
                             style="max-width: 200px;">
                             <input type="text" name="keyword" class="form-control form-control-sm me-2"
                                 placeholder="Tìm theo tên..." value="{{ request('keyword') }}">
@@ -41,35 +40,47 @@
                             <thead class="table-white">
                                 <tr>
                                     <th>ID</th>
+                                    <th>Danh mục</th>
                                     <th>Tên</th>
-                                    <th>Slug</th>
+                                    <th>Giá</th>
+                                    <th>Hình ảnh</th>
                                     <th>Trạng thái</th>
                                     <th>Ngày tạo</th>
-                                    <th>Ngày cập nhật</th>
                                     <th class="text-center">Hành động</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($categories as $category)
+                                @foreach($products as $product)
                                     <tr>
-                                        <td>{{ $category->id }}</td>
-                                        <td>{{ $category->name }}</td>
-                                        <td>{{ $category->slug }}</td>
+                                        <td>{{ $product->id }}</td>
+                                        <td>{{ $product->category ? $product->category->name : '' }}</td>
+                                        <td>{{ $product->name }}</td>
+                                        <td>{{ $product->price }}VND</td>
                                         <td>
-                                            @if($category->status == 1)
-                                                <span class="badge bg-success rounded-pill px-3 py-2">Hiển thị</span>
+                                            @if($product->thumbnail)
+                                                <img src="{{ asset($product->thumbnail) }}" alt="Ảnh sản phẩm" style="max-width: 80px;">
                                             @else
-                                                <span class="badge bg-danger rounded-pill px-3 py-2">Ẩn</span>
+                                                Không có ảnh
                                             @endif
                                         </td>
-                                        <td>{{ $category->created_at }}</td>
-                                        <td>{{ $category->updated_at }}</td>
+                                        <td>
+                                            @if($product->status == 1)
+                                                <span class="badge bg-success">Hiển thị</span>
+                                            @else
+                                                <span class="badge bg-secondary">Ẩn</span>
+                                            @endif
+                                        </td>
+                                        <td>{{ $product->created_at->format('d/m/Y')}}</td>
                                         <td class="text-center">
-                                            <a href="{{ route('category.edit', $category->id) }}"
+                                            <a href="{{ route('product.show', $product->id) }}"
+                                                class="btn btn-sm btn-info rounded-pill px-3 py-1 d-inline-flex align-items-center me-1">
+                                                <i class="bi bi-eye me-1"></i> Chi tiết
+                                            </a>
+                                            <a href="{{ route('product.edit', $product->id) }}"
                                                 class="btn btn-sm btn-warning rounded-pill px-3 py-1 d-inline-flex align-items-center me-1">
                                                 <i class="bi bi-pencil-square me-1"></i> Sửa
                                             </a>
-                                            <a href="{{ route('category.delete', $category->id) }}"
+                                            <a href="{{ route('product.delete', $product->id) }}"
                                                 onclick="return confirm('Bạn có chắc muốn xoá không?')"
                                                 class="btn btn-sm btn-danger rounded-pill px-3 py-1 d-inline-flex align-items-center">
                                                 <i class="bi bi-trash me-1"></i> Xóa
@@ -80,13 +91,11 @@
                             </tbody>
                         </table>
                     </div>
-                    <div class="mt-3">{{ $categories->appends(request()->query())->links() }}</div>
+                    {{-- <div class="mt-3">{{ $categories->appends(request()->query())->links() }}</div> --}}
                 </div>
             </div>
         </div>
         </div>
     </section>
     {{-- End Danh mục sản phẩm --}}
-
-    @include('admin.category.create')
 @endsection
