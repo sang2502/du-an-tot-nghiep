@@ -111,7 +111,7 @@
                         <li class="sidebar-item">
                             <a href="{{ url('admin/voucher') }}" class='sidebar-link'>
                                 <i class="bi bi-ticket-perforated-fill"></i>
-                                <span>Voucher</span>
+                                <span>Mã giảm giá</span>
                             </a>
                         </li>
                         <li class="sidebar-item">
