@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductImageController;
+use App\Http\Controllers\UserController;
 // Route cho Admin
 Route::prefix('admin')->group(function () {
     Route::get('', [CategoryController::class, 'index'])->name('category.index');
@@ -35,6 +36,15 @@ Route::prefix('admin')->group(function () {
             Route::get('delete/{id}', [ProductImageController::class, 'destroy'])->name('product.image.delete');
         });
 
+    });
+    // Route cho Quản lý người dùng
+    Route::prefix('user')->group(function () {
+        Route::get('', [App\Http\Controllers\UserController::class, 'index'])->name('user.index');
+        Route::get('create', [App\Http\Controllers\UserController::class, 'create'])->name('user.create');
+        Route::post('store', [App\Http\Controllers\UserController::class, 'store'])->name('user.store');
+        Route::get('edit/{id}', [App\Http\Controllers\UserController::class, 'edit'])->name('user.edit');
+        Route::post('update/{id}', [App\Http\Controllers\UserController::class, 'update'])->name('user.update');
+        Route::get('delete/{id}', [App\Http\Controllers\UserController::class, 'destroy'])->name('user.delete');
     });
 
 });
