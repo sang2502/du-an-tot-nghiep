@@ -21,17 +21,20 @@
                 <div class="card-content">
                     {{-- Nút thêm --}}
                     <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap">
-                        <a href="{{route('product.create')}}" class="btn btn-primary mb-2 mb-md-0" data-bs-toggle="modal">
-                            + Thêm sản phẩm
-                        </a>
-                        {{-- Nút tìm kiếm --}}
+                        <div class="d-flex gap-2 mb-2 mb-md-0">
+                            <a href="{{ route('product.create') }}" class="btn btn-primary" data-bs-toggle="modal">
+                                + Thêm sản phẩm
+                            </a>
+                            <a href="{{ route('product.image.index') }}" class="btn btn-outline-secondary">
+                                <i class="bi bi-images"></i> Kho ảnh
+                            </a>
+                        </div>
                         <form action="{{ route('product.index') }}" method="GET" class="d-flex w-auto"
                             style="max-width: 200px;">
                             <input type="text" name="keyword" class="form-control form-control-sm me-2"
                                 placeholder="Tìm theo tên..." value="{{ request('keyword') }}">
                             <button type="submit" class="btn btn-outline-primary btn-sm">Tìm kiếm</button>
                         </form>
-
                     </div>
 
                     <div class="table-responsive">
@@ -58,7 +61,8 @@
                                         <td>{{ $product->price }}VND</td>
                                         <td>
                                             @if($product->thumbnail)
-                                                <img src="{{ asset($product->thumbnail) }}" alt="Ảnh sản phẩm" style="max-width: 80px;">
+                                                <img src="{{ asset($product->thumbnail) }}" alt="Ảnh sản phẩm"
+                                                    style="max-width: 80px;">
                                             @else
                                                 Không có ảnh
                                             @endif
@@ -91,7 +95,7 @@
                             </tbody>
                         </table>
                     </div>
-                    {{-- <div class="mt-3">{{ $categories->appends(request()->query())->links() }}</div> --}}
+                    <div class="mt-3">{{ $products->appends(request()->query())->links() }}</div>
                 </div>
             </div>
         </div>

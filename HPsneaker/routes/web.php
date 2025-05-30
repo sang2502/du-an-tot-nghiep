@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProductImageController;
 // Route cho Admin
 Route::prefix('admin')->group(function () {
     Route::get('', [CategoryController::class, 'index'])->name('category.index');
@@ -25,7 +26,17 @@ Route::prefix('admin')->group(function () {
         Route::get('edit/{id}', [ProductController::class, 'edit'])->name('product.edit');
         Route::post('update/{id}', [ProductController::class, 'update'])->name('product.update');
         Route::get('delete/{id}', [ProductController::class, 'destroy'])->name('product.delete');
+
+        //Route cho Kho ảnh
+        Route::prefix('image')->group(function () {
+            Route::get('', [ProductImageController::class, 'index'])->name('product.image.index');
+            Route::post('store', [ProductImageController::class, 'store'])->name('product.image.store');
+            Route::get('{product_id}/detail', [ProductImageController::class, 'show'])->name('product.image.detail');
+            Route::get('delete/{id}', [ProductImageController::class, 'destroy'])->name('product.image.delete');
+        });
+
     });
+
 });
 // Route cho Trang chủ
 Route::get('/', function () {
