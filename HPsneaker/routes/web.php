@@ -53,6 +53,7 @@ Route::prefix('admin')->group(function () {
             Route::get('edit/{id}', [UserController::class, 'edit'])->name('user.edit');
             Route::post('update/{id}', [UserController::class, 'update'])->name('user.update');
             Route::get('delete/{id}', [UserController::class, 'destroy'])->name('user.delete');
+            Route::get('show/{id}', [UserController::class, 'show'])->name('user.show');
         });
     });
 });

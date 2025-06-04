@@ -43,16 +43,8 @@
                                     <th>ID</th>
                                     <th>Tài khoản </th>
                                     <th>Email </th>
-                                    <th>Mật khẩu</th>
-                                    <th>SDT</th>
-                                    <th>Giới tính </th>
-                                    <th>Ngày sinh </th>
-                                    <th>Địa chỉ</th>
-                                    <th>Điểm</th>
-                                    <th>Cấp bậc</th>
                                     <th>Quyền </th>
                                     <th>Ngày tạo</th>
-                                    <th>Ngày cập nhật</th>
                                     <th class="text-center">Hành động</th>
                                 </tr>
                             </thead>
@@ -62,17 +54,13 @@
                                         <td>{{ $user->id }}</td>
                                         <td>{{ $user->name}}</td>
                                         <td>{{ $user->email }}</td>
-                                        <td>{{ $user->password }}</td>
-                                        <td>{{ $user->phone }}</td>
-                                        <td>{{ $user->gender }}</td>
-                                        <td>{{ $user->birth_date }}</td>
-                                        <td>{{ $user->address }}</td>
-                                        <td>{{ $user->points }}</td>
-                                        <td>{{ $user->tier }}</td>
                                         <td>{{ $user->role_id ? $user->role->name : ''  }}</td>
                                         <td>{{ $user->created_at->format('d/m/Y')}}</td>
-                                        <td>{{ $user->updated_at->format('d/m/Y')}}</td>
                                         <td class="text-center">
+                                            <a href="{{ route('user.show', $user->id) }}"
+                                                class="btn btn-sm btn-info rounded-pill px-3 py-1 d-inline-flex align-items-center me-1">
+                                                <i class="bi bi-eye me-1"></i> Chi tiết
+                                            </a>
                                             <a href="{{ route('user.edit', $user->id) }}"
                                                 class="btn btn-sm btn-warning rounded-pill px-3 py-1 d-inline-flex align-items-center me-1">
                                                 <i class="bi bi-pencil-square me-1"></i> Sửa
