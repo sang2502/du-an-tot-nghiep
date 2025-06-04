@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\client;
+use App\Http\Controllers\Controller;
 
-use App\Models\Color;
 use Illuminate\Http\Request;
 
-class ColorController extends Controller
+class PosOrderController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -34,7 +34,7 @@ class ColorController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Color $rc)
+    public function show(string $id)
     {
         //
     }
@@ -42,7 +42,7 @@ class ColorController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit( $rc)
+    public function edit(string $id)
     {
         //
     }
@@ -50,7 +50,7 @@ class ColorController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request,  $rc)
+    public function update(Request $request, string $id)
     {
         //
     }
@@ -58,7 +58,7 @@ class ColorController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy( $rc)
+    public function destroy(string $id)
     {
         //
     }

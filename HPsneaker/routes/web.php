@@ -1,11 +1,11 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\LoginController;
-use App\Http\Controllers\ProductController;
-use App\Http\Controllers\ProductImageController;
-use App\Http\Controllers\UserController;
+use App\Http\Controllers\admin\CategoryController;
+use App\Http\Controllers\admin\LoginController;
+use App\Http\Controllers\admin\ProductController;
+use App\Http\Controllers\admin\ProductImageController;
+use App\Http\Controllers\admin\UserController;
 // Route cho Admin
 Route::prefix('admin')->group(function () {
     // Form login và xử lý login KHÔNG cần middleware
@@ -47,17 +47,17 @@ Route::prefix('admin')->group(function () {
 
         // Quản lý người dùng
         Route::prefix('user')->group(function () {
-            Route::get('', [App\Http\Controllers\UserController::class, 'index'])->name('user.index');
-            Route::get('create', [App\Http\Controllers\UserController::class, 'create'])->name('user.create');
-            Route::post('store', [App\Http\Controllers\UserController::class, 'store'])->name('user.store');
-            Route::get('edit/{id}', [App\Http\Controllers\UserController::class, 'edit'])->name('user.edit');
-            Route::post('update/{id}', [App\Http\Controllers\UserController::class, 'update'])->name('user.update');
-            Route::get('delete/{id}', [App\Http\Controllers\UserController::class, 'destroy'])->name('user.delete');
+            Route::get('', [UserController::class, 'index'])->name('user.index');
+            Route::get('create', [UserController::class, 'create'])->name('user.create');
+            Route::post('store', [UserController::class, 'store'])->name('user.store');
+            Route::get('edit/{id}', [UserController::class, 'edit'])->name('user.edit');
+            Route::post('update/{id}', [UserController::class, 'update'])->name('user.update');
+            Route::get('delete/{id}', [UserController::class, 'destroy'])->name('user.delete');
         });
     });
 });
 
 // Route cho Trang chủ
 Route::get('/', function () {
-    return view('welcome');
-})->name('home');
+    return view('viewers.home.index');
+});
