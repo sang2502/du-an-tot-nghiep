@@ -8,7 +8,7 @@
         </div>
         <div class="card-body">
             <div class="d-flex flex-column gap-2">
-                <div class="border-bottom pb-2"><strong>Họ và tên:</strong> {{ $user->name }}</div>
+                <div class="border-bottom pb-2"><strong>Tài khoản:</strong> {{ $user->name }}</div>
                 <div class="border-bottom pb-2"><strong>Email:</strong> {{ $user->email }}</div>
                 <div class="border-bottom pb-2"><strong>Số điện thoại:</strong> {{ $user->phone }}</div>
                 <div class="border-bottom pb-2"><strong>Giới tính:</strong>
