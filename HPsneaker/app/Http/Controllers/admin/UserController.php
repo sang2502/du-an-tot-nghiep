@@ -74,4 +74,15 @@ class UserController extends Controller
         ]);
         return redirect()->route('user.index')->with('success', 'Cập nhật thành công');
     }
+    public function destroy($id)
+    {
+        $user = User::findOrFail($id);
+        $user->delete();
+        return redirect()->route('user.index')->with('success', 'Xóa người dùng thành công.');
+    }
+    public function show($id)
+    {
+        $user = User::findOrFail($id);
+        return view('admin.user.detail', compact('user'));
+    }
 }
