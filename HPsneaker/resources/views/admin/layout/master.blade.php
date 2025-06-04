@@ -139,7 +139,7 @@
                             </a>
                         </li>
                         <li class="sidebar-item">
-                            <a href="{{ url('admin/logout') }}" class='sidebar-link'>
+                            <a href="{{ route('admin.logout') }}" onclick="return confirm('Bạn có chắc muốn đăng xuất?')" class='sidebar-link'>
                                 <i class="bi bi-box-arrow-right"></i>
                                 <span>Đăng xuất</span>
                             </a>
