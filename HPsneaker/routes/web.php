@@ -2,10 +2,12 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\admin\CategoryController;
+use App\Http\Controllers\admin\ContactController;
 use App\Http\Controllers\admin\LoginController;
 use App\Http\Controllers\admin\ProductController;
 use App\Http\Controllers\admin\ProductImageController;
 use App\Http\Controllers\admin\UserController;
+
 // Route cho Admin
 Route::prefix('admin')->group(function () {
     // Form login và xử lý login KHÔNG cần middleware
@@ -54,6 +56,13 @@ Route::prefix('admin')->group(function () {
             Route::post('update/{id}', [UserController::class, 'update'])->name('user.update');
             Route::get('delete/{id}', [UserController::class, 'destroy'])->name('user.delete');
             Route::get('show/{id}', [UserController::class, 'show'])->name('user.show');
+        });
+
+        // Quản lý contact
+        Route::prefix('contact')->group(function () {
+            Route::get('', [ContactController::class, 'index'])->name('contact.index');
+            Route::get('delete/{id}', [ContactController::class, 'delete'])->name('contact.delete');
+            Route::get('show/{id}', [ContactController::class, 'show'])->name('contact.show');
         });
     });
 });
