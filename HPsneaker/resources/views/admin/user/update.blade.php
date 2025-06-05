@@ -13,7 +13,7 @@
                     @method('POST') {{-- hoặc PUT nếu dùng Route::put --}}
 
                     <div class="mb-3">
-                        <label class="form-label">Họ và tên</label>
+                        <label class="form-label">Tài Khoản</label>
                         <input type="text" class="form-control" name="name" value="{{ $user->name }}" required>
                     </div>
 
@@ -61,6 +61,15 @@
                         <select class="form-select" name="tier">
                             <option value="basic" @if($user->tier == 'basic') selected @endif>Basic</option>
                             <option value="premium" @if($user->tier == 'premium') selected @endif>Premium</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Vai trò</label>
+                        <select class="form-select" name="role_id">
+                            <option value="1" @if($user->role_id == 1) selected @endif>Admin</option>
+                            <option value="2" @if($user->role_id == 2) selected @endif>Nhân viên</option>
+                            <option value="3" @if($user->role_id == 3) selected @endif>Người dùng</option>
                         </select>
                     </div>
 

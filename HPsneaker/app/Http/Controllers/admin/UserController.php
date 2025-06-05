@@ -30,12 +30,6 @@ class UserController extends Controller
     }
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8|confirmed',
-        ]);
-
         User::create([
             'name' => $request->name,
             'email' => $request->email,
@@ -59,8 +53,8 @@ class UserController extends Controller
     }
     public function update(Request $request, string $id)
     {
-        //
-        user::find($id)->update([
+        $user = User::findOrFail($id);
+        $user->update([
             'name' => $request->name,
             'email' => $request->email,
             'password' => $request->password ? bcrypt($request->password) : null, // Chỉ cập nhật mật khẩu nếu có giá trị
@@ -71,7 +65,7 @@ class UserController extends Controller
             'points' => $request->points ?? 0, // Mặc định là 0 nếu không có giá trị
             'tier' => $request->tier ?? 'basic', // Mặc định là 'basic' nếu không có giá trị
             'role_id' => $request->role_id, // Cập nhật ID vai trò
-        ]);
+    ]);
         return redirect()->route('user.index')->with('success', 'Cập nhật thành công');
     }
     public function destroy($id)
@@ -82,7 +76,8 @@ class UserController extends Controller
     }
     public function show($id)
     {
+        $role = Role::all();
         $user = User::findOrFail($id);
-        return view('admin.user.detail', compact('user'));
+        return view('admin.user.detail', compact('user' , 'role'));
     }
 }
