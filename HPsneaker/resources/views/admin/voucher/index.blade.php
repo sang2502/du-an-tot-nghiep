@@ -12,21 +12,21 @@
     {{-- end Thông báo thành công --}}
 
     <div class="page-heading">
-        <h3>Danh sách tài khoản người dùng</h3>
+        <h3>Danh mục mã giảm giá</h3>
     </div>
-    <!-- Bảng Danh sách tài khoản người dùng -->
+    <!-- Bảng Danh mục sản phẩm -->
     <section class="section">
         <div class="row" id="table-head">
             <div class="col-12">
                 <div class="card-content">
                     {{-- Nút thêm --}}
                     <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap">
-                        <a href="" class="btn btn-primary mb-2 mb-md-0" data-bs-toggle="modal"
-                            data-bs-target="#addUserModal">
-                            + Thêm tài khoản
+                        <a href="#" class="btn btn-primary mb-2 mb-md-0" data-bs-toggle="modal"
+                            data-bs-target="#addVoucherModal">
+                            + Thêm mã giảm giá
                         </a>
                         {{-- Nút tìm kiếm --}}
-                        <form action="{{ route('user.index') }}" method="GET" class="d-flex w-auto"
+                        <form action="{{ route('voucher.index') }}" method="GET" class="d-flex w-auto"
                             style="max-width: 200px;">
                             <input type="text" name="keyword" class="form-control form-control-sm me-2"
                                 placeholder="Tìm theo tên..." value="{{ request('keyword') }}">
@@ -36,36 +36,37 @@
                     </div>
 
                     <div class="table-responsive">
-                        {{-- Bảng tài khoản --}}
+                        {{-- Bảng voucher --}}
                         <table class="table table-striped table-bordered align-middle">
                             <thead class="table-white">
                                 <tr>
                                     <th>ID</th>
-                                    <th>Tài khoản </th>
-                                    <th>Email </th>
-                                    <th>Quyền </th>
-                                    <th>Ngày tạo</th>
+                                    <th>Mã</th>
+                                    <th>Mô tả</th>
+                                    <th>Ngày bắt đầu</th>
+                                    <th>Ngày kết thúc</th>
                                     <th class="text-center">Hành động</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($users as $user)
+                                @foreach($vouchers as $voucher)
                                     <tr>
-                                        <td>{{ $user->id }}</td>
-                                        <td>{{ $user->name}}</td>
-                                        <td>{{ $user->email }}</td>
-                                        <td>{{ $user->role_id ? $user->role->name : ''  }}</td>
-                                        <td>{{ $user->created_at->format('d/m/Y')}}</td>
+                                        <td>{{ $voucher->id }}</td>
+                                        <td>{{ $voucher->code }}</td>
+                                        <td>{{ $voucher->description }}</td>
+                                        <td>{{ $voucher->valid_from }}</td>
+                                        <td>{{ $voucher->valid_to }}</td>
+
                                         <td class="text-center">
-                                            <a href="{{ route('user.show', $user->id) }}"
+                                            <a href="{{ route('voucher.show', $voucher->id) }}"
                                                 class="btn btn-sm btn-info rounded-pill px-3 py-1 d-inline-flex align-items-center me-1">
                                                 <i class="bi bi-eye me-1"></i> Chi tiết
                                             </a>
-                                            <a href="{{ route('user.edit', $user->id) }}"
+                                            <a href="{{ route('voucher.edit', $voucher->id) }}"
                                                 class="btn btn-sm btn-warning rounded-pill px-3 py-1 d-inline-flex align-items-center me-1">
                                                 <i class="bi bi-pencil-square me-1"></i> Sửa
                                             </a>
-                                            <a href="{{ route('user.delete', $user->id) }}"
+                                            <a href="{{ route('voucher.delete', $voucher->id) }}"
                                                 onclick="return confirm('Bạn có chắc muốn xoá không?')"
                                                 class="btn btn-sm btn-danger rounded-pill px-3 py-1 d-inline-flex align-items-center">
                                                 <i class="bi bi-trash me-1"></i> Xóa
@@ -76,12 +77,13 @@
                             </tbody>
                         </table>
                     </div>
-                    <div class="mt-3">{{ $users->appends(request()->query())->links() }}</div>
+                    <div class="mt-3">{{ $vouchers->appends(request()->query())->links() }}</div>
                 </div>
             </div>
         </div>
         </div>
     </section>
     {{-- End Danh mục sản phẩm --}}
-    @include('admin.user.create')
+
+    @include('admin.voucher.create')
 @endsection
