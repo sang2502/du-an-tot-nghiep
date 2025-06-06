@@ -1,4 +1,4 @@
-@extends('viewers.layout.master')
+@extends('client.layout.master')
 @section('main')
 <!-- Blog Details Hero Begin -->
     <section class="blog-details-hero set-bg" data-setbg="img/blog/details/details-hero.jpg">

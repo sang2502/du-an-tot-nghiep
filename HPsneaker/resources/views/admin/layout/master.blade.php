@@ -99,7 +99,7 @@
                         <li class="sidebar-item">
                             <a href="{{ url('admin/category') }}" class='sidebar-link'>
                                 <i class="bi bi-grid-fill"></i>
-                                <span>Danh mục</span>
+                                <span>Danh mục </span>
                             </a>
                         </li>
                         <li class="sidebar-item">
@@ -126,12 +126,24 @@
                                 <span>Contact</span>
                             </a>
                         </li>
-                        <li class="sidebar-item">
-                            <a href="{{ url('admin/post') }}" class='sidebar-link'>
+                        <li class="sidebar-item has-sub">
+                            <a href="#" class='sidebar-link'>
                                 <i class="bi bi-journal-text"></i>
                                 <span>Bài viết</span>
                             </a>
+                            <ul class="submenu">
+                                <li class="submenu-item">
+                                    <a href="{{ url('admin/blog-category') }}">Danh mục bài viết</a>
+                                </li>
+                                <li class="submenu-item">
+                                    <a href="{{ url('admin/Blog') }}">Bài viết</a>   
+                                </li>
+                                <li class="submenu-item">
+                                    <a href="{{ url('admin') }}">Tag bài viết</a>
+                                </li>
+                            </ul>
                         </li>
+
                         <li class="sidebar-item">
                             <a href="{{ url('admin/comment') }}" class='sidebar-link'>
                                 <i class="bi bi-chat-left-text-fill"></i>
@@ -145,7 +157,8 @@
                             </a>
                         </li>
                         <li class="sidebar-item">
-                            <a href="{{ route('admin.logout') }}" onclick="return confirm('Bạn có chắc muốn đăng xuất?')" class='sidebar-link'>
+                            <a href="{{ route('admin.logout') }}"
+                                onclick="return confirm('Bạn có chắc muốn đăng xuất?')" class='sidebar-link'>
                                 <i class="bi bi-box-arrow-right"></i>
                                 <span>Đăng xuất</span>
                             </a>

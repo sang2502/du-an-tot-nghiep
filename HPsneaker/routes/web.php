@@ -8,6 +8,7 @@ use App\Http\Controllers\admin\ProductController;
 use App\Http\Controllers\admin\ProductImageController;
 use App\Http\Controllers\admin\UserController;
 use App\Http\Controllers\admin\VoucherController;
+use App\Http\Controllers\admin\BlogCategoryController;
 
 // Route cho Admin
 Route::prefix('admin')->group(function () {
@@ -76,10 +77,21 @@ Route::prefix('admin')->group(function () {
             Route::get('delete/{id}', [ContactController::class, 'delete'])->name('contact.delete');
             Route::get('show/{id}', [ContactController::class, 'show'])->name('contact.show');
         });
+        // Quản lý Danh mục bài viết
+        Route::prefix('blog-category')->group(function () {
+            Route::get('', [BlogCategoryController::class, 'index'])->name('blog_category.index');
+            Route::get('create', [BlogCategoryController::class, 'create'])->name('blog_category.create');
+            Route::post('store', [BlogCategoryController::class, 'store'])->name('blog_category.store');
+            Route::get('edit/{id}', [BlogCategoryController::class, 'edit'])->name('blog_category.edit');
+            Route::post('update/{id}', [BlogCategoryController::class, 'update'])->name('blog_category.update');
+            Route::get('delete/{id}', [BlogCategoryController::class, 'destroy'])->name('blog_category.delete');
+        });
+
+
     });
 });
 
 // Route cho Trang chủ
 Route::get('/', function () {
-    return view('viewers.home.index');
+    return view('client.home.index');
 });
