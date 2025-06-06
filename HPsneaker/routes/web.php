@@ -1,11 +1,15 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\LoginController;
-use App\Http\Controllers\ProductController;
-use App\Http\Controllers\ProductImageController;
-use App\Http\Controllers\UserController;
+
+use App\Http\Controllers\admin\CategoryController;
+use App\Http\Controllers\admin\LoginController;
+use App\Http\Controllers\admin\ProductController;
+use App\Http\Controllers\admin\ProductImageController;
+use App\Http\Controllers\admin\UserController;
+use App\Http\Controllers\admin\VoucherController;
+use App\Http\Controllers\UserAuthController;
+
 // Route cho Admin
 Route::prefix('admin')->group(function () {
     // Form login và xử lý login KHÔNG cần middleware
@@ -24,6 +28,7 @@ Route::prefix('admin')->group(function () {
             Route::get('edit/{id}', [CategoryController::class, 'edit'])->name('category.edit');
             Route::post('update/{id}', [CategoryController::class, 'update'])->name('category.update');
             Route::get('delete/{id}', [CategoryController::class, 'destroy'])->name('category.delete');
+
         });
 
         // Sản phẩm
@@ -47,17 +52,31 @@ Route::prefix('admin')->group(function () {
 
         // Quản lý người dùng
         Route::prefix('user')->group(function () {
-            Route::get('', [App\Http\Controllers\UserController::class, 'index'])->name('user.index');
-            Route::get('create', [App\Http\Controllers\UserController::class, 'create'])->name('user.create');
-            Route::post('store', [App\Http\Controllers\UserController::class, 'store'])->name('user.store');
-            Route::get('edit/{id}', [App\Http\Controllers\UserController::class, 'edit'])->name('user.edit');
-            Route::post('update/{id}', [App\Http\Controllers\UserController::class, 'update'])->name('user.update');
-            Route::get('delete/{id}', [App\Http\Controllers\UserController::class, 'destroy'])->name('user.delete');
+            Route::get('', [UserController::class, 'index'])->name('user.index');
+            Route::get('create', [UserController::class, 'create'])->name('user.create');
+            Route::post('store', [UserController::class, 'store'])->name('user.store');
+            Route::get('edit/{id}', [UserController::class, 'edit'])->name('user.edit');
+            Route::post('update/{id}', [UserController::class, 'update'])->name('user.update');
+            Route::get('delete/{id}', [UserController::class, 'destroy'])->name('user.delete');
+            Route::get('show/{id}', [UserController::class, 'show'])->name('user.show');
         });
+        // Quản lý voucher
+        Route::prefix('voucher')->group(function () {
+            Route::get('', [VoucherController::class, 'index'])->name('voucher.index');
+            Route::get('create', [VoucherController::class, 'create'])->name('voucher.create');
+            Route::post('store', [VoucherController::class, 'store'])->name('voucher.store');
+            Route::get('edit/{id}', [VoucherController::class, 'edit'])->name('voucher.edit');
+            Route::post('update/{id}', [VoucherController::class, 'update'])->name('voucher.update');
+            Route::get('delete/{id}', [VoucherController::class, 'destroy'])->name('voucher.delete');
+            route::get('show/{id}', [VoucherController::class, 'show'])->name('voucher.show');
+        });
+
     });
 });
 
 // Route cho Trang chủ
 Route::get('/', function () {
-    return view('welcome');
-})->name('home');
+    return view('viewers.home.index');
+});
+    Route::get('login', [UserAuthController::class, 'showLoginForm'])->name('user.login');
+    Route::post('login', [UserAuthController::class, 'login'])->name('user.login.submit');

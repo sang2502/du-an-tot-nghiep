@@ -21,17 +21,23 @@
                 <div class="card-content">
                     {{-- Nút thêm --}}
                     <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap">
-                        <a href="#" class="btn btn-primary mb-2 mb-md-0" data-bs-toggle="modal"
-                            data-bs-target="#addCategoryModal">
+                        <a href="" class="btn btn-primary mb-2 mb-md-0" data-bs-toggle="modal"
+                            data-bs-target="#addUserModal">
                             + Thêm tài khoản
                         </a>
                         {{-- Nút tìm kiếm --}}
                         <form action="{{ route('user.index') }}" method="GET" class="d-flex w-auto"
-                            style="max-width: 200px;">
-                            <input type="text" name="keyword" class="form-control form-control-sm me-2"
-                                placeholder="Tìm theo tên..." value="{{ request('keyword') }}">
-                            <button type="submit" class="btn btn-outline-primary btn-sm">Tìm kiếm</button>
-                        </form>
+                        style="max-width: 400px;">
+                        <input type="text" name="keyword" class="form-control form-control-sm me-2"
+                            placeholder="Tìm theo tên..." value="{{ request('keyword') }}">
+                        <select name="role_id" class="form-select form-select-sm me-2" style="width:120px;">
+                            <option value="">Tất cả</option>
+                            <option value="1" {{ request('role_id') == 1 ? 'selected' : '' }}>Admin</option>
+                            <option value="2" {{ request('role_id') == 2 ? 'selected' : '' }}>Staff</option>
+                            <option value="3" {{ request('role_id') == 3 ? 'selected' : '' }}>Customer</option>
+                        </select>
+                        <button type="submit" class="btn btn-outline-primary btn-sm">Tìm kiếm</button>
+                    </form>
 
                     </div>
 
@@ -43,16 +49,8 @@
                                     <th>ID</th>
                                     <th>Tài khoản </th>
                                     <th>Email </th>
-                                    <th>Mật khẩu</th>
-                                    <th>SDT</th>
-                                    <th>Giới tính </th>
-                                    <th>Ngày sinh </th>
-                                    <th>Địa chỉ</th>
-                                    <th>Điểm</th>
-                                    <th>Cấp bậc</th>
                                     <th>Quyền </th>
                                     <th>Ngày tạo</th>
-                                    <th>Ngày cập nhật</th>
                                     <th class="text-center">Hành động</th>
                                 </tr>
                             </thead>
@@ -62,17 +60,13 @@
                                         <td>{{ $user->id }}</td>
                                         <td>{{ $user->name}}</td>
                                         <td>{{ $user->email }}</td>
-                                        <td>{{ $user->password }}</td>
-                                        <td>{{ $user->phone }}</td>
-                                        <td>{{ $user->gender }}</td>
-                                        <td>{{ $user->birth_date }}</td>
-                                        <td>{{ $user->address }}</td>
-                                        <td>{{ $user->points }}</td>
-                                        <td>{{ $user->tier }}</td>
-                                        <td>{{ $user->role_id ? $user->role->name : ''  }}</td>
-                                        <td>{{ $user->created_at->format('d/m/Y')}}</td>
-                                        <td>{{ $user->updated_at->format('d/m/Y')}}</td>
+                                        <td>{{ $user->role_id ? $user->role->name : ''  }}</td> 
+                                        <td>{{ $user->created_at ? $user->created_at->format('d/m/Y') : '' }}</td>
                                         <td class="text-center">
+                                            <a href="{{ route('user.show', $user->id) }}"
+                                                class="btn btn-sm btn-info rounded-pill px-3 py-1 d-inline-flex align-items-center me-1">
+                                                <i class="bi bi-eye me-1"></i> Chi tiết
+                                            </a>
                                             <a href="{{ route('user.edit', $user->id) }}"
                                                 class="btn btn-sm btn-warning rounded-pill px-3 py-1 d-inline-flex align-items-center me-1">
                                                 <i class="bi bi-pencil-square me-1"></i> Sửa
