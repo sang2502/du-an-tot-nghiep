@@ -1,4 +1,4 @@
-@extends('viewers.layout.master')
+@extends('client.layout.master')
 @section('main')
 
 <section class="breadcrumb-section set-bg" data-setbg="img/breadcrumb.jpg">

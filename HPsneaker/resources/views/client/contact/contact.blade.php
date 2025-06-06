@@ -1,4 +1,4 @@
-@extends('viewers.layout.master')
+@extends('client.layout.master')
 @section('main')
 
 <!-- Breadcrumb Section Begin -->
