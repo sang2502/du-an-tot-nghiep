@@ -27,11 +27,17 @@
                         </a>
                         {{-- Nút tìm kiếm --}}
                         <form action="{{ route('user.index') }}" method="GET" class="d-flex w-auto"
-                            style="max-width: 200px;">
-                            <input type="text" name="keyword" class="form-control form-control-sm me-2"
-                                placeholder="Tìm theo tên..." value="{{ request('keyword') }}">
-                            <button type="submit" class="btn btn-outline-primary btn-sm">Tìm kiếm</button>
-                        </form>
+                        style="max-width: 400px;">
+                        <input type="text" name="keyword" class="form-control form-control-sm me-2"
+                            placeholder="Tìm theo tên..." value="{{ request('keyword') }}">
+                        <select name="role_id" class="form-select form-select-sm me-2" style="width:120px;">
+                            <option value="">Tất cả</option>
+                            <option value="1" {{ request('role_id') == 1 ? 'selected' : '' }}>Admin</option>
+                            <option value="2" {{ request('role_id') == 2 ? 'selected' : '' }}>Staff</option>
+                            <option value="3" {{ request('role_id') == 3 ? 'selected' : '' }}>Customer</option>
+                        </select>
+                        <button type="submit" class="btn btn-outline-primary btn-sm">Tìm kiếm</button>
+                    </form>
 
                     </div>
 
@@ -54,8 +60,8 @@
                                         <td>{{ $user->id }}</td>
                                         <td>{{ $user->name}}</td>
                                         <td>{{ $user->email }}</td>
-                                        <td>{{ $user->role_id ? $user->role->name : ''  }}</td>
-                                        <td>{{ $user->created_at->format('d/m/Y')}}</td>
+                                        <td>{{ $user->role_id ? $user->role->name : ''  }}</td> 
+                                        <td>{{ $user->created_at ? $user->created_at->format('d/m/Y') : '' }}</td>
                                         <td class="text-center">
                                             <a href="{{ route('user.show', $user->id) }}"
                                                 class="btn btn-sm btn-info rounded-pill px-3 py-1 d-inline-flex align-items-center me-1">

@@ -66,10 +66,10 @@
                             </a>
                         </div>
                     </div>
-                    @if(Auth::check())
+                    @if(session('admin'))
                         <div class="account-info">
-                            <i class="bi bi-person-circle me-1"></i>
-                            <span class="fw-bold">{{ Auth::user()->name }}</span>
+<i class="bi bi-person-circle me-1" style="font-size: 1.5rem; color: #435EBE; vertical-align: sub; position: relative; top: 2px;"></i>
+                            <span class="fw-bold">{{ session('admin.name') }}</span>
                         </div>
                     @endif
                 </div>

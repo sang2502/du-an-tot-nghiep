@@ -10,13 +10,16 @@ use \App\Models\Role;
 
 class UserController extends Controller
 {
-    public function index(Request $request)
+public function index(Request $request)
     {
-        $role = Role::all(); // Lấy danh sách vai trò nếu cần
+        $role = Role::all();
         $query = User::query();
 
         if ($request->filled('keyword')) {
             $query->where('name', 'like', '%' . $request->keyword . '%');
+        }
+        if ($request->filled('role_id')) {
+            $query->where('role_id', $request->role_id);
         }
 
         $users = $query->orderBy('id', 'desc')->paginate(10);
@@ -33,7 +36,7 @@ class UserController extends Controller
         User::create([
             'name' => $request->name,
             'email' => $request->email,
-            'password' => bcrypt($request->password),
+            'password' => $request->password,
             'phone' => $request->phone,
             'gender' => $request->gender,
             'birth_date' => $request->birth_date,
@@ -51,23 +54,30 @@ class UserController extends Controller
         $role = Role::all(); // Lấy danh sách vai trò nếu cần
         return view('admin.user.update', compact('user', 'role'));
     }
-    public function update(Request $request, string $id)
-    {
-        $user = User::findOrFail($id);
-        $user->update([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => $request->password ? bcrypt($request->password) : null, // Chỉ cập nhật mật khẩu nếu có giá trị
-            'phone' => $request->phone,
-            'gender' => $request->gender,
-            'birth_date' => $request->birth_date,
-            'address' => $request->address,
-            'points' => $request->points ?? 0, // Mặc định là 0 nếu không có giá trị
-            'tier' => $request->tier ?? 'basic', // Mặc định là 'basic' nếu không có giá trị
-            'role_id' => $request->role_id, // Cập nhật ID vai trò
-    ]);
-        return redirect()->route('user.index')->with('success', 'Cập nhật thành công');
+public function update(Request $request, string $id)
+{
+    $user = User::findOrFail($id);
+
+    $data = [
+        'name' => $request->name,
+        'email' => $request->email,
+        'phone' => $request->phone,
+        'gender' => $request->gender,
+        'birth_date' => $request->birth_date,
+        'address' => $request->address,
+        'points' => $request->points ?? 0,
+        'tier' => $request->tier ?? 'basic',
+        'role_id' => $request->role_id,
+    ];
+
+    if ($request->filled('password')) {
+        $data['password'] = $request->password; // Không mã hóa mật khẩu
     }
+
+    $user->update($data);
+
+    return redirect()->route('user.index')->with('success', 'Cập nhật thành công');
+}
     public function destroy($id)
     {
         $user = User::findOrFail($id);
