@@ -121,6 +121,12 @@
                             </a>
                         </li>
                         <li class="sidebar-item">
+                            <a href="{{ url('admin/contact') }}" class='sidebar-link'>
+                                <i class=""></i>
+                                <span>Contact</span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
                             <a href="{{ url('admin/post') }}" class='sidebar-link'>
                                 <i class="bi bi-journal-text"></i>
                                 <span>Bài viết</span>
