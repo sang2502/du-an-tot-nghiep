@@ -7,6 +7,7 @@ use App\Http\Controllers\admin\LoginController;
 use App\Http\Controllers\admin\ProductController;
 use App\Http\Controllers\admin\ProductImageController;
 use App\Http\Controllers\admin\UserController;
+use App\Http\Controllers\admin\VoucherController;
 
 // Route cho Admin
 Route::prefix('admin')->group(function () {
@@ -57,6 +58,17 @@ Route::prefix('admin')->group(function () {
             Route::get('delete/{id}', [UserController::class, 'destroy'])->name('user.delete');
             Route::get('show/{id}', [UserController::class, 'show'])->name('user.show');
         });
+        // Quản lý voucher
+        Route::prefix('voucher')->group(function () {
+            Route::get('', [VoucherController::class, 'index'])->name('voucher.index');
+            Route::get('create', [VoucherController::class, 'create'])->name('voucher.create');
+            Route::post('store', [VoucherController::class, 'store'])->name('voucher.store');
+            Route::get('edit/{id}', [VoucherController::class, 'edit'])->name('voucher.edit');
+            Route::post('update/{id}', [VoucherController::class, 'update'])->name('voucher.update');
+            Route::get('delete/{id}', [VoucherController::class, 'destroy'])->name('voucher.delete');
+            route::get('show/{id}', [VoucherController::class, 'show'])->name('voucher.show');
+        });
+
 
         // Quản lý contact
         Route::prefix('contact')->group(function () {

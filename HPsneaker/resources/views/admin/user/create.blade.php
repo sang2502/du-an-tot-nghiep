@@ -1,5 +1,5 @@
 <!-- Modal Thêm Danh Mục -->
-<div class="modal fade" id="addCategoryModal" tabindex="-1" aria-labelledby="addCategoryModalLabel" aria-hidden="true">
+<div class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="addCategoryModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <form action="{{ route('user.store') }}" method="POST">
       @csrf
