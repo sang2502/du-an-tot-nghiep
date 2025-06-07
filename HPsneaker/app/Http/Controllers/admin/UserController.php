@@ -71,7 +71,7 @@ public function update(Request $request, string $id)
     ];
 
     if ($request->filled('password')) {
-        $data['password'] = $request->password; // Không mã hóa mật khẩu
+        $data['password'] = $request->password;
     }
 
     $user->update($data);

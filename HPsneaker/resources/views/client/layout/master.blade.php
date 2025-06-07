@@ -119,7 +119,19 @@
                                 </ul>
                             </div>
                             <div class="header__top__right__auth">
-                                <a href="#"><i class="fa fa-user"></i> Login</a>
+                                @if(session('user'))
+                                    <span style="display: flex; align-items: center;">
+                                        <i class="fa fa-user"></i>
+                                        <a href="{{ route('user.profile.show') }}" style="margin: 0 8px 0 4px; color: #222; font-weight: 600; text-decoration: none;">
+                                            {{ session('user.name') }}
+                                        </a>
+                                        <a href="{{ route('user.logout') }}" style="margin-left: 10px; color: #435EBE;" onclick="return confirm('Bạn có chắc muốn đăng xuất?')">
+                                            <i class="fa fa-sign-out"></i> Logout
+                                        </a>
+                                    </span>
+                                @else
+                                    <a href="{{ route('user.login') }}"><i class="fa fa-user"></i> Login</a>
+                                @endif
                             </div>
                         </div>
                     </div>
