@@ -63,13 +63,13 @@
     <div class="container">
         <div class="row">
             <div class="categories__slider owl-carousel">
-                @for($i = 1; $i <= 5; $i++)
+                @foreach ($categories as $i => $category)
                 <div class="col-lg-3">
                     <div class="categories__item set-bg" data-setbg="{{ asset('img/categories/cat-' . $i . '.jpg') }}">
-                        <h5><a href="#">Danh mục {{ $i }}</a></h5>
+                        <h5><a href="#">{{ $category->name}}</a></h5>
                     </div>
                 </div>
-                @endfor
+                @endforeach
             </div>
         </div>
     </div>
@@ -95,11 +95,12 @@
             </div>
         </div>
         <div class="row featured__filter">
-            {{-- Lặp sản phẩm từ DB, ví dụ: @foreach($products as $product) --}}
-            @for($i = 1; $i <= 8; $i++)
+            {{-- Product --}}
+            @foreach ($products as $i => $product)
+            
             <div class="col-lg-3 col-md-4 col-sm-6 mix giay-the-thao">
                 <div class="featured__item">
-                    <div class="featured__item__pic set-bg" data-setbg="{{ asset('img/featured/feature-' . $i . '.jpg') }}">
+                    <div class="featured__item__pic set-bg" data-setbg="{{ $product->thumbnail }}">
                         <ul class="featured__item__pic__hover">
                             <li><a href="#"><i class="fa fa-heart"></i></a></li>
                             <li><a href="#"><i class="fa fa-retweet"></i></a></li>
@@ -107,12 +108,12 @@
                         </ul>
                     </div>
                     <div class="featured__item__text">
-                        <h6><a href="#">Sản phẩm {{ $i }}</a></h6>
-                        <h5>{{ number_format(100000 * $i, 0, ',', '.') }} đ</h5>
+                        <h6><a href="{{route('shop.product.show', ['name' => Str::slug($product->name), 'id' => $product->id]) }}}}"> {{ $product->name }}</a></h6>
+                        <h5>{{ $product->price }} đ</h5>
                     </div>
                 </div>
             </div>
-            @endfor
+            @endforeach
             {{-- @endforeach --}}
         </div>
     </div>
@@ -142,33 +143,69 @@
 <section class="latest-product spad">
     <div class="container">
         <div class="row">
-            @for($col = 1; $col <= 3; $col++)
+            {{-- Cột 1: Mới nhất --}}
             <div class="col-lg-4 col-md-6">
                 <div class="latest-product__text">
-                    <h4>
-                        @if($col == 1) Sản phẩm mới
-                        @elseif($col == 2) Sản phẩm nổi bật
-                        @else Đánh giá cao
-                        @endif
-                    </h4>
+                    <h4>Mới nhất</h4>
                     <div class="latest-product__slider owl-carousel">
                         <div class="latest-prdouct__slider__item">
-                            @for($j = 1; $j <= 3; $j++)
-                            <a href="#" class="latest-product__item">
+                            @foreach($newProducts as $product)
+                            <a href="{{route('shop.product.show', ['name' => Str::slug($product->name), 'id' => $product->id]) }}}}" class="latest-product__item">
                                 <div class="latest-product__item__pic">
-                                    <img src="{{ asset('img/latest-product/lp-' . $j . '.jpg') }}" alt="">
+                                    <img src="{{ $product->thumbnail }}" alt="">
                                 </div>
                                 <div class="latest-product__item__text">
-                                    <h6>Sản phẩm {{ $j }}</h6>
-                                    <span>{{ number_format(100000 * $j, 0, ',', '.') }} đ</span>
+                                    <h6>{{ $product->name }}</h6>
+                                    <span>{{ number_format($product->price, 0, ',', '.') }} đ</span>
                                 </div>
                             </a>
-                            @endfor
+                            @endforeach
                         </div>
                     </div>
                 </div>
             </div>
-            @endfor
+            {{-- Cột 2: Nổi bật --}}
+            <div class="col-lg-4 col-md-6">
+                <div class="latest-product__text">
+                    <h4>Nổi bật</h4>
+                    <div class="latest-product__slider owl-carousel">
+                        <div class="latest-prdouct__slider__item">
+                            
+                            <a href="#" class="latest-product__item">
+                                <div class="latest-product__item__pic">
+                                    <img src="{{ $product->thumbnail }}" alt="">
+                                </div>
+                                <div class="latest-product__item__text">
+                                    <h6>{{ $product->name }}</h6>
+                                    <span>{{ number_format($product->price, 0, ',', '.') }} đ</span>
+                                </div>
+                            </a>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {{-- Cột 3: Đánh giá cao --}}
+            <div class="col-lg-4 col-md-6">
+                <div class="latest-product__text">
+                    <h4>Đánh giá cao</h4>
+                    <div class="latest-product__slider owl-carousel">
+                        <div class="latest-prdouct__slider__item">
+                            
+                            <a href="#" class="latest-product__item">
+                                <div class="latest-product__item__pic">
+                                    <img src="{{ $product->thumbnail }}" alt="">
+                                </div>
+                                <div class="latest-product__item__text">
+                                    <h6>{{ $product->name }}</h6>
+                                    <span>{{ number_format($product->price, 0, ',', '.') }} đ</span>
+                                </div>
+                            </a>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </section>

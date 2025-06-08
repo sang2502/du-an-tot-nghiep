@@ -11,7 +11,8 @@ class HomeController extends Controller
     {
         $products = Product::where('status', 1)->get();
         $categories = Category::all();
-        return view('client.home.index', compact('products', 'categories'));
+        $newProducts = Product::orderBy('created_at', 'desc')->take(3)->get();
+        return view('client.home.index', compact('products', 'categories', 'newProducts'));
     }
 
     public function search(Request $request)
