@@ -2,11 +2,14 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\admin\CategoryController;
+use App\Http\Controllers\client\ContactClientController;
 use App\Http\Controllers\admin\ContactController;
+use App\Http\Controllers\admin\CommentController;
 use App\Http\Controllers\admin\LoginController;
 use App\Http\Controllers\admin\ProductController;
 use App\Http\Controllers\admin\ProductImageController;
 use App\Http\Controllers\admin\UserController;
+use App\Http\Controllers\client\ContactClientController as ClientContactClientController;
 
 // Route cho Admin
 Route::prefix('admin')->group(function () {
@@ -63,7 +66,17 @@ Route::prefix('admin')->group(function () {
             Route::get('', [ContactController::class, 'index'])->name('contact.index');
             Route::get('delete/{id}', [ContactController::class, 'delete'])->name('contact.delete');
             Route::get('show/{id}', [ContactController::class, 'show'])->name('contact.show');
+
         });
+
+        // Quản lý bình luận
+        Route::prefix('comment')->group(function () {
+            Route::get('', [CommentController::class, 'index'])->name('comment.index');
+            Route::get('delete/{id}', [CommentController::class, 'delete'])->name('comment.delete');
+            Route::get('show/{id}', [CommentController::class, 'show'])->name('comment.show');
+
+        });
+
     });
 });
 
@@ -71,3 +84,9 @@ Route::prefix('admin')->group(function () {
 Route::get('/', function () {
     return view('viewers.home.index');
 });
+        Route::prefix('contact')->group(function () {
+            Route::get('', [ContactClientController::class, 'index'])->name('client.contact.index');
+            Route::post('', [ContactClientController::class, 'submit'])->name('client.contact.submit');
+
+});
+

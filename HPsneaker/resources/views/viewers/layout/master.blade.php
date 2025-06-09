@@ -69,7 +69,7 @@
                     </ul>
                 </li>
                 <li><a href="./blog.html">Blog</a></li>
-                <li><a href="./contact.html">Contact</a></li>
+                <li><a href="./contact.client">Contact</a></li>
             </ul>
         </nav>
         <div id="mobile-menu-wrap"></div>
@@ -147,7 +147,7 @@
                                 </ul>
                             </li>
                             <li><a href="./blog.html">Blog</a></li>
-                            <li><a href="./contact.html">Contact</a></li>
+                            <li><a href="{{ route('client.contact.index') }}">Contact</a></li>
                         </ul>
                     </nav>
                 </div>
@@ -170,7 +170,7 @@
 <div class="container">
     @yield('main')
 </div>
-    
+
 
     <!-- Footer Section Begin -->
     <footer class="footer spad">
