@@ -77,7 +77,8 @@ class ProductController extends Controller
                 Log::info($request->variants);
                 foreach ($request->variants as $variant) {
                     // Bỏ qua dòng trống
-                    if (empty($variant['size_id']) || empty($variant['color_id'])) continue;
+                    if (empty($variant['size_id']) || empty($variant['color_id']))
+                        continue;
                     ProductVariant::create([
                         'product_id' => $product->id,
                         'size_id' => $variant['size_id'],
@@ -92,18 +93,17 @@ class ProductController extends Controller
             return redirect()->route('product.index')->with('success', 'Thêm sản phẩm thành công');
         } catch (\Exception $e) {
             DB::rollBack();
-            dd($e->getMessage());
         }
-        
+
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show($id)
     {
         $product = Product::findOrFail($id);
-        $variant = ProductVariant::findOrFail($id);
+        $variant = ProductVariant::where('product_id', $id)->first();
         return view('admin.product.detail', compact('product', 'variant'));
     }
 
@@ -124,47 +124,92 @@ class ProductController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $product = Product::findOrFail($id);
-        $imagePath = $product->thumbnail;
+        DB::beginTransaction();
+        try {
+            $product = Product::findOrFail($id);
+            $imagePath = $product->thumbnail;
 
-        if ($request->hasFile('image')) {
-            $image = $request->file('image');
-            $imageName = time() . '_' . $image->getClientOriginalName();
-            $image->move(public_path('uploads/products/'), $imageName);
-            $imagePath = 'uploads/products/' . $imageName;
-            ProductImage::create([
-                'product_id' => $product->id,
-                'url' => $imagePath,
-            ]);
-        }
-
-        $product->update([
-            'name' => $request->name,
-            'category_id' => $request->category_id,
-            'slug' => $request->slug,
-            'price' => $request->price,
-            'description' => $request->description,
-            'status' => $request->status,
-            'thumbnail' => $imagePath,
-        ]);
-
-        // Cập nhật biến thể (nếu cần, bạn có thể xóa hết rồi thêm lại hoặc cập nhật từng cái)
-        // Ví dụ: Xóa hết và thêm lại
-        if ($request->has('variants')) {
-            ProductVariant::where('product_id', $product->id)->delete();
-            foreach ($request->variants as $variant) {
-                if (empty($variant['size_id']) || empty($variant['color_id'])) continue;
-                ProductVariant::create([
+            if ($request->hasFile('image')) {
+                $image = $request->file('image');
+                $imageName = time() . '_' . $image->getClientOriginalName();
+                $image->move(public_path('uploads/products/'), $imageName);
+                $imagePath = 'uploads/products/' . $imageName;
+                // Xóa ảnh cũ nếu có
+                if ($product->thumbnail && file_exists(public_path($product->thumbnail))) {
+                    unlink(public_path($product->thumbnail));
+                }
+                ProductImage::create([
                     'product_id' => $product->id,
-                    'size_id' => $variant['size_id'],
-                    'color_id' => $variant['color_id'],
-                    'price' => $variant['price'],
-                    'stock' => $variant['stock'],
+                    'url' => $imagePath,
                 ]);
             }
-        }
 
-        return redirect()->route('product.index')->with('success', 'Cập nhật sản phẩm thành công');
+            $product->update([
+                'name' => $request->name,
+                'category_id' => $request->category_id,
+                'slug' => $request->slug,
+                'price' => $request->price,
+                'description' => $request->description,
+                'status' => $request->status,
+                'thumbnail' => $imagePath,
+            ]);
+            // Cập nhật biến thể sản phẩm
+            if ($request->has('variants')) {
+                $inputVariants = collect($request->variants)->unique(function ($item) {
+                    return $item['size_id'] . '-' . $item['color_id'];
+                });
+                $oldVariants = ProductVariant::where('product_id', $product->id)->get();
+
+                // Lưu lại các id biến thể đã xử lý
+                $variantIds = [];
+
+                foreach ($inputVariants as $variant) {
+                    if (empty($variant['size_id']) || empty($variant['color_id']))
+                        continue;
+
+                    // Tìm biến thể cũ theo size_id và color_id
+                    $old = $oldVariants->first(function ($item) use ($variant) {
+                        return $item->size_id == $variant['size_id'] && $item->color_id == $variant['color_id'];
+                    });
+
+                    if ($old) {
+                        // Cập nhật nếu đã có
+                        $old->update([
+                            'price' => $variant['price'],
+                            'stock' => $variant['stock'],
+                        ]);
+                        $variantIds[] = $old->id;
+                    } else {
+                        // Thêm mới nếu chưa có
+                        $new = ProductVariant::create([
+                            'product_id' => $product->id,
+                            'size_id' => $variant['size_id'],
+                            'color_id' => $variant['color_id'],
+                            'price' => $variant['price'],
+                            'stock' => $variant['stock'],
+                            'sku' => 'SP' . $product->id . $variant['size_id'] . $variant['color_id'],
+                        ]);
+                        $variantIds[] = $new->id;
+                    }
+                }
+
+                // Xóa các biến thể không còn trong request
+                if (!empty($variantIds)) {
+                    ProductVariant::where('product_id', $product->id)
+                        ->whereNotIn('id', $variantIds)
+                        ->delete();
+                } else {
+                    // Nếu không có biến thể nào gửi lên, xóa hết biến thể cũ
+                    ProductVariant::where('product_id', $product->id)->delete();
+                }
+            }
+
+            DB::commit();
+            return redirect()->route('product.index')->with('success', 'Cập nhật sản phẩm thành công');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            dd($e->getMessage());
+        }
     }
 
     /**

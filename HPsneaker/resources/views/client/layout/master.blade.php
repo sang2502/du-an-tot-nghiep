@@ -25,25 +25,93 @@
     <link rel="stylesheet" href="{{ asset('css/slicknav.min.css') }}" type="text/css">
     <link rel="stylesheet" href="{{ asset('css/style.css') }}" type="text/css">
     <style>
-        body {
-            font-family: 'Roboto', 'Montserrat', Arial, sans-serif;
-            font-size: 16px;
-            color: #222;
-            background: #fff;
-        }
+    body {
+        font-family: 'Roboto', 'Montserrat', Arial, sans-serif;
+        font-size: 16px;
+        color: #111827;
+        background: #f9fafb;
+    }
 
-        h1,
-        h2,
-        h3,
-        h4,
-        h5,
-        h6,
-        .section-title h2 {
-            font-family: 'Montserrat', Arial, sans-serif;
-            font-weight: 700;
-            color: #222;
-        }
-    </style>
+    /* Nút (Buttons) */
+    button,
+    .btn,
+    .site-btn {
+        background-color: #111827 !important; /* đen than */
+        color: #fff !important;
+        border: none;
+        transition: background 0.2s, box-shadow 0.2s;
+        box-shadow: 0 2px 8px rgba(17, 24, 39, 0.1);
+    }
+
+    button:hover,
+    .btn:hover,
+    .site-btn:hover {
+        background-color: #f97316 !important; /* cam cháy khi hover */
+        color: #fff !important;
+        box-shadow: 0 4px 16px rgba(249, 115, 22, 0.3);
+    }
+
+    /* Tiêu đề */
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    .section-title h2 {
+        font-family: 'Montserrat', Arial, sans-serif;
+        font-weight: 700;
+        color: #111827;
+    }
+
+    /* Footer */
+    .footer {
+        background-color: #1f2937;
+        color: #d1d5db;
+    }
+
+    .footer__widget h6,
+    .footer__about__logo a,
+    .footer__widget__social a {
+        color: #fff;
+    }
+
+    .footer__widget__social a:hover {
+        color: #facc15; /* vàng mù tạt */
+    }
+
+    /* Header */
+    .header {
+        background-color: #ffffff;
+        border-bottom: 1px solid #e5e7eb;
+    }
+
+    .header__menu ul li a {
+        color: #111827;
+        font-weight: 500;
+    }
+
+    .header__menu ul li a:hover,
+    .header__menu ul li.active a {
+        color: #f97316;
+    }
+
+    /* Cart and auth icons */
+    .header__cart ul li a,
+    .header__top__right__auth a {
+        color: #111827;
+    }
+
+    .header__top__right__auth a:hover {
+        color: #f97316;
+    }
+
+    /* Language switch */
+    .header__top__right__language > div {
+        color: #111827;
+    }
+</style>
+
 </head>
 
 <body>
@@ -173,14 +241,14 @@
                         <ul>
                             <li class="active"><a href="{{ url('/') }}">Trang chủ</a></li>
                             <li><a href="{{ url('/shop') }}">Cửa hàng</a></li>
-                            <li><a href="#">Trang</a>
+                            {{-- <li><a href="#">Trang</a>
                                 <ul class="header__menu__dropdown">
                                     <li><a href="{{ url('/shop-details') }}">Chi tiết sản phẩm</a></li>
                                     <li><a href="{{ url('/shopping-cart') }}">Giỏ hàng</a></li>
                                     <li><a href="{{ url('/checkout') }}">Thanh toán</a></li>
                                     <li><a href="{{ url('/blog-details') }}">Chi tiết tin tức</a></li>
                                 </ul>
-                            </li>
+                            </li> --}}
                             <li><a href="{{ url('/blog') }}">Tin tức</a></li>
                             <li><a href="{{ url('/contact') }}">Liên hệ</a></li>
                         </ul>
@@ -202,7 +270,6 @@
         </div>
     </header>
     <!-- End Desktop Header -->
-
     <div class="container">
         @yield('main')
     </div>
