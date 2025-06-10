@@ -41,8 +41,9 @@
                             <div class="mb-2">
                                 <span class="text-muted">Kích cỡ:</span>
                                 @if($product->variants && $product->variants->count())
-                                    @foreach($product->variants as $variant)
-                                        <span class="text-muted">{{ $variant->size->label ?? $variant->size->value ?? '-' }}</span>
+                                    @foreach($product->variants->sortBy('size.value') as $variant)
+                                        <span class="text-muted">{{ $variant->size->label ?? $variant->size->value ?? '-'}}</span>
+                                        @if(!$loop->last) - @endif
                                     @endforeach
                                 @else
                                     <span class="text-muted">-</span>

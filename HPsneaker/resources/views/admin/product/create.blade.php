@@ -89,7 +89,7 @@
                                     </tr>
                                 </tbody>
                                 <th>
-                                    <button type="button" class="btn btn-success btn-sm" id="add-variant">+</button>
+                                    <button type="button" class="btn btn-success btn-sm" id="add-variant">Thêm biến thể</button>
                                 </th>
                             </table>
                         </div>
@@ -134,7 +134,7 @@
                         <input type="number" name="variants[${variantIndex}][stock]" class="form-control">
                     </td>
                     <td>
-                        <button type="button" class="btn btn-danger btn-sm remove-variant">-</button>
+                        <button type="button" class="btn btn-danger btn-sm remove-variant">Xoá</button>
                     </td>
                 `;
             tbody.appendChild(row);
