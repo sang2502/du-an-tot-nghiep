@@ -116,7 +116,6 @@
                 <div class="text-center mt-3">
                     <span>Chưa có tài khoản? <a href="auth-register.html" class="text-link">Đăng ký</a></span>
                 </div>
-            </div>
         </div>
     </div>
 </body>
