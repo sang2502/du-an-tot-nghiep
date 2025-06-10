@@ -68,9 +68,9 @@ class DatabaseSeeder extends Seeder
         ]);
 
         DB::table('sizes')->insert([
-            ['label' => '39'],
-            ['label' => '40'],
-            ['label' => '41']
+            ['value' => '39'],
+            ['value' => '40'],
+            ['value' => '41']
         ]);
 
         DB::table('colors')->insert([
