@@ -8,6 +8,13 @@ use App\Http\Controllers\admin\ProductController;
 use App\Http\Controllers\admin\ProductImageController;
 use App\Http\Controllers\admin\UserController;
 use App\Http\Controllers\admin\VoucherController;
+use App\Http\Controllers\admin\BlogCategoryController;
+use App\Http\Controllers\client\UserAuthController;
+use App\Http\Controllers\client\HomeController;
+use App\Http\Controllers\client\ShopController;
+use App\Http\Controllers\client\ShopCartController;
+use App\Http\Controllers\admin\ColorController;
+ use App\Http\Controllers\admin\SizeController;
 
 // Route cho Admin
 Route::prefix('admin')->group(function () {
@@ -46,7 +53,22 @@ Route::prefix('admin')->group(function () {
                 Route::get('{product_id}/detail', [ProductImageController::class, 'show'])->name('product.image.detail');
                 Route::get('delete/{id}', [ProductImageController::class, 'destroy'])->name('product.image.delete');
             });
+            // Màu sắc
+            Route::prefix('color')->group(function () {
+                Route::get('', [ColorController::class, 'index'])->name('product.color.index');
+                Route::post('store', [ColorController::class, 'store'])->name('product.color.store');
+                Route::get('delete/{id}', [ColorController::class, 'destroy'])->name('product.color.delete');
+            });
+            // Kích cỡ
+            Route::prefix('size')->group(function () {
+                Route::get('', [SizeController::class, 'index'])->name('product.size.index');
+                Route::post('store', [SizeController::class, 'store'])->name('product.size.store');
+                Route::get('delete/{id}', [SizeController::class, 'destroy'])->name('product.size.delete');
+            });
+            
         });
+        
+        
 
         // Quản lý người dùng
         Route::prefix('user')->group(function () {
@@ -66,7 +88,7 @@ Route::prefix('admin')->group(function () {
             Route::get('edit/{id}', [VoucherController::class, 'edit'])->name('voucher.edit');
             Route::post('update/{id}', [VoucherController::class, 'update'])->name('voucher.update');
             Route::get('delete/{id}', [VoucherController::class, 'destroy'])->name('voucher.delete');
-            route::get('show/{id}', [VoucherController::class, 'show'])->name('voucher.show');
+            Route::get('show/{id}', [VoucherController::class, 'show'])->name('voucher.show');
         });
 
 
@@ -76,10 +98,41 @@ Route::prefix('admin')->group(function () {
             Route::get('delete/{id}', [ContactController::class, 'delete'])->name('contact.delete');
             Route::get('show/{id}', [ContactController::class, 'show'])->name('contact.show');
         });
+        // Quản lý Danh mục bài viết
+        Route::prefix('blog-category')->group(function () {
+            Route::get('', [BlogCategoryController::class, 'index'])->name('blog_category.index');
+            Route::get('create', [BlogCategoryController::class, 'create'])->name('blog_category.create');
+            Route::post('store', [BlogCategoryController::class, 'store'])->name('blog_category.store');
+            Route::get('edit/{id}', [BlogCategoryController::class, 'edit'])->name('blog_category.edit');
+            Route::post('update/{id}', [BlogCategoryController::class, 'update'])->name('blog_category.update');
+            Route::get('delete/{id}', [BlogCategoryController::class, 'destroy'])->name('blog_category.delete');
+        });
+
+
     });
 });
 
 // Route cho Trang chủ
-Route::get('/', function () {
-    return view('viewers.home.index');
+Route::prefix('/')->group(function () {
+    Route::get('', [HomeController::class, 'index'])->name('home.index');
+    Route::get('search', [HomeController::class, 'search'])->name('home.search');
+    // Route cho Shop
+    Route::prefix('shop')->group(function () {
+        Route::get('', [ShopController::class, 'index'])->name('shop.index');
+        Route::get('{name}/{id}', [ShopController::class, 'show'])->name('shop.product.show');
+
+        // Route cho giỏ hàng
+        Route::prefix('cart')->group(function () {
+            Route::get('', [ShopCartController::class, 'index'])->name('shop.cart.index');
+        });
+    });
 });
+// Route cho Login của người dùng
+Route::get('login', [UserAuthController::class, 'showLoginForm'])->name('user.login');
+Route::post('login', [UserAuthController::class, 'login'])->name('user.login.submit');
+Route::get('logout', [UserAuthController::class, 'logout'])->name('user.logout');
+Route::get('profile', [UserAuthController::class, 'showProfile'])->name('user.profile.show');
+Route::get('edit', [UserAuthController::class, 'editProfile'])->name('user.profile.edit');
+Route::post('update', [UserAuthController::class, 'updateProfile'])->name('user.profile.update');
+
+

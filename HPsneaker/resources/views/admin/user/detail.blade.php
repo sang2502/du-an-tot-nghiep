@@ -22,8 +22,8 @@
                 <div class="border-bottom pb-2"><strong>Cấp độ thành viên:</strong> {{ ucfirst($user->tier) }}</div>
                 <div class="border-bottom pb-2"><strong>Điểm thưởng:</strong> {{ $user->points }}</div>
                 <div class="border-bottom pb-2"><strong>Vai trò:</strong> {{ $user->role_id ? $user->role->name : 'Không có' }}</div>
-                <div class="border-bottom pb-2"><strong>Ngày tạo:</strong> {{ $user->created_at->format('d/m/Y H:i') }}</div>
-                <div class="border-bottom pb-2"><strong>Ngày cập nhật:</strong> {{ $user->updated_at->format('d/m/Y H:i') }}</div>
+                <div class="border-bottom pb-2"><strong>Ngày tạo:</strong> {{ $user->created_at ? $user->created_at->format('d/m/Y H:i') : '' }}</div>
+                <div class="border-bottom pb-2"><strong>Ngày cập nhật:</strong> {{ $user->updated_at ? $user->updated_at->format('d/m/Y H:i') : '' }}</div>
             </div>
 
             <div class="d-flex justify-content-center mt-4">

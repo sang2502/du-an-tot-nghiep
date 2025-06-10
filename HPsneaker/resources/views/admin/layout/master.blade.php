@@ -1,11 +1,10 @@
-<!-- filepath: c:\wamp64\www\du-an-tot-nghiep\HPsneaker\resources\views\admin\layout\master.blade.php -->
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - Mazer Admin Dashboard</title>
+    <title>HPSneaker-Admin</title>
 
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
@@ -66,17 +65,15 @@
                             </a>
                         </div>
                     </div>
-                    @if(Auth::check())
+                    @if(session('admin'))
                         <div class="account-info">
-                            <i class="bi bi-person-circle me-1"></i>
-                            <span class="fw-bold">{{ Auth::user()->name }}</span>
+                            <i class="bi bi-person-circle me-1"
+                                style="font-size: 1.5rem; color: #435EBE; vertical-align: sub; position: relative; top: 2px;"></i>
+                            <span class="fw-bold">{{ session('admin.name') }}</span>
                         </div>
                     @endif
                 </div>
                 <div class="sidebar-menu">
-
-
-
                     <ul class="menu">
                         <li class="sidebar-item">
                             <a href="{{ url('admin/statistics') }}" class='sidebar-link'>
@@ -96,17 +93,28 @@
                                 <span>Người dùng</span>
                             </a>
                         </li>
-                        <li class="sidebar-item">
-                            <a href="{{ url('admin/category') }}" class='sidebar-link'>
+                        <!-- Quản lý sản phẩm submenu -->
+                        <li class="sidebar-item has-sub
+    {{ request()->is('admin/category*') || request()->is('admin/product*') ? 'menu-open' : '' }}">
+                            <a href="#" class='sidebar-link'>
                                 <i class="bi bi-grid-fill"></i>
-                                <span>Danh mục</span>
+                                <span>Quản lý sản phẩm</span>
                             </a>
-                        </li>
-                        <li class="sidebar-item">
-                            <a href="{{ url('admin/product') }}" class='sidebar-link'>
-                                <i class="bi bi-grid-1x2-fill"></i>
-                                <span>Sản phẩm</span>
-                            </a>
+                            <ul class="submenu"
+                                style="{{ request()->is('admin/category*') || request()->is('admin/product*') ? 'display:block;' : '' }}">
+                                <li class="submenu-item {{ request()->is('admin/category*') ? 'active' : '' }}">
+                                    <a href="{{ url('admin/category') }}">Danh mục</a>
+                                </li>
+                                <li class="submenu-item {{ request()->is('admin/product*') ? 'active' : '' }}">
+                                    <a href="{{ url('admin/product') }}">Sản phẩm</a>
+                                </li>
+                                <li class="submenu-item {{ request()->is('admin/product*') ? 'active' : '' }}">
+                                    <a href="{{ url('admin/product/color') }}">Màu sắc</a>
+                                </li>
+                                <li class="submenu-item {{ request()->is('admin/product*') ? 'active' : '' }}">
+                                    <a href="{{ url('admin/product/size') }}">Kích cỡ</a>
+                                </li>
+                            </ul>
                         </li>
                         <li class="sidebar-item">
                             <a href="{{ url('admin/voucher') }}" class='sidebar-link'>
@@ -126,11 +134,22 @@
                                 <span>Contact</span>
                             </a>
                         </li>
-                        <li class="sidebar-item">
-                            <a href="{{ url('admin/post') }}" class='sidebar-link'>
+                        <li class="sidebar-item has-sub">
+                            <a href="#" class='sidebar-link'>
                                 <i class="bi bi-journal-text"></i>
                                 <span>Bài viết</span>
                             </a>
+                            <ul class="submenu">
+                                <li class="submenu-item">
+                                    <a href="{{ url('admin/blog-category') }}">Danh mục bài viết</a>
+                                </li>
+                                <li class="submenu-item">
+                                    <a href="{{ url('admin/Blog') }}">Bài viết</a>
+                                </li>
+                                <li class="submenu-item">
+                                    <a href="{{ url('admin') }}">Tag bài viết</a>
+                                </li>
+                            </ul>
                         </li>
                         <li class="sidebar-item">
                             <a href="{{ url('admin/comment') }}" class='sidebar-link'>
@@ -145,7 +164,8 @@
                             </a>
                         </li>
                         <li class="sidebar-item">
-                            <a href="{{ route('admin.logout') }}" onclick="return confirm('Bạn có chắc muốn đăng xuất?')" class='sidebar-link'>
+                            <a href="{{ route('admin.logout') }}"
+                                onclick="return confirm('Bạn có chắc muốn đăng xuất?')" class='sidebar-link'>
                                 <i class="bi bi-box-arrow-right"></i>
                                 <span>Đăng xuất</span>
                             </a>
