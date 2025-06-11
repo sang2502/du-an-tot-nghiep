@@ -5,6 +5,10 @@ use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\ProductImage;
+use App\Models\Color;
+use App\Models\Size;
+use App\Models\Voucher;
+use App\Models\ProductVariant;
 class ShopController extends Controller
 {
     public function index()
@@ -29,7 +33,7 @@ class ShopController extends Controller
 public function show($name, $id)
 {
     $product = Product::findOrFail($id);
-
+    $variant = ProductVariant::where('product_id', $product->id)->get();
     // Lấy các sản phẩm cùng danh mục, loại trừ sản phẩm hiện tại
     $relatedProducts = Product::where('category_id', $product->category_id)
         ->where('id', '!=', $product->id)
@@ -40,6 +44,6 @@ public function show($name, $id)
     $gallery = ProductImage::where('product_id', $product->id)->get();
     $product->gallery = $gallery;
 
-    return view('client.shop.product-detail', compact('product', 'relatedProducts'));
+    return view('client.shop.product-detail', compact('product', 'relatedProducts', 'variant'));
 }
 }
