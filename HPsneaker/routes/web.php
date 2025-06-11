@@ -15,6 +15,7 @@ use App\Http\Controllers\client\ShopController;
 use App\Http\Controllers\client\ShopCartController;
 use App\Http\Controllers\admin\ColorController;
  use App\Http\Controllers\admin\SizeController;
+use App\Http\Controllers\admin\BlogPostController;
 
 // Route cho Admin
 Route::prefix('admin')->group(function () {
@@ -65,10 +66,10 @@ Route::prefix('admin')->group(function () {
                 Route::post('store', [SizeController::class, 'store'])->name('product.size.store');
                 Route::get('delete/{id}', [SizeController::class, 'destroy'])->name('product.size.delete');
             });
-            
+
         });
-        
-        
+
+
 
         // Quản lý người dùng
         Route::prefix('user')->group(function () {
@@ -107,7 +108,16 @@ Route::prefix('admin')->group(function () {
             Route::post('update/{id}', [BlogCategoryController::class, 'update'])->name('blog_category.update');
             Route::get('delete/{id}', [BlogCategoryController::class, 'destroy'])->name('blog_category.delete');
         });
-
+        // Quản lý Blog
+        Route::prefix('blog-post')->group(function () {
+            Route::get('', [BlogPostController::class, 'index'])->name('blog_post.index');
+            Route::get('create', [BlogPostController::class, 'create'])->name('blog_post.create');
+            Route::post('store', [BlogPostController::class, 'store'])->name('blog_post.store');
+            Route::get('show/{id}', [BlogPostController::class, 'show'])->name('blog_post.show');
+            Route::get('edit/{id}', [BlogPostController::class, 'edit'])->name('blog_post.edit');
+            Route::post('update/{id}', [BlogPostController::class, 'update'])->name('blog_post.update');
+            Route::get('delete/{id}', [BlogPostController::class, 'destroy'])->name('blog_post.delete');
+        });
 
     });
 });

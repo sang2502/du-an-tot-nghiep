@@ -144,10 +144,10 @@
                                     <a href="{{ url('admin/blog-category') }}">Danh mục bài viết</a>
                                 </li>
                                 <li class="submenu-item">
-                                    <a href="{{ url('admin/Blog') }}">Bài viết</a>
+                                    <a href="{{ url('admin/blog-post') }}">Bài viết</a>
                                 </li>
                                 <li class="submenu-item">
-                                    <a href="{{ url('admin') }}">Tag bài viết</a>
+                                    <a href="{{ url('admin/blog-tag') }}">Tag bài viết</a>
                                 </li>
                             </ul>
                         </li>
