@@ -14,7 +14,9 @@ use App\Http\Controllers\client\HomeController;
 use App\Http\Controllers\client\ShopController;
 use App\Http\Controllers\client\ShopCartController;
 use App\Http\Controllers\admin\ColorController;
- use App\Http\Controllers\admin\SizeController;
+use App\Http\Controllers\admin\CommentController;
+use App\Http\Controllers\admin\SizeController;
+use App\Http\Controllers\client\ContactClientController;
 
 // Route cho Admin
 Route::prefix('admin')->group(function () {
@@ -65,10 +67,10 @@ Route::prefix('admin')->group(function () {
                 Route::post('store', [SizeController::class, 'store'])->name('product.size.store');
                 Route::get('delete/{id}', [SizeController::class, 'destroy'])->name('product.size.delete');
             });
-            
+
         });
-        
-        
+
+
 
         // Quản lý người dùng
         Route::prefix('user')->group(function () {
@@ -97,6 +99,8 @@ Route::prefix('admin')->group(function () {
             Route::get('', [ContactController::class, 'index'])->name('contact.index');
             Route::get('delete/{id}', [ContactController::class, 'delete'])->name('contact.delete');
             Route::get('show/{id}', [ContactController::class, 'show'])->name('contact.show');
+            Route::get('edit/{id}', [ContactController::class, 'edit'])->name('contact.edit');
+            Route::get('update/{id}', [ContactController::class, 'update'])->name('contact.update');
         });
         // Quản lý Danh mục bài viết
         Route::prefix('blog-category')->group(function () {
@@ -106,6 +110,16 @@ Route::prefix('admin')->group(function () {
             Route::get('edit/{id}', [BlogCategoryController::class, 'edit'])->name('blog_category.edit');
             Route::post('update/{id}', [BlogCategoryController::class, 'update'])->name('blog_category.update');
             Route::get('delete/{id}', [BlogCategoryController::class, 'destroy'])->name('blog_category.delete');
+        });
+
+        // Quản lý bình luận
+        Route::prefix('comment')->group(function () {
+            Route::get('', [CommentController::class, 'index'])->name('comment.index');
+            Route::get('delete/{id}', [CommentController::class, 'delete'])->name('comment.delete');
+            Route::get('show/{id}', [CommentController::class, 'show'])->name('comment.show');
+            Route::get('edit/{id}', [CommentController::class, 'edit'])->name('comment.edit');
+            Route::get('update/{id}', [CommentController::class, 'update'])->name('comment.update');
+
         });
 
 
@@ -122,10 +136,16 @@ Route::prefix('/')->group(function () {
         Route::get('{name}/{id}', [ShopController::class, 'show'])->name('shop.product.show');
 
         // Route cho giỏ hàng
-        Route::prefix('cart')->group(function () {
+    Route::prefix('cart')->group(function () {
             Route::get('', [ShopCartController::class, 'index'])->name('shop.cart.index');
         });
     });
+
+        //route contact ở phía client
+    Route::prefix('contact')->group(function () {
+            Route::get('', [ContactClientController::class, 'index'])->name('shop.contact.index');
+            Route::post('', [ContactClientController::class, 'submit'])->name('shop.contact.submit');
+        });
 });
 // Route cho Login của người dùng
 Route::get('login', [UserAuthController::class, 'showLoginForm'])->name('user.login');
