@@ -13,27 +13,28 @@ class UserAuthController extends Controller
         return view('client.account.login');
     }
 
-public function login(Request $request)
-{
-    $request->validate([
-        'email'    => 'required|email',
-        'password' => 'required'
-    ]);
+    public function login(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required'
+        ]);
 
-    $user = User::where('email', $request->email)->first();
+        $user = User::where('email', $request->email)->first();
 
-    if ($user && $user->password === $request->password) {
-        session(['user' => $user->toArray()]);
-        return view('client.home.index')->with('success', 'Đăng nhập thành công!');
+        if ($user && $user->password === $request->password) {
+            session(['user' => $user->toArray()]);
+            return redirect()->route('home.index');
+        }
+
+        return back()->withErrors(['email' => 'Email hoặc mật khẩu không đúng']);
     }
-
-    return back()->withErrors(['email' => 'Email hoặc mật khẩu không đúng']);
-}
 
     public function logout()
     {
         session()->forget('user');
-        return view('client.home.index')->with('success', 'Đăng xuất thành công!');
+
+        return redirect()->route('home.index');
     }
     public function showProfile()
     {
