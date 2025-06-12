@@ -19,6 +19,7 @@ use App\Http\Controllers\admin\BlogPostController;
 use App\Http\Controllers\admin\CommentController;
 use App\Http\Controllers\client\ContactClientController;
 use App\Http\Controllers\admin\OrderController;
+use App\Http\Controllers\admin\OrderController;
 
 
 // Route cho Admin
@@ -73,6 +74,12 @@ Route::prefix('admin')->group(function () {
 
         });
 
+        // Quản lý Order
+        Route::prefix('order')->group(function () {
+            Route::get('', [OrderController::class, 'index'])->name('order.index');
+            Route::get('show/{id}', [OrderController::class, 'show'])->name('order.show');
+            Route::get('delete/{id}', [OrderController::class, 'delete'])->name('order.delete');
+        });
 
 
         // Quản lý người dùng
@@ -105,14 +112,6 @@ Route::prefix('admin')->group(function () {
             Route::get('edit/{id}', [ContactController::class, 'edit'])->name('contact.edit');
             Route::get('update/{id}', [ContactController::class, 'update'])->name('contact.update');
         });
-
-        // Quản lý Order
-        Route::prefix('order')->group(function () {
-            Route::get('', [OrderController::class, 'index'])->name('order.index');
-            Route::get('show/{id}', [OrderController::class, 'show'])->name('order.show');
-            Route::get('delete/{id}', [OrderController::class, 'delete'])->name('order.delete');
-        });
-
         // Quản lý Danh mục bài viết
         Route::prefix('blog-category')->group(function () {
             Route::get('', [BlogCategoryController::class, 'index'])->name('blog_category.index');
