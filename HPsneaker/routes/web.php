@@ -13,6 +13,8 @@ use App\Http\Controllers\client\UserAuthController;
 use App\Http\Controllers\client\HomeController;
 use App\Http\Controllers\client\ShopController;
 use App\Http\Controllers\client\ShopCartController;
+use App\Http\Controllers\admin\ColorController;
+ use App\Http\Controllers\admin\SizeController;
 use App\Http\Controllers\admin\OrderController;
 
 
@@ -53,6 +55,19 @@ Route::prefix('admin')->group(function () {
                 Route::get('{product_id}/detail', [ProductImageController::class, 'show'])->name('product.image.detail');
                 Route::get('delete/{id}', [ProductImageController::class, 'destroy'])->name('product.image.delete');
             });
+            // Màu sắc
+            Route::prefix('color')->group(function () {
+                Route::get('', [ColorController::class, 'index'])->name('product.color.index');
+                Route::post('store', [ColorController::class, 'store'])->name('product.color.store');
+                Route::get('delete/{id}', [ColorController::class, 'destroy'])->name('product.color.delete');
+            });
+            // Kích cỡ
+            Route::prefix('size')->group(function () {
+                Route::get('', [SizeController::class, 'index'])->name('product.size.index');
+                Route::post('store', [SizeController::class, 'store'])->name('product.size.store');
+                Route::get('delete/{id}', [SizeController::class, 'destroy'])->name('product.size.delete');
+            });
+
         });
 
         // Quản lý người dùng
@@ -128,7 +143,4 @@ Route::get('profile', [UserAuthController::class, 'showProfile'])->name('user.pr
 Route::get('edit', [UserAuthController::class, 'editProfile'])->name('user.profile.edit');
 Route::post('update', [UserAuthController::class, 'updateProfile'])->name('user.profile.update');
 
-Route::get('a', function () {
-    return view('client.shop.product-detail');
-})->name('shop.a');
 
