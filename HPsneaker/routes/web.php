@@ -8,6 +8,7 @@ use App\Http\Controllers\admin\ProductController;
 use App\Http\Controllers\admin\ProductImageController;
 use App\Http\Controllers\admin\UserController;
 use App\Http\Controllers\admin\VoucherController;
+use App\Http\Controllers\admin\BlogCategoryController;
 use App\Http\Controllers\admin\OrderController;
 
 
@@ -85,6 +86,17 @@ Route::prefix('admin')->group(function () {
             Route::get('show/{id}', [OrderController::class, 'show'])->name('order.show');
             Route::get('delete/{id}', [OrderController::class, 'delete'])->name('order.delete');
         });
+
+        // Quản lý Danh mục bài viết
+        Route::prefix('blog-category')->group(function () {
+            Route::get('', [BlogCategoryController::class, 'index'])->name('blog_category.index');
+            Route::get('create', [BlogCategoryController::class, 'create'])->name('blog_category.create');
+            Route::post('store', [BlogCategoryController::class, 'store'])->name('blog_category.store');
+            Route::get('edit/{id}', [BlogCategoryController::class, 'edit'])->name('blog_category.edit');
+            Route::post('update/{id}', [BlogCategoryController::class, 'update'])->name('blog_category.update');
+            Route::get('delete/{id}', [BlogCategoryController::class, 'destroy'])->name('blog_category.delete');
+        });
+
 
     });
 });
