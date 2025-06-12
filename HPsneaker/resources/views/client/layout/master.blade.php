@@ -154,7 +154,7 @@
                                 @else
                                     <a href="{{ route('user.login') }}"><i class="fa fa-user"></i> Login</a>
                                 @endif
-                                <a href="#"><i class="fa fa-user"></i> Đăng nhập</a>
+                                
                             </div>
                         </div>
                     </div>
@@ -190,7 +190,7 @@
                     <div class="header__cart">
                         <ul>
                             <li><a href="#"><i class="fa fa-heart"></i> <span>1</span></a></li>
-                            <li><a href="#"><i class="fa fa-shopping-bag"></i> <span>3</span></a></li>
+                            <li><a href="{{ url('/shop/cart') }}"><i class="fa fa-shopping-bag"></i> <span>3</span></a></li>
                         </ul>
                         <div class="header__cart__price">Tổng: <span>0đ</span></div>
                     </div>

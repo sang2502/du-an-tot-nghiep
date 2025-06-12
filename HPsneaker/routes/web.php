@@ -11,6 +11,8 @@ use App\Http\Controllers\admin\VoucherController;
 use App\Http\Controllers\admin\BlogCategoryController;
 use App\Http\Controllers\client\UserAuthController;
 use App\Http\Controllers\client\HomeController;
+use App\Http\Controllers\client\ShopController;
+use App\Http\Controllers\client\ShopCartController;
 use App\Http\Controllers\admin\OrderController;
 
 
@@ -71,7 +73,7 @@ Route::prefix('admin')->group(function () {
             Route::get('edit/{id}', [VoucherController::class, 'edit'])->name('voucher.edit');
             Route::post('update/{id}', [VoucherController::class, 'update'])->name('voucher.update');
             Route::get('delete/{id}', [VoucherController::class, 'destroy'])->name('voucher.delete');
-            route::get('show/{id}', [VoucherController::class, 'show'])->name('voucher.show');
+            Route::get('show/{id}', [VoucherController::class, 'show'])->name('voucher.show');
         });
 
 
@@ -107,6 +109,16 @@ Route::prefix('admin')->group(function () {
 Route::prefix('/')->group(function () {
     Route::get('', [HomeController::class, 'index'])->name('home.index');
     Route::get('search', [HomeController::class, 'search'])->name('home.search');
+    // Route cho Shop
+    Route::prefix('shop')->group(function () {
+        Route::get('', [ShopController::class, 'index'])->name('shop.index');
+        Route::get('{name}/{id}', [ShopController::class, 'show'])->name('shop.product.show');
+
+        // Route cho giỏ hàng
+        Route::prefix('cart')->group(function () {
+            Route::get('', [ShopCartController::class, 'index'])->name('shop.cart.index');
+        });
+    });
 });
 // Route cho Login của người dùng
 Route::get('login', [UserAuthController::class, 'showLoginForm'])->name('user.login');
@@ -116,4 +128,7 @@ Route::get('profile', [UserAuthController::class, 'showProfile'])->name('user.pr
 Route::get('edit', [UserAuthController::class, 'editProfile'])->name('user.profile.edit');
 Route::post('update', [UserAuthController::class, 'updateProfile'])->name('user.profile.update');
 
+Route::get('a', function () {
+    return view('client.shop.product-detail');
+})->name('shop.a');
 
