@@ -9,6 +9,7 @@ use App\Http\Controllers\admin\ProductImageController;
 use App\Http\Controllers\admin\UserController;
 use App\Http\Controllers\admin\VoucherController;
 use App\Http\Controllers\admin\BlogCategoryController;
+use App\Http\Controllers\client\UserAuthController;
 use App\Http\Controllers\admin\OrderController;
 
 
@@ -103,5 +104,9 @@ Route::prefix('admin')->group(function () {
 
 // Route cho Trang chủ
 Route::get('/', function () {
-    return view('viewers.home.index');
+    return view('client.home.index');
 });
+// Route cho Login của người dùng
+Route::get('login', [UserAuthController::class, 'showLoginForm'])->name('user.login');
+Route::post('login', [UserAuthController::class, 'login'])->name('user.login.submit');
+
