@@ -8,6 +8,8 @@ use App\Http\Controllers\admin\ProductController;
 use App\Http\Controllers\admin\ProductImageController;
 use App\Http\Controllers\admin\UserController;
 use App\Http\Controllers\admin\VoucherController;
+use App\Http\Controllers\admin\OrderController;
+
 
 // Route cho Admin
 Route::prefix('admin')->group(function () {
@@ -76,6 +78,14 @@ Route::prefix('admin')->group(function () {
             Route::get('delete/{id}', [ContactController::class, 'delete'])->name('contact.delete');
             Route::get('show/{id}', [ContactController::class, 'show'])->name('contact.show');
         });
+
+        // Quản lý Order
+        Route::prefix('order')->group(function () {
+            Route::get('', [OrderController::class, 'index'])->name('order.index');
+            Route::get('show/{id}', [OrderController::class, 'show'])->name('order.show');
+            Route::get('delete/{id}', [OrderController::class, 'delete'])->name('order.delete');
+        });
+
     });
 });
 
