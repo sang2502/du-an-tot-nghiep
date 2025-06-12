@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\client;
+namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
 
-class CartController extends Controller
+class ReviewController extends Controller
 {
     /**
      * Display a listing of the resource.

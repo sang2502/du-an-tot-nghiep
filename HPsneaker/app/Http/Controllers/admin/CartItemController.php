@@ -5,7 +5,7 @@ use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
 
-class RoleController extends Controller
+class CartItemController extends Controller
 {
     /**
      * Display a listing of the resource.

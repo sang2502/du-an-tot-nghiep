@@ -10,6 +10,7 @@ use App\Http\Controllers\admin\UserController;
 use App\Http\Controllers\admin\VoucherController;
 use App\Http\Controllers\admin\BlogCategoryController;
 use App\Http\Controllers\client\UserAuthController;
+use App\Http\Controllers\client\HomeController;
 use App\Http\Controllers\admin\OrderController;
 
 
@@ -103,8 +104,9 @@ Route::prefix('admin')->group(function () {
 });
 
 // Route cho Trang chủ
-Route::get('/', function () {
-    return view('client.home.index');
+Route::prefix('/')->group(function () {
+    Route::get('', [HomeController::class, 'index'])->name('home.index');
+    Route::get('search', [HomeController::class, 'search'])->name('home.search');
 });
 // Route cho Login của người dùng
 Route::get('login', [UserAuthController::class, 'showLoginForm'])->name('user.login');
