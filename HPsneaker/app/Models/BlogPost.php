@@ -14,4 +14,8 @@ class BlogPost extends Model
     return $this->hasMany(BlogPostTag::class);
 }
 
+    public function blogCategory() {
+        return $this->belongsTo(BlogCategory::class);
+    }
+
 }

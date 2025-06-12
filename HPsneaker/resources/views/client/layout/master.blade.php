@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="vi">
 
@@ -25,92 +24,119 @@
     <link rel="stylesheet" href="{{ asset('css/slicknav.min.css') }}" type="text/css">
     <link rel="stylesheet" href="{{ asset('css/style.css') }}" type="text/css">
     <style>
-    body {
-        font-family: 'Roboto', 'Montserrat', Arial, sans-serif;
-        font-size: 16px;
-        color: #111827;
-        background: #f9fafb;
-    }
+        body {
+            font-family: 'Roboto', 'Montserrat', Arial, sans-serif;
+            font-size: 16px;
+            color: #111827;
+            background: #f9fafb;
+        }
 
-    /* Nút (Buttons) */
-    button,
-    .btn,
-    .site-btn {
-        background-color: #111827 !important; /* đen than */
-        color: #fff !important;
-        border: none;
-        transition: background 0.2s, box-shadow 0.2s;
-        box-shadow: 0 2px 8px rgba(17, 24, 39, 0.1);
-    }
+        /* Nút (Buttons) */
+        button,
+        .btn,
+        .site-btn {
+            background-color: #111827 !important;
+            /* đen than */
+            color: #fff !important;
+            border: none;
+            transition: background 0.2s, box-shadow 0.2s;
+            box-shadow: 0 2px 8px rgba(17, 24, 39, 0.1);
+        }
 
-    button:hover,
-    .btn:hover,
-    .site-btn:hover {
-        background-color: #f97316 !important; /* cam cháy khi hover */
-        color: #fff !important;
-        box-shadow: 0 4px 16px rgba(249, 115, 22, 0.3);
-    }
+        button:hover,
+        .btn:hover,
+        .site-btn:hover {
+            background-color: #f97316 !important;
+            /* cam cháy khi hover */
+            color: #fff !important;
+            box-shadow: 0 4px 16px rgba(249, 115, 22, 0.3);
+        }
 
-    /* Tiêu đề */
-    h1,
-    h2,
-    h3,
-    h4,
-    h5,
-    h6,
-    .section-title h2 {
-        font-family: 'Montserrat', Arial, sans-serif;
-        font-weight: 700;
-        color: #111827;
-    }
+        /* Tiêu đề */
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6,
+        .section-title h2 {
+            font-family: 'Montserrat', Arial, sans-serif;
+            font-weight: 700;
+            color: #111827;
+        }
 
-    /* Footer */
-    .footer {
-        background-color: #1f2937;
-        color: #d1d5db;
-    }
+        /* Footer */
+        .footer {
+            background-color: #1f2937;
+            color: #d1d5db;
+        }
 
-    .footer__widget h6,
-    .footer__about__logo a,
-    .footer__widget__social a {
-        color: #fff;
-    }
+        .footer__widget h6,
+        .footer__about__logo a,
+        .footer__widget__social a {
+            color: #fff;
+        }
 
-    .footer__widget__social a:hover {
-        color: #facc15; /* vàng mù tạt */
-    }
+        .footer__widget__social a:hover {
+            color: #facc15;
+            /* vàng mù tạt */
+        }
 
-    /* Header */
-    .header {
-        background-color: #ffffff;
-        border-bottom: 1px solid #e5e7eb;
-    }
+        /* Header */
+        .header {
+            background-color: #ffffff;
+            border-bottom: 1px solid #e5e7eb;
+        }
 
-    .header__menu ul li a {
-        color: #111827;
-        font-weight: 500;
-    }
+        .header__menu ul li a {
+            color: #111827;
+            font-weight: 500;
+        }
 
-    .header__menu ul li a:hover,
-    .header__menu ul li.active a {
-        color: #f97316;
-    }
+        .header__menu ul li a:hover,
+        .header__menu ul li.active a {
+            color: #f97316;
+        }
 
-    /* Cart and auth icons */
-    .header__cart ul li a,
-    .header__top__right__auth a {
-        color: #111827;
-    }
+        /* Cart and auth icons */
+        .header__cart ul li a,
+        .header__top__right__auth a {
+            color: #111827;
+        }
 
-    .header__top__right__auth a:hover {
-        color: #f97316;
-    }
+        .header__top__right__auth a:hover {
+            color: #f97316;
+        }
 
-    /* Language switch */
-    .header__top__right__language > div {
-        color: #111827;
-    }
-</style>
+        /* Language switch */
+        .header__top__right__language>div {
+            color: #111827;
+        }
+
+        .product__details__option .btn,
+        .product__details__option .optionimage {
+            background: #fff !important;
+            color: #000000 !important;
+            border-color: #000000f1 !important;
+            border-radius: 5px !important;
+            margin-right: 5px !important;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .product__details__option .btn:hover,
+        .product__details__option .optionimage:hover {
+            background: #000000 !important;
+            color: #ffffff !important;
+        }
+
+        .product__details__option .optionimage.active,
+        .product__details__option .optionimage:active {
+            background: #000 !important;
+            color: #fff !important;
+            border-color: #000 !important;
+        }
+    </style>
 
 </head>
 
@@ -212,10 +238,12 @@
                                 @if(session('user'))
                                     <span style="display: flex; align-items: center;">
                                         <i class="fa fa-user"></i>
-                                        <a href="{{ route('user.profile.show') }}" style="margin: 0 8px 0 4px; color: #222; font-weight: 600; text-decoration: none;">
+                                        <a href="{{ route('user.profile.show') }}"
+                                            style="margin: 0 8px 0 4px; color: #222; font-weight: 600; text-decoration: none;">
                                             {{ session('user.name') }}
                                         </a>
-                                        <a href="{{ route('user.logout') }}" style="margin-left: 10px; color: #435EBE;" onclick="return confirm('Bạn có chắc muốn đăng xuất?')">
+                                        <a href="{{ route('user.logout') }}" style="margin-left: 10px; color: #435EBE;"
+                                            onclick="return confirm('Bạn có chắc muốn đăng xuất?')">
                                             <i class="fa fa-sign-out"></i> Logout
                                         </a>
                                     </span>
@@ -258,7 +286,8 @@
                     <div class="header__cart">
                         <ul>
                             <li><a href="#"><i class="fa fa-heart"></i> <span>1</span></a></li>
-                            <li><a href="{{ url('/shop/cart') }}"><i class="fa fa-shopping-bag"></i> <span>3</span></a></li>
+                            <li><a href="{{ url('/shop/cart') }}"><i class="fa fa-shopping-bag"></i> <span>3</span></a>
+                            </li>
                         </ul>
                         <div class="header__cart__price">Tổng: <span>0đ</span></div>
                     </div>
@@ -358,6 +387,18 @@
     <script src="{{ asset('js/mixitup.min.js') }}"></script>
     <script src="{{ asset('js/owl.carousel.min.js') }}"></script>
     <script src="{{ asset('js/main.js') }}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('.product__details__option .optionimage').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.product__details__option .optionimage').forEach(function(b) {
+                    b.classList.remove('active');
+                });
+                this.classList.add('active');
+            });
+        });
+    });
+    </script>
 </body>
 
 </html>

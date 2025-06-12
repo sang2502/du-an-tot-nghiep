@@ -17,6 +17,7 @@ use App\Http\Controllers\admin\ColorController;
 use App\Http\Controllers\admin\CommentController;
 use App\Http\Controllers\admin\SizeController;
 use App\Http\Controllers\client\ContactClientController;
+use App\Http\Controllers\admin\BlogPostController;
 
 // Route cho Admin
 Route::prefix('admin')->group(function () {
@@ -122,6 +123,16 @@ Route::prefix('admin')->group(function () {
 
         });
 
+        // Quản lý Blog
+        Route::prefix('blog-post')->group(function () {
+            Route::get('', [BlogPostController::class, 'index'])->name('blog_post.index');
+            Route::get('create', [BlogPostController::class, 'create'])->name('blog_post.create');
+            Route::post('store', [BlogPostController::class, 'store'])->name('blog_post.store');
+            Route::get('show/{id}', [BlogPostController::class, 'show'])->name('blog_post.show');
+            Route::get('edit/{id}', [BlogPostController::class, 'edit'])->name('blog_post.edit');
+            Route::post('update/{id}', [BlogPostController::class, 'update'])->name('blog_post.update');
+            Route::get('delete/{id}', [BlogPostController::class, 'destroy'])->name('blog_post.delete');
+        });
 
     });
 });
@@ -134,11 +145,12 @@ Route::prefix('/')->group(function () {
     Route::prefix('shop')->group(function () {
         Route::get('', [ShopController::class, 'index'])->name('shop.index');
         Route::get('{name}/{id}', [ShopController::class, 'show'])->name('shop.product.show');
+        Route::post('add-to-cart/{id}', [ShopController::class, 'addToCart'])->name('shop.product.addToCart');
 
         // Route cho giỏ hàng
     Route::prefix('cart')->group(function () {
             Route::get('', [ShopCartController::class, 'index'])->name('shop.cart.index');
-        });
+            Route::get('remove/{id}', [ShopCartController::class, 'removeCart'])->name('cart.remove');
     });
 
         //route contact ở phía client
@@ -146,6 +158,7 @@ Route::prefix('/')->group(function () {
             Route::get('', [ContactClientController::class, 'index'])->name('shop.contact.index');
             Route::post('', [ContactClientController::class, 'submit'])->name('shop.contact.submit');
         });
+});
 });
 // Route cho Login của người dùng
 Route::get('login', [UserAuthController::class, 'showLoginForm'])->name('user.login');
