@@ -61,13 +61,10 @@
                         @if($product->variants && $product->variants->count())
                             <div class="product__details__option mb-3">
                                 <span>Chọn size:</span>
-                                @php
-                                    $sizes = $product->variants->pluck('size.value', 'size.id')->unique();
-                                @endphp
                                 <div class="d-flex flex-wrap mt-2">
-                                    @foreach($sizes as $sizeId => $sizeValue)
-                                        <label class="optionimage btn btn-outline-white me-2 mb-2" rel="{{ $sizeId }}">
-                                            <span class="option-value">{{ $sizeValue }}</span>
+                                    @foreach($product->variants as $variant)
+                                        <label class="optionimage btn btn-outline-white me-2 mb-2" rel="{{ $variant->id }}">
+                                            <span class="option-value">{{ $variant->size->value }}</span>
                                         </label>
                                     @endforeach
                                 </div>
@@ -75,12 +72,19 @@
                             <div class="product__details__quantity mb-3">
                                 <div class="quantity d-inline-flex align-items-center">
                                     <span class="mr-2">Số lượng:</span>
-                                    <div class="pro-qty">
-                                        <input type="text" value="1" style="width:50px;text-align:center;">
-                                    </div>
                                 </div>
                             </div>
-                            <a href="#" class="primary-btn mr-2">Thêm vào giỏ hàng</a>
+                            <form action="{{ route('shop.product.addToCart', ['id' => $product->id]) }}" method="POST"
+                                class="d-inline" id="addToCartForm">
+                                @csrf
+                                <input type="hidden" name="product_variant_id" id="product_variant_id" value="">
+                                <div class="pro-qty">
+                                    <input type="number" name="quantity" value="1" min="1"
+                                        style="width:50px;text-align:center;">
+                                </div>
+                                <button type="submit" class="primary-btn mr-2" id="addToCartBtn" disabled>Thêm vào giỏ
+                                    hàng</button>
+                            </form>
                             <a href="#" class="heart-icon"><span class="icon_heart_alt"></span></a>
                             <ul class="mt-3 list-unstyled">
                                 <li><b>Tình trạng:</b>
@@ -186,4 +190,35 @@
             </div>
     </section>
     <!-- Product Details Section End -->
+    <script>
+        document.querySelectorAll('.optionimage').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                document.getElementById('product_variant_id').value = this.getAttribute('rel');
+            });
+        });
+        // Khi chọn size thì enable nút Thêm vào giỏ hàng
+        document.querySelectorAll('.optionimage').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                document.getElementById('product_variant_id').value = this.getAttribute('rel');
+                document.getElementById('addToCartBtn').disabled = false;
+                // Đổi màu active cho nút size
+                document.querySelectorAll('.optionimage').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // Khi load trang, luôn disable nếu chưa chọn size
+        document.addEventListener('DOMContentLoaded', function () {
+            document.getElementById('addToCartBtn').disabled = true;
+        });
+
+        // Ngăn submit nếu chưa chọn size (phòng trường hợp hack html)
+        document.getElementById('addToCartForm').addEventListener('submit', function (e) {
+            if (!document.getElementById('product_variant_id').value) {
+                e.preventDefault();
+                alert('Vui lòng chọn size trước khi thêm vào giỏ hàng!');
+            }
+        });
+    </script>
+
 @endsection

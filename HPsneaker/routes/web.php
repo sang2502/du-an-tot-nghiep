@@ -130,12 +130,14 @@ Route::prefix('/')->group(function () {
     Route::prefix('shop')->group(function () {
         Route::get('', [ShopController::class, 'index'])->name('shop.index');
         Route::get('{name}/{id}', [ShopController::class, 'show'])->name('shop.product.show');
+        Route::post('add-to-cart/{id}', [ShopController::class, 'addToCart'])->name('shop.product.addToCart');
 
         // Route cho giỏ hàng
         Route::prefix('cart')->group(function () {
             Route::get('', [ShopCartController::class, 'index'])->name('shop.cart.index');
-        });
+            Route::get('remove/{id}', [ShopCartController::class, 'removeCart'])->name('cart.remove');
     });
+});
 });
 // Route cho Login của người dùng
 Route::get('login', [UserAuthController::class, 'showLoginForm'])->name('user.login');
