@@ -186,7 +186,7 @@
                     </ul>
                 </li>
                 <li><a href="{{ url('/blog') }}">Tin tức</a></li>
-                <li><a href="{{ url('/contact') }}">Liên hệ</a></li>
+                <li><a href="{{ route('shop.contact.index') }}"">Liên hệ</a></li>
             </ul>
         </nav>
         <div id="mobile-menu-wrap"></div>
@@ -278,7 +278,7 @@
                                 </ul>
                             </li> --}}
                             <li><a href="{{ url('/blog') }}">Tin tức</a></li>
-                            <li><a href="{{ url('/contact') }}">Liên hệ</a></li>
+                            <li><a href="{{ route('shop.contact.index') }}">Liên hệ</a></li>
                         </ul>
                     </nav>
                 </div>

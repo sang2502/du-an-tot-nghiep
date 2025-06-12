@@ -14,7 +14,9 @@ use App\Http\Controllers\client\HomeController;
 use App\Http\Controllers\client\ShopController;
 use App\Http\Controllers\client\ShopCartController;
 use App\Http\Controllers\admin\ColorController;
- use App\Http\Controllers\admin\SizeController;
+use App\Http\Controllers\admin\CommentController;
+use App\Http\Controllers\admin\SizeController;
+use App\Http\Controllers\client\ContactClientController;
 use App\Http\Controllers\admin\BlogPostController;
 
 // Route cho Admin
@@ -98,6 +100,8 @@ Route::prefix('admin')->group(function () {
             Route::get('', [ContactController::class, 'index'])->name('contact.index');
             Route::get('delete/{id}', [ContactController::class, 'delete'])->name('contact.delete');
             Route::get('show/{id}', [ContactController::class, 'show'])->name('contact.show');
+            Route::get('edit/{id}', [ContactController::class, 'edit'])->name('contact.edit');
+            Route::get('update/{id}', [ContactController::class, 'update'])->name('contact.update');
         });
         // Quản lý Danh mục bài viết
         Route::prefix('blog-category')->group(function () {
@@ -108,6 +112,17 @@ Route::prefix('admin')->group(function () {
             Route::post('update/{id}', [BlogCategoryController::class, 'update'])->name('blog_category.update');
             Route::get('delete/{id}', [BlogCategoryController::class, 'destroy'])->name('blog_category.delete');
         });
+
+        // Quản lý bình luận
+        Route::prefix('comment')->group(function () {
+            Route::get('', [CommentController::class, 'index'])->name('comment.index');
+            Route::get('delete/{id}', [CommentController::class, 'delete'])->name('comment.delete');
+            Route::get('show/{id}', [CommentController::class, 'show'])->name('comment.show');
+            Route::get('edit/{id}', [CommentController::class, 'edit'])->name('comment.edit');
+            Route::get('update/{id}', [CommentController::class, 'update'])->name('comment.update');
+
+        });
+
         // Quản lý Blog
         Route::prefix('blog-post')->group(function () {
             Route::get('', [BlogPostController::class, 'index'])->name('blog_post.index');
@@ -133,10 +148,16 @@ Route::prefix('/')->group(function () {
         Route::post('add-to-cart/{id}', [ShopController::class, 'addToCart'])->name('shop.product.addToCart');
 
         // Route cho giỏ hàng
-        Route::prefix('cart')->group(function () {
+    Route::prefix('cart')->group(function () {
             Route::get('', [ShopCartController::class, 'index'])->name('shop.cart.index');
             Route::get('remove/{id}', [ShopCartController::class, 'removeCart'])->name('cart.remove');
     });
+
+        //route contact ở phía client
+    Route::prefix('contact')->group(function () {
+            Route::get('', [ContactClientController::class, 'index'])->name('shop.contact.index');
+            Route::post('', [ContactClientController::class, 'submit'])->name('shop.contact.submit');
+        });
 });
 });
 // Route cho Login của người dùng
