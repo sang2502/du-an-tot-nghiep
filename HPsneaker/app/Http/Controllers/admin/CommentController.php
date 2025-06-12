@@ -3,18 +3,18 @@
 namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 
-use App\Models\Contact;
+use App\Models\Comment;
 use Illuminate\Http\Request;
 
-class ContactController extends Controller
+class CommentController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $contacts = Contact::all();
-        return view('admin.contact.index', compact('contacts'));
+        $comments = Comment::all();
+        return view('admin.comment.index', compact('comments'));
     }
 
     /**
@@ -36,10 +36,10 @@ class ContactController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(contact $contact, string $id)
+    public function show(comment $comment, string $id)
     {
-        $contact = Contact::find($id);
-        return view('admin.contact.detail', compact('contact'));
+        $comment = Comment::find($id);
+        return view('admin.comment.detail', compact('comment'));
     }
 
     /**
@@ -47,19 +47,19 @@ class ContactController extends Controller
      */
     public function edit(string $id)
     {
-        $contact = Contact::find($id);
-        return view('admin.contact.update', compact('contact'));
+        $comment = Comment::find($id);
+        return view('admin.comment.update', compact('comment'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Contact $contact, Request $request, string $id)
+    public function update(Comment $comment, Request $request, string $id)
     {
-        Contact::find($id)->update([
+        Comment::find($id)->update([
            'status' => $request->status,
         ]);
-        return redirect()->route('contact.index')->with('success', 'Cập nhật thành công');
+        return redirect()->route('comment.index')->with('success', 'Cập nhật thành công');
     }
 
     /**
@@ -67,7 +67,7 @@ class ContactController extends Controller
      */
     public function delete($id)
     {
-        Contact::destroy($id);
-        return redirect()->route('contact.index');
+        Comment::destroy($id);
+        return redirect()->route('comment.index');
     }
 }

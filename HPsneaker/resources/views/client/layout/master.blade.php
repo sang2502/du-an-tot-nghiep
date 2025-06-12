@@ -160,7 +160,7 @@
                     </ul>
                 </li>
                 <li><a href="{{ url('/blog') }}">Tin tức</a></li>
-                <li><a href="{{ url('/contact') }}">Liên hệ</a></li>
+                <li><a href="{{ route('shop.contact.index') }}"">Liên hệ</a></li>
             </ul>
         </nav>
         <div id="mobile-menu-wrap"></div>
@@ -222,7 +222,7 @@
                                 @else
                                     <a href="{{ route('user.login') }}"><i class="fa fa-user"></i> Login</a>
                                 @endif
-                                
+
                             </div>
                         </div>
                     </div>
@@ -250,7 +250,7 @@
                                 </ul>
                             </li> --}}
                             <li><a href="{{ url('/blog') }}">Tin tức</a></li>
-                            <li><a href="{{ url('/contact') }}">Liên hệ</a></li>
+                            <li><a href="{{ route('shop.contact.index') }}">Liên hệ</a></li>
                         </ul>
                     </nav>
                 </div>
