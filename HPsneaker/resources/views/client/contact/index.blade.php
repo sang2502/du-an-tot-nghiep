@@ -7,10 +7,10 @@
             <div class="row">
                 <div class="col-lg-12 text-center">
                     <div class="breadcrumb__text">
-                        <h2>Contact Us</h2>
+                        <h2>Liên hệ với chúng tôi</h2>
                         <div class="breadcrumb__option">
-                            <a href="./index.html">Home</a>
-                            <span>Contact Us</span>
+                            <a href="{{ url('/') }}">Trang chủ</a>
+                            <span>Liên hệ với chúng tôi</span>
                         </div>
                     </div>
                 </div>
@@ -26,21 +26,21 @@
                 <div class="col-lg-3 col-md-3 col-sm-6 text-center">
                     <div class="contact__widget">
                         <span class="icon_phone"></span>
-                        <h4>Phone</h4>
+                        <h4>Số điện thoại</h4>
                         <p>+01-3-8888-6868</p>
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-3 col-sm-6 text-center">
                     <div class="contact__widget">
                         <span class="icon_pin_alt"></span>
-                        <h4>Address</h4>
-                        <p>60-49 Road 11378 New York</p>
+                        <h4>Địa chỉ</h4>
+                        <p>Lê Thánh Tông, Ngô Quyền, Hải Phòng</p>
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-3 col-sm-6 text-center">
                     <div class="contact__widget">
                         <span class="icon_clock_alt"></span>
-                        <h4>Open time</h4>
+                        <h4>Thời gian mở cửa</h4>
                         <p>10:00 am to 23:00 pm</p>
                     </div>
                 </div>
@@ -64,10 +64,10 @@
         <div class="map-inside">
             <i class="icon_pin"></i>
             <div class="inside-widget">
-                <h4>New York</h4>
+                <h4>Hải Phòng</h4>
                 <ul>
-                    <li>Phone: +12-345-6789</li>
-                    <li>Add: 16 Creek Ave. Farmingdale, NY</li>
+                    <li>Số điện thoại: +12-345-6789</li>
+                    <li>Địa chỉ: Lê Thánh Tông, Hải Phòng</li>
                 </ul>
             </div>
         </div>
@@ -80,21 +80,27 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="contact__form__title">
-                        <h2>Leave Message</h2>
+                        <h2>Liên hệ với chúng tôi</h2>
                     </div>
                 </div>
             </div>
-            <form action="#">
+            @if(session('success'))
+            <div class="alert alert-success">
+            {{ session('success') }}
+            </div>
+            @endif
+            <form action="{{ route('shop.contact.submit') }}" method="POST">
+                @csrf
                 <div class="row">
                     <div class="col-lg-6 col-md-6">
-                        <input type="text" placeholder="Your name">
+                        <input type="text" placeholder="Tên của bạn" name="name" required>
                     </div>
                     <div class="col-lg-6 col-md-6">
-                        <input type="text" placeholder="Your Email">
+                        <input type="email" placeholder="Email của bạn" name="email" required>
                     </div>
                     <div class="col-lg-12 text-center">
-                        <textarea placeholder="Your message"></textarea>
-                        <button type="submit" class="site-btn">SEND MESSAGE</button>
+                        <textarea placeholder="Lời nhắn" name="mess" required></textarea>
+                        <button type="submit" class="site-btn">Gửi</button>
                     </div>
                 </div>
             </form>
