@@ -35,7 +35,7 @@
                                 <i class="fa fa-phone"></i>
                             </div>
                             <div class="hero__search__phone__text">
-                                <h5>+65 11.188.888</h5>
+                                <h5>+84 36.363.6360</h5>
                                 <span>Hỗ trợ 24/7</span>
                             </div>
                         </div>
@@ -98,7 +98,8 @@
                         <div class="featured__item">
                             <a
                                 href="{{ route('shop.product.show', ['name' => Str::slug($product->name), 'id' => $product->id]) }}">
-                                <div class="product__item__pic set-bg" data-setbg="{{ $product->thumbnail }}">
+                                <div class="featured__item__pic set-bg">
+                                    <img src="{{$product->thumbnail}}" alt="">
                                 </div>
                             </a>
                             <div class="featured__item__text">
