@@ -156,7 +156,8 @@
                                 <div class="product__item">
                                     <a
                                         href="{{ route('shop.product.show', ['name' => Str::slug($product->name), 'id' => $product->id]) }}">
-                                        <div class="product__item__pic set-bg" data-setbg="{{ $product->thumbnail }}">
+                                        <div class="product__item__pic set-bg">
+                                            <img src="{{ $product->thumbnail }}" alt="">
                                         </div>
                                     </a>
 
