@@ -51,9 +51,8 @@ Route::prefix('admin')->group(function () {
 
             // Kho ảnh
             Route::prefix('image')->group(function () {
-                Route::get('', [ProductImageController::class, 'index'])->name('product.image.index');
-                Route::post('store', [ProductImageController::class, 'store'])->name('product.image.store');
-                Route::get('{product_id}/detail', [ProductImageController::class, 'show'])->name('product.image.detail');
+                Route::get('{id}', [ProductImageController::class, 'index'])->name('product.image.index');
+                Route::post('store/{id}', [ProductImageController::class, 'store'])->name('product.image.store');
                 Route::get('delete/{id}', [ProductImageController::class, 'destroy'])->name('product.image.delete');
             });
             // Màu sắc
