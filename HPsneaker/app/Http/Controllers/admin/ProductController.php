@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\admin;
+
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use App\Models\Category;
@@ -20,12 +21,14 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         $categories = Category::all();
-        $query = Product::query();
+        $query = Product::with('images', 'category');
 
         if ($request->filled('keyword')) {
             $query->where('name', 'like', '%' . $request->keyword . '%');
         }
+
         $products = $query->orderBy('id', 'desc')->paginate(10);
+
         return view('admin.product.index', compact('products', 'categories'));
     }
 
@@ -43,59 +46,73 @@ class ProductController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-    {
-        DB::beginTransaction();
-        try {
-            // upload image
-            $imagePath = null;
-            if ($request->hasFile('image')) {
-                $image = $request->file('image');
-                $imageName = time() . '_' . $image->getClientOriginalName();
-                $image->move(public_path('uploads/products/'), $imageName);
-                $imagePath = 'uploads/products/' . $imageName;
-            }
-            // Thêm mới sản phẩm
-            $product = Product::create([
-                'name' => $request->name,
-                'category_id' => $request->category_id,
-                'slug' => $request->slug,
-                'price' => $request->price,
-                'description' => $request->description,
-                'status' => $request->status,
-                'thumbnail' => $imagePath,
-            ]);
-            // Thêm vào bảng product_images
-            if ($imagePath) {
-                ProductImage::create([
-                    'product_id' => $product->id,
-                    'url' => $imagePath,
-                ]);
-            }
-            // Thêm biến thể sản phẩm
-            if ($request->has('variants')) {
-                Log::info($request->variants);
-                foreach ($request->variants as $variant) {
-                    // Bỏ qua dòng trống
-                    if (empty($variant['size_id']) || empty($variant['color_id']))
-                        continue;
-                    ProductVariant::create([
-                        'product_id' => $product->id,
-                        'size_id' => $variant['size_id'],
-                        'color_id' => $variant['color_id'],
-                        'price' => $variant['price'],
-                        'stock' => $variant['stock'],
-                        'sku' => 'SP' . $product->id . $variant['size_id'] . $variant['color_id'],
-                    ]);
-                }
-            }
-            DB::commit();
-            return redirect()->route('product.index')->with('success', 'Thêm sản phẩm thành công');
-        } catch (\Exception $e) {
-            DB::rollBack();
+
+public function store(Request $request)
+{
+    DB::beginTransaction();
+    try {
+        // upload image
+        $imagePath = null;
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $imageName = time() . '_' . $image->getClientOriginalName();
+            $image->move(public_path('uploads/products/'), $imageName);
+            $imagePath = 'uploads/products/' . $imageName;
         }
 
+        // Kiểm tra biến thể
+        $hasValidVariant = false;
+        if ($request->has('variants')) {
+            foreach ($request->variants as $variant) {
+                if (!empty($variant['size_id']) && !empty($variant['color_id'])) {
+                    $hasValidVariant = true;
+                    break;
+                }
+            }
+        }
+        if (!$hasValidVariant) {
+            return redirect()->back()
+                ->withInput()
+                ->with('error', 'Bạn phải thêm ít nhất một biến thể sản phẩm!');
+        }
+
+        // Thêm mới sản phẩm
+        $product = Product::create([
+            'name' => $request->name,
+            'category_id' => $request->category_id,
+            'slug' => $request->slug,
+            'price' => $request->price,
+            'description' => $request->description,
+            'status' => $request->status,
+            'thumbnail' => $imagePath,
+        ]);
+        // Thêm vào bảng product_images
+        if ($imagePath) {
+            ProductImage::create([
+                'product_id' => $product->id,
+                'url' => $imagePath,
+            ]);
+        }
+        // Thêm biến thể sản phẩm
+        foreach ($request->variants as $variant) {
+            if (empty($variant['size_id']) || empty($variant['color_id']))
+                continue;
+            ProductVariant::create([
+                'product_id' => $product->id,
+                'size_id' => $variant['size_id'],
+                'color_id' => $variant['color_id'],
+                'price' => $variant['price'],
+                'stock' => $variant['stock'],
+                'sku' => 'SP' . $product->id . $variant['size_id'] . $variant['color_id'],
+            ]);
+        }
+        DB::commit();
+        return redirect()->route('product.index')->with('success', 'Thêm sản phẩm thành công');
+    } catch (\Exception $e) {
+        DB::rollBack();
+        return redirect()->back()->withInput()->with('error', 'Đã xảy ra lỗi!');
     }
+}
 
     /**
      * Display the specified resource.
