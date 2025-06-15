@@ -48,11 +48,10 @@ class OrderController extends Controller
      */
     public function show($id)
     {
-        $order = Order::findOrFail($id);
+        // Lấy đơn hàng + danh sách sản phẩm trong đơn
+        $order = Order::with('orderItems')->findOrFail($id);
         return view('admin.order.show', compact('order'));
     }
-
-
     /**
      * Show the form for editing the specified resource.
      */
