@@ -25,8 +25,9 @@
                 <div class="col-lg-9">
                     <div class="hero__search">
                         <div class="hero__search__form">
-                            <form action="#">
-                                <input type="text" placeholder="Bạn cần tìm gì?">
+                            {{-- tìm kiếm --}}
+                            <form action="{{ route('product.search') }}" method="GET">
+                                <input type="text" placeholder="Bạn cần tìm gì?" name="keyword">
                                 <button type="submit" class="site-btn">Tìm kiếm</button>
                             </form>
                         </div>
@@ -35,7 +36,7 @@
                                 <i class="fa fa-phone"></i>
                             </div>
                             <div class="hero__search__phone__text">
-                                <h5>+65 11.188.888</h5>
+                                <h5>+84 36.363.6360</h5>
                                 <span>Hỗ trợ 24/7</span>
                             </div>
                         </div>
@@ -98,7 +99,8 @@
                         <div class="featured__item">
                             <a
                                 href="{{ route('shop.product.show', ['name' => Str::slug($product->name), 'id' => $product->id]) }}">
-                                <div class="product__item__pic set-bg" data-setbg="{{ $product->thumbnail }}">
+                                <div class="featured__item__pic set-bg">
+                                    <img src="{{$product->thumbnail}}" alt="">
                                 </div>
                             </a>
                             <div class="featured__item__text">
