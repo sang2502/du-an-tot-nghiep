@@ -18,6 +18,7 @@ use App\Http\Controllers\admin\CommentController;
 use App\Http\Controllers\admin\SizeController;
 use App\Http\Controllers\client\ContactClientController;
 use App\Http\Controllers\admin\BlogPostController;
+use App\Http\Controllers\client\CartController;
 use App\Http\Controllers\client\SearchProductController;
 
 // Route cho Admin
@@ -158,6 +159,9 @@ Route::prefix('/')->group(function () {
             Route::get('', [ContactClientController::class, 'index'])->name('shop.contact.index');
             Route::post('', [ContactClientController::class, 'submit'])->name('shop.contact.submit');
         });
+        // Route cho nhập voucher
+        Route::post('/cart/apply-voucher', [ShopCartController::class, 'applyVoucher'])->name('cart.applyVoucher');
+        Route::post('/cart/remove-voucher', [ShopCartController::class, 'removeVoucher'])->name('cart.removeVoucher');
         //route tìm kiếm ở phía client
     Route::get('/search', [SearchProductController::class, 'search'])->name('product.search');
 });
