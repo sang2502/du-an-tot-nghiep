@@ -11,10 +11,15 @@ class ContactController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
+        $keyword = $request->input('keyword');
+        if ($keyword) {
+        $contacts = Contact::where('name', 'like', '%' . $keyword . '%')->get();
+        } else {
         $contacts = Contact::all();
-        return view('admin.contact.index', compact('contacts'));
+        }
+        return view('admin.contact.index', compact('contacts', 'keyword'));
     }
 
     /**
@@ -28,10 +33,14 @@ class ContactController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-    {
-        //
-    }
+    // public function search(Request $request)
+    // {
+    //     $keyword = $request->input('keyword');
+
+    //     $contact = Contact::where('name', 'like', '%' . $keyword . '%')->get();
+
+    //     return view('admin.contact.search', compact('contacts', 'keyword'));
+    // }
 
     /**
      * Display the specified resource.
