@@ -19,7 +19,10 @@ class OrderController extends Controller
         if ($request->has('keyword') && $request->keyword != '') {
             $query->where('user_id', 'like', '%' . $request->keyword . '%');
         }
-
+        // Lọc theo trạng thái
+        if ($request->has('status') && $request->status != '') {
+            $query->where('status', $request->status);
+        }
         // Sắp xếp mới nhất trước và phân trang 10 đơn mỗi trang
         $orders = $query->orderBy('created_at', 'desc')->paginate(10);
 

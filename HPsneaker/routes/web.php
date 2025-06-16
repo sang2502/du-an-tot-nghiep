@@ -137,7 +137,7 @@ Route::prefix('admin')->group(function () {
         // Quản lý Order
         Route::prefix('order')->group(function () {
             Route::get('', [OrderController::class, 'index'])->name('order.index');
-            Route::get('show/{id}', [OrderController::class, 'show'])->name('order.show'); // Thêm dòng này
+            Route::get('show/{id}', [OrderController::class, 'show'])->name('order.show');
             Route::get('delete/{id}', [OrderController::class, 'delete'])->name('order.delete');
         });
     });

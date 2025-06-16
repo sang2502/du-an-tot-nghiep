@@ -10,11 +10,15 @@
                 <div class="card-content">
                     {{-- Tìm kiếm --}}
                     <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap">
-                        <form action="{{ route('order.index') }}" method="GET" class="d-flex w-auto"
-                              style="max-width: 250px;">
-                            <input type="text" name="keyword" class="form-control form-control-sm me-2"
-                                   placeholder="Tìm theo User ID..." value="{{ request('keyword') }}">
-                            <button type="submit" class="btn btn-outline-primary btn-sm">Tìm</button>
+                        <form method="GET" action="{{ route('order.index') }}" class="d-flex" style="gap: 8px;">
+                            <input type="text" name="keyword" placeholder="Tìm theo User ID..." value="{{ request('keyword') }}">
+                            <select name="status" onchange="this.form.submit()">
+                                <option value="">-- Tất cả trạng thái --</option>
+                                <option value="completed" {{ request('status') == 'completed' ? 'selected' : '' }}>Hoàn tất</option>
+                                <option value="processing" {{ request('status') == 'processing' ? 'selected' : '' }}>Đang xử lý</option>
+                                <option value="cancelled" {{ request('status') == 'cancelled' ? 'selected' : '' }}>Đã hủy</option>
+                            </select>
+                            <button type="submit">Tìm</button>
                         </form>
                     </div>
 
@@ -43,10 +47,14 @@
                                     <td>{{ $item->voucher_id ?? 'Không áp dụng' }}</td>
                                     <td>{{ number_format($item->discount_applied, 0, ',', '.') }}₫</td>
                                     <td>
-                                        @if($item->status == 1)
-                                            <span class="badge bg-success rounded-pill px-3 py-2">Đang xử lý</span>
-                                        @else
+                                        @if($item->status == 'completed')
                                             <span class="badge bg-secondary rounded-pill px-3 py-2">Hoàn tất</span>
+                                        @elseif($item->status == 'processing')
+                                            <span class="badge bg-warning text-dark rounded-pill px-3 py-2">Đang xử lý</span>
+                                        @elseif($item->status == 'cancelled')
+                                            <span class="badge bg-danger rounded-pill px-3 py-2">Đã hủy</span>
+                                        @else
+                                            <span class="badge bg-info rounded-pill px-3 py-2">{{ $item->status }}</span>
                                         @endif
                                     </td>
                                     <td>{{ ucfirst($item->payment_method) }}</td>
