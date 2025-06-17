@@ -11,10 +11,15 @@ class CommentController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
+        $keyword = $request->input('keyword');
+        if ($keyword) {
+        $comments = Comment::where('name', 'like', '%' . $keyword . '%')->get();
+        } else {
         $comments = Comment::all();
-        return view('admin.comment.index', compact('comments'));
+        }
+        return view('admin.comment.index', compact('comments', 'keyword'));
     }
 
     /**
