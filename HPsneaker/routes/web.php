@@ -18,8 +18,10 @@ use App\Http\Controllers\admin\CommentController;
 use App\Http\Controllers\admin\SizeController;
 use App\Http\Controllers\client\ContactClientController;
 use App\Http\Controllers\admin\BlogPostController;
+use App\Http\Controllers\admin\OrderController;
 use App\Http\Controllers\client\CartController;
 use App\Http\Controllers\client\SearchProductController;
+
 
 // Route cho Admin
 Route::prefix('admin')->group(function () {
@@ -134,7 +136,12 @@ Route::prefix('admin')->group(function () {
             Route::post('update/{id}', [BlogPostController::class, 'update'])->name('blog_post.update');
             Route::get('delete/{id}', [BlogPostController::class, 'destroy'])->name('blog_post.delete');
         });
-
+        // Quản lý Order
+        Route::prefix('order')->group(function () {
+            Route::get('', [OrderController::class, 'index'])->name('order.index');
+            Route::get('show/{id}', [OrderController::class, 'show'])->name('order.show');
+            Route::get('delete/{id}', [OrderController::class, 'delete'])->name('order.delete');
+        });
     });
 });
 

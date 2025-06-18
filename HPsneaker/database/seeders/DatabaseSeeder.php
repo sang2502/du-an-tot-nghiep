@@ -151,5 +151,8 @@ class DatabaseSeeder extends Seeder
             ['blog_post_id' => 1, 'blog_tag_id' => 1],
             ['blog_post_id' => 1, 'blog_tag_id' => 2],
         ]);
-}
+
+        // Order seed
+        $this->call(OrderSeeder::class);
+    }
 }
