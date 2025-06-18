@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
 class Order extends Model
 {
     use HasFactory;
@@ -13,7 +12,8 @@ class Order extends Model
         'status', 'payment_method', 'shipping_address'
     ];
 
-    public function items() {
-        return $this->hasMany(OrderItem::class);
+    public function orderItems()
+    {
+        return $this->hasMany(\App\Models\OrderItem::class, 'order_id', 'id');
     }
 }
