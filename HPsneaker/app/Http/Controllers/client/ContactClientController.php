@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\client;
 use App\Http\Controllers\Controller;
 use App\Models\Contact;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\ThankYouForContacting;
 
 use Illuminate\Http\Request;
 
@@ -34,9 +36,10 @@ class ContactClientController extends Controller
             'email' => 'required|email',
             'mess' => 'required|string',
         ]);
-        Contact::create($data);
 
-        // return redirect()->route('client.contact.index')->with('success', 'Message sent successfully!');
+        $contact = Contact::create($data);
+        // Gửi email cảm ơn
+        Mail::to($contact->email)->send(new ThankYouForContacting($contact->name));
         return back()->with('success', 'Cảm ơn bạn đã liên hệ!');
     }
 
