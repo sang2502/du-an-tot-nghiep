@@ -19,6 +19,9 @@ use App\Http\Controllers\admin\SizeController;
 use App\Http\Controllers\client\ContactClientController;
 use App\Http\Controllers\admin\BlogPostController;
 use App\Http\Controllers\admin\OrderController;
+use App\Http\Controllers\client\CartController;
+use App\Http\Controllers\client\SearchProductController;
+
 
 // Route cho Admin
 Route::prefix('admin')->group(function () {
@@ -52,9 +55,8 @@ Route::prefix('admin')->group(function () {
 
             // Kho ảnh
             Route::prefix('image')->group(function () {
-                Route::get('', [ProductImageController::class, 'index'])->name('product.image.index');
-                Route::post('store', [ProductImageController::class, 'store'])->name('product.image.store');
-                Route::get('{product_id}/detail', [ProductImageController::class, 'show'])->name('product.image.detail');
+                Route::get('{id}', [ProductImageController::class, 'index'])->name('product.image.index');
+                Route::post('store/{id}', [ProductImageController::class, 'store'])->name('product.image.store');
                 Route::get('delete/{id}', [ProductImageController::class, 'destroy'])->name('product.image.delete');
             });
             // Màu sắc
@@ -145,7 +147,7 @@ Route::prefix('admin')->group(function () {
 
 // Route cho Trang chủ
 Route::prefix('/')->group(function () {
-    Route::get('', [HomeController::class, 'index'])->name('home.index');
+    Route::get('', [HomeController::class, 'index'])->name('home');
     Route::get('search', [HomeController::class, 'search'])->name('home.search');
     // Route cho Shop
     Route::prefix('shop')->group(function () {
@@ -164,6 +166,11 @@ Route::prefix('/')->group(function () {
             Route::get('', [ContactClientController::class, 'index'])->name('shop.contact.index');
             Route::post('', [ContactClientController::class, 'submit'])->name('shop.contact.submit');
         });
+        // Route cho nhập voucher
+        Route::post('/cart/apply-voucher', [ShopCartController::class, 'applyVoucher'])->name('cart.applyVoucher');
+        Route::post('/cart/remove-voucher', [ShopCartController::class, 'removeVoucher'])->name('cart.removeVoucher');
+        //route tìm kiếm ở phía client
+    Route::get('/search', [SearchProductController::class, 'search'])->name('product.search');
 });
 });
 // Route cho Login của người dùng

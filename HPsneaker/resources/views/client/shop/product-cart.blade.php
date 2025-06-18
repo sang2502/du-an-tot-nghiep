@@ -101,25 +101,61 @@
                         <div class="shoping__continue">
                             <div class="shoping__discount">
                                 <h5>Mã giảm giá</h5>
-                                <form action="#">
-                                    <input type="text" placeholder="Nhập mã giảm giá">
-                                    <button type="submit" class="site-btn">Áp dụng</button>
-                                </form>
+                                @if(session('success'))
+                                    <div class="alert alert-success">
+                                        {{ session('success') }}
+                                    </div>
+                                @endif
+                                @if(session('error'))
+                                    <div class="alert alert-danger">
+                                        {{ session('error') }}
+                                    </div>
+                                @endif
+                                <div class="d-flex align-items-center">
+                                    <form action="{{ route('cart.applyVoucher') }}" method="POST" class="d-flex align-items-center" style="margin-right:16px;">
+                                        @csrf
+                                        <input type="text" name="voucher_code" placeholder="Nhập mã giảm giá" required class="form-control" style="max-width: 180px;">
+                                        <button type="submit" class="btn btn-link text-dark ms-2">Áp dụng</button>
+                                    </form>
+                                    @if(session('voucher'))
+                                        <form action="{{ route('cart.removeVoucher') }}" method="POST">
+                                            @csrf
+                                            <button type="submit" class="btn btn-link text-danger"
+                                                onclick="return confirm('Bạn có chắc muốn xóa mã giảm giá?')">
+                                                <i class="bi bi-x-circle"></i> Hủy mã
+                                            </button>
+                                        </form>
+                                    @endif
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div class="col-lg-6">
                         <div class="shoping__checkout">
                             <h5>Tổng giỏ hàng</h5>
+                            @php
+                                $subtotal = $cartItems->sum(fn($i) => ($i->variant->price ?? 0) * $i->quantity);
+                                $voucher = session('voucher');
+                                $discount = 0;
+                                if ($voucher) {
+                                    if ($voucher->discount_type == 'percent') {
+                                        $discount = round($subtotal * $voucher->discount_value / 100);
+                                        if ($voucher->max_discount && $discount > $voucher->max_discount) {
+                                            $discount = $voucher->max_discount;
+                                        }
+                                    } else {
+                                        $discount = $voucher->discount_value;
+                                    }
+                                    if ($discount > $subtotal) $discount = $subtotal;
+                                }
+                                $total = $subtotal - $discount;
+                            @endphp
                             <ul>
-                                <li>Tạm tính
-                                    <span>{{ number_format($cartItems->sum(fn($i) => ($i->variant->price ?? 0) * $i->quantity), 0, ',', '.') }}
-                                        đ</span>
-                                </li>
-                                <li>Tổng cộng
-                                    <span>{{ number_format($cartItems->sum(fn($i) => ($i->variant->price ?? 0) * $i->quantity), 0, ',', '.') }}
-                                        đ</span>
-                                </li>
+                                <li>Tạm tính <span>{{ number_format($subtotal, 0, ',', '.') }} đ</span></li>
+                                @if($voucher)
+                                    <li>Giảm giá ({{ $voucher->code }}) <span>-{{ number_format($discount, 0, ',', '.') }} đ</span></li>
+                                @endif
+                                <li>Tổng cộng <span>{{ number_format($total, 0, ',', '.') }} đ</span></li>
                             </ul>
                             <a href="{{ url('/checkout') }}" class="primary-btn">Thanh toán</a>
                         </div>

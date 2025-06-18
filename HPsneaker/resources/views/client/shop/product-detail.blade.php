@@ -1,5 +1,6 @@
 @extends('client.layout.master')
 @section('main')
+
     <!-- Breadcrumb Section Begin -->
     <section class="breadcrumb-section set-bg" data-setbg="{{ asset('img/breadcrumb.jpg') }}">
         <div class="container">
@@ -154,7 +155,7 @@
                 <div class="related-product mt-5">
                     <div class="row">
                         <div class="col-lg-12">
-                            <div class="section-title related__product__title">
+                            <div class="section-title related__product__title ">
                                 <h2>Sản phẩm liên quan</h2>
                             </div>
                         </div>
