@@ -40,7 +40,7 @@ class CheckoutController extends Controller
             'phone'   => 'required|string|max:20',
             'address' => 'required|string|max:255',
             'note'    => 'nullable|string|max:1000',
-            'payment' => 'required|string', // giá trị: 'COD', 'VNPAY', 'MOMO', v.v.
+            'payment' => 'required|string', // ví dụ: 'COD', 'VNPAY', 'MOMO'
         ]);
 
         $userId = session('user.id');
@@ -48,45 +48,58 @@ class CheckoutController extends Controller
         if (!$cart) {
             return back()->with('error', 'Giỏ hàng không tồn tại!');
         }
-        $cartItems = CartItem::where('cart_id', $cart->id)->get();
-        if ($cartItems->count() === 0) {
+        $cartItems = CartItem::with(['variant'])->where('cart_id', $cart->id)->get();
+        if ($cartItems->isEmpty()) {
             return back()->with('error', 'Giỏ hàng rỗng!');
         }
 
         DB::beginTransaction();
         try {
-            // 1. Tạo đơn hàng
+            // Tính tổng tiền
+            $cartTotal = $cartItems->sum(fn($i) => ($i->variant->price ?? 0) * $i->quantity);
+
+            // Tạo đơn hàng (khớp với migration mới)
             $order = Order::create([
-                'user_id'      => $userId,
-                'customer_name'=> $data['name'],
-                'customer_email'=> $data['email'],
-                'customer_phone'=> $data['phone'],
-                'customer_address'=> $data['address'],
-                'note'         => $data['note'] ?? '',
-                'status'       => 'processing', // hoặc mặc định của bạn
-                'payment_method'=> $data['payment'],
-                'total'        => $cartItems->sum(fn($i) => ($i->variant->price ?? 0) * $i->quantity),
+                'user_id'        => $userId,
+                'total_amount'   => $cartTotal,
+                'voucher_id'     => null, // nếu có voucher thì xử lý logic ở đây
+                'discount_applied'=> 0, // nếu có thì xử lý logic ở đây
+                'status'         => 'processing',
+                'payment_method' => $data['payment'],
+                'shipping_address'=> $data['address'],
+                // Nếu bạn có customer_name, email, phone... thì bổ sung vào migration/model!
             ]);
 
-            // 2. Lưu từng sản phẩm vào bảng order_items
+            // Lưu từng item vào order_items
             foreach ($cartItems as $item) {
                 OrderItem::create([
-                    'order_id'         => $order->id,
-                    'product_variant_id'=> $item->product_variant_id,
-                    'quantity'         => $item->quantity,
-                    'price'            => $item->variant->price ?? 0,
+                    'order_id'           => $order->id,
+                    'product_variant_id' => $item->product_variant_id,
+                    'quantity'           => $item->quantity,
+                    'price'              => $item->variant->price ?? 0,
                 ]);
             }
 
-            // 3. Xóa cart và cart items (clear giỏ hàng)
+            // Xoá giỏ hàng và các item
             $cartItems->each->delete();
             $cart->delete();
 
             DB::commit();
-            return redirect()->route('shop.cart.index')->with('success', 'Đặt hàng thành công!');
+
+            // Chuyển sang trang success (hóa đơn), truyền orderId
+            return redirect()->route('checkout.success', $order->id);
+
         } catch (\Exception $e) {
             DB::rollBack();
             return back()->with('error', 'Có lỗi khi đặt hàng: ' . $e->getMessage());
         }
+    }
+
+    // Trang hiển thị hóa đơn thành công cho khách
+    public function success($orderId)
+    {
+        $order = Order::with(['orderItems.variant.product'])->findOrFail($orderId);
+
+        return view('client.checkout.success', compact('order'));
     }
 }

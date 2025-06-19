@@ -169,6 +169,7 @@ Route::prefix('/')->group(function () {
         Route::prefix('checkout')->group(function () {
             Route::get('', [CheckoutController::class, 'index'])->name('checkout.index');
             Route::post('', [CheckoutController::class, 'submit'])->name('checkout.submit');
+            Route::get('/checkout/success/{orderId}', [CheckoutController::class, 'success'])->name('checkout.success');
         });
     });
 });
