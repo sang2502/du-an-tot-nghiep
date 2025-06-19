@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Mail;
-
+use App\Models\Contact;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -16,9 +16,9 @@ class ThankYouForContacting extends Mailable
     /**
      * Create a new message instance.
      */
-    public function __construct()
+    public function __construct($name)
     {
-        //
+        // $this->name = $name;
     }
 
     /**
@@ -46,8 +46,8 @@ class ThankYouForContacting extends Mailable
      *
      * @return array<int, \Illuminate\Mail\Mailables\Attachment>
      */
-    public function attachments(): array
-    {
-        return [];
-    }
+    // public function attachments(): array
+    // {
+    //     return [];
+    // }
 }

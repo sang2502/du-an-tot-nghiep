@@ -18,6 +18,7 @@ use App\Http\Controllers\admin\CommentController;
 use App\Http\Controllers\admin\SizeController;
 use App\Http\Controllers\client\ContactClientController;
 use App\Http\Controllers\admin\BlogPostController;
+use App\Http\Controllers\Client\ProductCommentController;
 use App\Http\Controllers\client\SearchProductController;
 
 // Route cho Admin
@@ -147,6 +148,8 @@ Route::prefix('/')->group(function () {
         Route::get('', [ShopController::class, 'index'])->name('shop.index');
         Route::get('{name}/{id}', [ShopController::class, 'show'])->name('shop.product.show');
         Route::post('add-to-cart/{id}', [ShopController::class, 'addToCart'])->name('shop.product.addToCart');
+        Route::post('{id}/comment', [ShopController::class, 'submitComment'])->name('product.comment');
+
 
         // Route cho giỏ hàng
     Route::prefix('cart')->group(function () {
@@ -161,6 +164,9 @@ Route::prefix('/')->group(function () {
         });
         //route tìm kiếm ở phía client
     Route::get('/search', [SearchProductController::class, 'search'])->name('product.search');
+        // route cho bình luận ở client
+    Route::post('/shop/comment/{id}', [ProductCommentController::class, 'store'])->name('product.comment.store');
+
 });
 });
 // Route cho Login của người dùng

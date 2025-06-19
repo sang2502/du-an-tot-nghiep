@@ -8,6 +8,7 @@ use App\Models\ProductImage;
 use App\Models\ProductVariant;
 use App\Models\Cart;
 use App\Models\CartItem;
+use App\Models\Comment;
 
 
 class ShopController extends Controller
@@ -44,9 +45,26 @@ class ShopController extends Controller
         // Lấy gallery nếu có
         $gallery = ProductImage::where('product_id', $product->id)->get();
         $product->gallery = $gallery;
+        $comments = Comment::where('product_id', $product->id)
+        ->where('status', true)
+        ->orderBy('created_at', 'desc')
+        ->get();
 
-        return view('client.shop.product-detail', compact('product', 'relatedProducts', 'variant'));
+        return view('client.shop.product-detail', compact('product', 'relatedProducts', 'variant', 'comments'));
     }
+    // comment
+    public function submitComment(Request $request, $id)
+{
+    Comment::create([
+        'product_id' => $id,
+        'name' => $request->name,
+        'email' => $request->email,
+        'cmt' => $request->cmt,
+        'status' => true, // bạn có thể cho là false nếu muốn kiểm duyệt trước
+    ]);
+
+    return back()->with('success', 'Bình luận đã được gửi.');
+}
 
     public function addToCart(Request $request, $id)
     {
