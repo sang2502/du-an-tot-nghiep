@@ -157,7 +157,7 @@
                                 @endif
                                 <li>Tổng cộng <span>{{ number_format($total, 0, ',', '.') }} đ</span></li>
                             </ul>
-                            <a href="{{ url('/checkout') }}" class="primary-btn">Thanh toán</a>
+                            <a href="{{ route('checkout.index') }}" class="primary-btn">Thanh toán</a>
                         </div>
                     </div>
                 </div>

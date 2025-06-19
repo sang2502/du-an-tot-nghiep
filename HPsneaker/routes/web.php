@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\client\CheckoutController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\admin\CategoryController;
 use App\Http\Controllers\admin\ContactController;
@@ -178,7 +179,13 @@ Route::prefix('/')->group(function () {
     Route::post('/shop/comment/{id}', [ProductCommentController::class, 'store'])->name('product.comment.store');
 
 });
-});
+        // Check out cline
+        Route::prefix('checkout')->group(function () {
+            Route::get('', [CheckoutController::class, 'index'])->name('checkout.index');
+            Route::post('', [CheckoutController::class, 'submit'])->name('checkout.submit');
+            Route::get('/checkout/success/{orderId}', [CheckoutController::class, 'success'])->name('checkout.success');
+        });
+    });
 // Route cho Login của người dùng
 Route::get('login', [UserAuthController::class, 'showLoginForm'])->name('user.login');
 Route::post('login', [UserAuthController::class, 'login'])->name('user.login.submit');
