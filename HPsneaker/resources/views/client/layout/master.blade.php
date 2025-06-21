@@ -158,7 +158,7 @@
             color: #ffffff !important;
         }
 
-        .product__details__option .optionimage.active,
+        .roduct__details__option .optionimage.active,
         .product__details__option .optionimage:active {
             background: #000 !important;
             color: #fff !important;
@@ -167,11 +167,18 @@
 
         .hero__categories ul {
             display: none;
+            position: absolute;
+            top: 47px;
+            left: 15px;
+            width: 255px;
+            z-index: 1000;
+            background: #fff;
         }
 
         .hero__categories.active ul {
             display: block;
         }
+        
     </style>
 
 </head>
@@ -259,11 +266,11 @@
                                         </a>
                                         <a href="{{ route('user.logout') }}" style="margin-left: 10px; color: #435EBE;"
                                             onclick="return confirm('Bạn có chắc muốn đăng xuất?')">
-                                            <i class="fa fa-sign-out"></i> Logout
+                                            <i class="fa fa-sign-out"></i> Đăng xuất
                                         </a>
                                     </span>
                                 @else
-                                    <a href="{{ route('user.login') }}"><i class="fa fa-user"></i> Login</a>
+                                    <a href="{{ route('user.login') }}"><i class="fa fa-user"></i> Đăng nhập</a>
                                 @endif
 
                             </div>
