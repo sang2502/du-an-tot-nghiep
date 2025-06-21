@@ -16,4 +16,10 @@ class Order extends Model
     {
         return $this->hasMany(\App\Models\OrderItem::class, 'order_id', 'id');
     }
+    public function items() {
+        return $this->hasMany(OrderItem::class);
+    }
+    public function voucher() {
+        return $this->belongsTo(Voucher::class);
+    }
 }

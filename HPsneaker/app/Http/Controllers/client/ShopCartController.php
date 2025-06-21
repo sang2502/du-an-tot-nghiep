@@ -4,6 +4,7 @@ use App\Http\Controllers\Controller;
 use App\Models\CartItem;
 use Illuminate\Http\Request;
 use App\Models\Cart;
+use App\Models\Voucher;
 class ShopCartController extends Controller
 {
     public function index()
@@ -31,5 +32,23 @@ class ShopCartController extends Controller
         $cartItem->delete();
 
         return redirect()->route('shop.cart.index')->with('success', 'Sản phẩm đã được xóa khỏi giỏ hàng.');
+    }
+    public function applyVoucher(Request $request) {
+        $voucher = Voucher::where('code', $request->voucher_code)
+            ->where(function($q) {
+                $q->whereNull('valid_to')->orWhere('valid_to', '>=', now());
+            })
+            ->first();
+
+        if (!$voucher) {
+            return back()->with('error', 'Mã giảm giá không hợp lệ hoặc đã hết hạn.');
+        }
+
+        session(['voucher' => $voucher]);
+        return back()->with('success', 'Áp dụng mã giảm giá thành công!');
+    }
+    public function removeVoucher() {
+        session()->forget('voucher');
+        return back()->with('success', 'Đã xóa mã giảm giá khỏi giỏ hàng.');
     }
 }

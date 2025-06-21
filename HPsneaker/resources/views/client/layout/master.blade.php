@@ -29,6 +29,7 @@
             font-size: 16px;
             color: #111827;
             background: #f9fafb;
+            padding-top: 150px;
         }
 
         /* Nút (Buttons) */
@@ -85,7 +86,34 @@
         /* Header */
         .header {
             background-color: #ffffff;
-            border-bottom: 1px solid #e5e7eb;
+            border-bottom: 0.1px solid #ffffff;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            background: #fff;
+            box-shadow: 0 2px 8px rgb(255, 255, 255);
+            transition: all 0.3s;
+        }
+
+        .header__top {
+            will-change: transform;
+        }
+
+        .header.shrink {
+            min-height: 38px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .header.shrink .site-branding img {
+            max-height: 28px;
+            transition: max-height 0.3s;
+        }
+
+        .header.shrink .header__menu ul li a {
+            font-size: 12px;
+            padding: 3px 7px;
         }
 
         .header__menu ul li a {
@@ -130,12 +158,27 @@
             color: #ffffff !important;
         }
 
-        .product__details__option .optionimage.active,
+        .roduct__details__option .optionimage.active,
         .product__details__option .optionimage:active {
             background: #000 !important;
             color: #fff !important;
             border-color: #000 !important;
         }
+
+        .hero__categories ul {
+            display: none;
+            position: absolute;
+            top: 47px;
+            left: 15px;
+            width: 255px;
+            z-index: 1000;
+            background: #fff;
+        }
+
+        .hero__categories.active ul {
+            display: block;
+        }
+        
     </style>
 
 </head>
@@ -157,7 +200,6 @@
                 <li><a href="#"><i class="fa fa-heart"></i> <span>1</span></a></li>
                 <li><a href="#"><i class="fa fa-shopping-bag"></i> <span>3</span></a></li>
             </ul>
-            <div class="header__cart__price">Tổng: <span>0đ</span></div>
         </div>
         <div class="humberger__menu__widget">
             <div class="header__top__right__language">
@@ -211,31 +253,11 @@
             <div class="container">
                 <div class="row">
                     <div class="col-lg-6 col-md-6">
-                        <div class="header__top__left">
-                            <ul>
-                                <li><i class="fa fa-envelope"></i> hello@colorlib.com</li>
-                            </ul>
-                        </div>
                     </div>
                     <div class="col-lg-6 col-md-6">
                         <div class="header__top__right">
-                            <div class="header__top__right__social">
-                                <a href="#"><i class="fa fa-facebook"></i></a>
-                                <a href="#"><i class="fa fa-twitter"></i></a>
-                                <a href="#"><i class="fa fa-linkedin"></i></a>
-                                <a href="#"><i class="fa fa-pinterest-p"></i></a>
-                            </div>
-                            <div class="header__top__right__language">
-                                <img src="{{ asset('img/language.png') }}" alt="">
-                                <div>Tiếng Việt</div>
-                                <span class="arrow_carrot-down"></span>
-                                <ul>
-                                    <li><a href="#">English</a></li>
-                                    <li><a href="#">Tiếng Việt</a></li>
-                                </ul>
-                            </div>
                             <div class="header__top__right__auth">
-                                @if(session('user'))
+                                @if (session('user'))
                                     <span style="display: flex; align-items: center;">
                                         <i class="fa fa-user"></i>
                                         <a href="{{ route('user.profile.show') }}"
@@ -244,11 +266,11 @@
                                         </a>
                                         <a href="{{ route('user.logout') }}" style="margin-left: 10px; color: #435EBE;"
                                             onclick="return confirm('Bạn có chắc muốn đăng xuất?')">
-                                            <i class="fa fa-sign-out"></i> Logout
+                                            <i class="fa fa-sign-out"></i> Đăng xuất
                                         </a>
                                     </span>
                                 @else
-                                    <a href="{{ route('user.login') }}"><i class="fa fa-user"></i> Login</a>
+                                    <a href="{{ route('user.login') }}"><i class="fa fa-user"></i> Đăng nhập</a>
                                 @endif
 
                             </div>
@@ -282,14 +304,13 @@
                         </ul>
                     </nav>
                 </div>
-                <div class="col-lg-3">
+                <div class="col-lg-2">
                     <div class="header__cart">
                         <ul>
-                            <li><a href="#"><i class="fa fa-heart"></i> <span>1</span></a></li>
-                            <li><a href="{{ url('/shop/cart') }}"><i class="fa fa-shopping-bag"></i> <span>3</span></a>
+                            <li><a href="{{ url('/shop/cart') }}"><i class="fa fa-shopping-bag"></i>
+                                    <span>3</span></a>
                             </li>
                         </ul>
-                        <div class="header__cart__price">Tổng: <span>0đ</span></div>
                     </div>
                 </div>
             </div>
@@ -310,7 +331,8 @@
                 <div class="col-lg-3 col-md-6 col-sm-6">
                     <div class="footer__about">
                         <div class="footer__about__logo">
-                            <a href="{{ url('/') }}"><img src="{{ asset('img/logo.png') }}" alt="Logo"></a>
+                            <a href="{{ url('/') }}"><img src="{{ asset('img/logo.png') }}"
+                                    alt="Logo"></a>
                         </div>
                         <ul>
                             <li>Địa chỉ: 60-49 Road 11378 New York</li>
@@ -363,7 +385,9 @@
                         <div class="footer__copyright__text">
                             <p>
                                 Copyright &copy;
-                                <script>document.write(new Date().getFullYear());</script> All rights reserved | This
+                                <script>
+                                    document.write(new Date().getFullYear());
+                                </script> All rights reserved | This
                                 template is made with <i class="fa fa-heart" aria-hidden="true"></i> by <a
                                     href="https://colorlib.com" target="_blank">Colorlib</a>
                             </p>
@@ -388,16 +412,43 @@
     <script src="{{ asset('js/owl.carousel.min.js') }}"></script>
     <script src="{{ asset('js/main.js') }}"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-        document.querySelectorAll('.product__details__option .optionimage').forEach(function(btn) {
-            btn.addEventListener('click', function() {
-                document.querySelectorAll('.product__details__option .optionimage').forEach(function(b) {
-                    b.classList.remove('active');
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.product__details__option .optionimage').forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.product__details__option .optionimage').forEach(
+                        function(b) {
+                            b.classList.remove('active');
+                        });
+                    this.classList.add('active');
                 });
-                this.classList.add('active');
             });
         });
-    });
+    </script>
+    {{-- Category toggle --}}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const catAll = document.querySelector('.hero__categories__all');
+            const heroCat = document.querySelector('.hero__categories');
+            catAll.addEventListener('click', function() {
+                heroCat.classList.toggle('active');
+            });
+        });
+    </script>
+    {{-- Menu --}}
+    <script>
+        let lastScroll = 0;
+        window.addEventListener('scroll', function() {
+            const topBar = document.getElementById('topBar');
+            if (!topBar) return;
+            if (window.scrollY > 30) {
+                topBar.style.transform = 'translateY(-100%)';
+                topBar.style.transition = 'transform 0.3s';
+            } else {
+                topBar.style.transform = 'translateY(0)';
+            }
+
+        });
+        // 
     </script>
 </body>
 

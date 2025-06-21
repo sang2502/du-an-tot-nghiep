@@ -1,19 +1,23 @@
 <?php
 
-namespace App\Http\Controllers\admin;
+namespace App\Http\Controllers\client;
 use App\Http\Controllers\Controller;
-use App\Models\Voucher;
+use App\Models\Product;
 
 use Illuminate\Http\Request;
 
-class CartController extends Controller
+class SearchProductController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function search(Request $request)
     {
-        //
+        $keyword = $request->input('keyword');
+
+        $products = Product::where('name', 'like', '%' . $keyword . '%')->get();
+
+        return view('client.searchResults', compact('products', 'keyword'));
     }
 
     /**
@@ -27,9 +31,9 @@ class CartController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function submit(Request $request)
     {
-        //
+
     }
 
     /**
@@ -45,7 +49,7 @@ class CartController extends Controller
      */
     public function edit(string $id)
     {
-        //
+
     }
 
     /**

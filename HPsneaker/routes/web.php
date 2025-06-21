@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\client\CheckoutController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\admin\CategoryController;
 use App\Http\Controllers\admin\ContactController;
@@ -19,6 +20,10 @@ use App\Http\Controllers\admin\SizeController;
 use App\Http\Controllers\client\ContactClientController;
 use App\Http\Controllers\admin\BlogPostController;
 use App\Http\Controllers\admin\OrderController;
+use App\Http\Controllers\client\CartController;
+use App\Http\Controllers\Client\ProductCommentController;
+use App\Http\Controllers\client\SearchProductController;
+
 
 // Route cho Admin
 Route::prefix('admin')->group(function () {
@@ -52,9 +57,8 @@ Route::prefix('admin')->group(function () {
 
             // Kho ảnh
             Route::prefix('image')->group(function () {
-                Route::get('', [ProductImageController::class, 'index'])->name('product.image.index');
-                Route::post('store', [ProductImageController::class, 'store'])->name('product.image.store');
-                Route::get('{product_id}/detail', [ProductImageController::class, 'show'])->name('product.image.detail');
+                Route::get('{id}', [ProductImageController::class, 'index'])->name('product.image.index');
+                Route::post('store/{id}', [ProductImageController::class, 'store'])->name('product.image.store');
                 Route::get('delete/{id}', [ProductImageController::class, 'destroy'])->name('product.image.delete');
             });
             // Màu sắc
@@ -152,6 +156,8 @@ Route::prefix('/')->group(function () {
         Route::get('', [ShopController::class, 'index'])->name('shop.index');
         Route::get('{name}/{id}', [ShopController::class, 'show'])->name('shop.product.show');
         Route::post('add-to-cart/{id}', [ShopController::class, 'addToCart'])->name('shop.product.addToCart');
+        Route::post('{id}/comment', [ShopController::class, 'submitComment'])->name('product.comment');
+
 
         // Route cho giỏ hàng
     Route::prefix('cart')->group(function () {
@@ -164,8 +170,22 @@ Route::prefix('/')->group(function () {
             Route::get('', [ContactClientController::class, 'index'])->name('shop.contact.index');
             Route::post('', [ContactClientController::class, 'submit'])->name('shop.contact.submit');
         });
+        // Route cho nhập voucher
+        Route::post('/cart/apply-voucher', [ShopCartController::class, 'applyVoucher'])->name('cart.applyVoucher');
+        Route::post('/cart/remove-voucher', [ShopCartController::class, 'removeVoucher'])->name('cart.removeVoucher');
+        //route tìm kiếm ở phía client
+    Route::get('/search', [SearchProductController::class, 'search'])->name('product.search');
+        // route cho bình luận ở client
+    Route::post('/shop/comment/{id}', [ProductCommentController::class, 'store'])->name('product.comment.store');
+
 });
-});
+        // Check out cline
+        Route::prefix('checkout')->group(function () {
+            Route::get('', [CheckoutController::class, 'index'])->name('checkout.index');
+            Route::post('', [CheckoutController::class, 'submit'])->name('checkout.submit');
+            Route::get('/checkout/success/{orderId}', [CheckoutController::class, 'success'])->name('checkout.success');
+        });
+    });
 // Route cho Login của người dùng
 Route::get('login', [UserAuthController::class, 'showLoginForm'])->name('user.login');
 Route::post('login', [UserAuthController::class, 'login'])->name('user.login.submit');
