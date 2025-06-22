@@ -23,6 +23,7 @@ use App\Http\Controllers\admin\OrderController;
 use App\Http\Controllers\client\CartController;
 use App\Http\Controllers\Client\ProductCommentController;
 use App\Http\Controllers\client\SearchProductController;
+use App\Http\Controllers\client\ForgotPasswordController;
 
 
 // Route cho Admin
@@ -194,4 +195,7 @@ Route::get('profile', [UserAuthController::class, 'showProfile'])->name('user.pr
 Route::get('edit', [UserAuthController::class, 'editProfile'])->name('user.profile.edit');
 Route::post('update', [UserAuthController::class, 'updateProfile'])->name('user.profile.update');
 
+//Route cho quên mật khẩu
+Route::get('/forgot-password', [ForgotPasswordController::class, 'showForm'])->name('forgot-password.form');
+Route::post('/forgot-password', [ForgotPasswordController::class, 'handleForm'])->name('forgot-password.send');
 
