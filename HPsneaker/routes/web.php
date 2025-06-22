@@ -157,6 +157,7 @@ Route::prefix('/')->group(function () {
         Route::get('{name}/{id}', [ShopController::class, 'show'])->name('shop.product.show');
         Route::post('add-to-cart/{id}', [ShopController::class, 'addToCart'])->name('shop.product.addToCart');
         Route::post('{id}/comment', [ShopController::class, 'submitComment'])->name('product.comment');
+        Route::post('/product/{id}/review', [ShopController::class, 'submitReview'])->name('product.review.store');
 
 
         // Route cho giỏ hàng
