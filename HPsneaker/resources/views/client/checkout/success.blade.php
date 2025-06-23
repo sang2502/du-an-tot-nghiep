@@ -16,6 +16,18 @@
                                 <td>{{ $order->id }}</td>
                             </tr>
                             <tr>
+                                <th>Tên khách hàng:</th>
+                                <td>{{ $order->name }}</td>
+                            </tr>
+                            <tr>
+                                <th>Email:</th>
+                                <td>{{ $order->email }}</td>
+                            </tr>
+                            <tr>
+                                <th>Số điện thoại:</th>
+                                <td>{{ $order->phone }}</td>
+                            </tr>
+                            <tr>
                                 <th>Địa chỉ giao hàng:</th>
                                 <td>{{ $order->shipping_address }}</td>
                             </tr>
@@ -54,15 +66,22 @@
                             </tr>
                             </thead>
                             <tbody>
-                            @foreach($order->items as $item)
+                            @foreach($order->orderItems as $item)
                                 <tr>
                                     <td>{{ $item->variant->product->name ?? 'Sản phẩm' }}</td>
-                                    <td>{{ $item->variant->name ?? '-' }}</td>
+                                    <td>
+                                        @if($item->variant->size && $item->variant->color)
+                                            Size: {{ $item->variant->size->value }}, Màu: {{ $item->variant->color->name }}
+                                        @else
+                                            -
+                                        @endif
+                                    </td>
                                     <td>{{ $item->quantity }}</td>
                                     <td>{{ number_format($item->price, 0, ',', '.') }} đ</td>
                                     <td>{{ number_format($item->quantity * $item->price, 0, ',', '.') }} đ</td>
                                 </tr>
                             @endforeach
+
                             </tbody>
                         </table>
                         <div class="text-center mt-4">
