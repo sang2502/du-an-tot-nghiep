@@ -12,12 +12,11 @@ class ProductImageController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request, $id)
     {
-        //
-        // Lấy danh sách sản phẩm với hình ảnh liên quan
-        $products = Product::with('images')->paginate(10); // 10 sản phẩm mỗi trang
-        return view('admin.product.image.image', compact('products'));
+        $product = Product::findOrFail($id);
+        $images = ProductImage::where('product_id', $id)->get();
+        return view('admin.product.image', compact('product', 'images'));
 
     }
 
@@ -46,18 +45,13 @@ class ProductImageController extends Controller
             }
         }
 
-        return redirect()->route('product.image.index')->with('success', 'Thêm ảnh thành công');
+        return redirect()->route('product.image.index',$request->product_id)->with('success', 'Thêm ảnh thành công');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
-    {
-        //
-        $productImgDetail = Product::with('images')->findOrFail($id);
-        return view('admin.product.image.detail', compact('productImgDetail'));
-    }
+
 
        public function destroy(string $id)
     {

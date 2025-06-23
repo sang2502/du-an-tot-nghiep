@@ -104,7 +104,7 @@
                                 </label>
                             </div>
                         </div>
-                        <div class="sidebar__item">
+                        {{-- <div class="sidebar__item">
                             <div class="latest-product__text">
                                 <h4>Giày mới nhất</h4>
                                 <div class="latest-product__slider owl-carousel">
@@ -123,7 +123,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
                 <!-- End Sidebar -->
@@ -156,7 +156,8 @@
                                 <div class="product__item">
                                     <a
                                         href="{{ route('shop.product.show', ['name' => Str::slug($product->name), 'id' => $product->id]) }}">
-                                        <div class="product__item__pic set-bg" data-setbg="{{ $product->thumbnail }}">
+                                        <div class="product__item__pic set-bg">
+                                            <img src="{{ $product->thumbnail }}" alt="">
                                         </div>
                                     </a>
 
