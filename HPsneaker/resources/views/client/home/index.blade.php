@@ -33,33 +33,40 @@
                     </div>
                 </div>
             </div>
-            {{-- Banner --}}
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="hero__item set-bg" data-setbg="{{ asset('img/hero/banner.jpg') }}" style="width: ;">
-                        <div class="hero__text">
-                            <span>SNEAKER HOT</span>
-                            <h2>Bộ sưu tập <br />2025</h2>
-                            <p>Miễn phí vận chuyển toàn quốc</p>
-                            <a href="{{ route('shop.index') }}" class="primary-btn">MUA NGAY</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
     </section>
     <!-- Hero Section End -->
+    {{-- Banner --}}
+    <section class="hero"
+        style="height: 600px; position: relative; background-image: url('{{ asset('img/hero/banner.jpg') }}'); background-size: cover; background-position: center;">
+        <div
+            style=" position: absolute; top:0; left:0; width:100%; height:100%; display:flex; align-items:center; justify-content:center; text-align:center; padding: 20px;">
+            <div style="color:#fff;">
+                <h2 style="font-size: 48px; font-weight: bold;">BỘ SƯU TẬP GIÀY MỚI 2025</h2>
+                <p style="font-size: 20px;">Phân phối chính hãng, giá tốt, giao hàng toàn quốc</p>
+                <a href="{{ route('shop.index') }}" class="primary-btn"
+                    style="background-color: #e74c3c; padding: 12px 30px; font-size: 16px; border-radius: 5px; color:#fff; text-decoration:none;">MUA
+                    NGAY</a>
+            </div>
+        </div>
+    </section>
+
+    <hr style="border: none; border-top: 1px solid #ccc; margin: 20px 0;">
 
     <!-- Categories Section Begin -->
-    <section class="categories">
+    <section class="categories spad" style="padding: 50px 0; background-color: #f8f9fa;">
         <div class="container">
             <div class="row">
                 <div class="categories__slider owl-carousel">
                     @foreach ($categories as $i => $category)
-                        <div class="col-lg-3">
+                        <div class="col-lg-3 col-md-4 col-sm-6 mb-3">
                             <div class="categories__item set-bg"
-                                data-setbg="{{ asset('img/categories/cat-' . $i . '.jpg') }}">
-                                <h5><a href="#">{{ $category->name }}</a></h5>
+                                data-setbg="{{ asset('img/categories/cat-' . $i . '.jpg') }}"
+                                style="border-radius:8px; overflow:hidden; position: relative;">
+                                <a href="#"
+                                    style="display:block; width:100%; height:100%; padding:20px; background: rgba(102, 98, 98, 0.221); color:#fff; font-weight:bold; font-size:16px; text-align:center; text-decoration:none;">
+                                    {{ $category->name }}
+                                </a>
                             </div>
                         </div>
                     @endforeach
@@ -68,6 +75,8 @@
         </div>
     </section>
     <!-- Categories Section End -->
+<hr style="border: none; border-top: 1px solid #ccc; margin: 20px 0 -50px;">
+
 
     <!-- Featured Section Begin -->
     <section class="featured spad">
@@ -112,6 +121,7 @@
         </div>
     </section>
     <!-- Featured Section End -->
+<hr style="border: none; border-top: 1px solid #ccc; margin: 20px 0;">
 
     <!-- Banner Begin -->
     <div class="banner">
@@ -131,6 +141,7 @@
         </div>
     </div>
     <!-- Banner End -->
+<hr style="border: none; border-top: 1px solid #ccc; margin: 20px 0 -10px;">
 
     <!-- Latest Product Section Begin -->
     <section class="latest-product spad">
@@ -204,6 +215,7 @@
         </div>
     </section>
     <!-- Latest Product Section End -->
+<hr style="border: none; border-top: 1px solid #ccc; margin: 20px 0 -10px;">
 
     <!-- Blog Section Begin -->
     <section class="from-blog spad">

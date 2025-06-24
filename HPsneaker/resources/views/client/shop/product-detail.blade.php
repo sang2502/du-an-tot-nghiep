@@ -47,13 +47,10 @@
                         <h3 class="mb-2">{{ $product->name ?? 'Tên sản phẩm' }}</h3>
                         <div class="product__details__rating mb-2">
                             @php
-                                $stars = round($averageRating ?? 0); // Làm tròn số sao
+                                $stars = round($product->rating ?? 5);
                             @endphp
-
-                            @for($i = 1; $i <= 5; $i++)
-                                @if($i <= $stars)
                             @for ($i = 1; $i <= 5; $i++)
-                                @if ($i <= round($product->rating ?? 5))
+                                @if ($i <= $stars)
                                     <i class="fa fa-star text-warning"></i>
                                 @else
                                     <i class="fa fa-star-o text-warning"></i>
@@ -145,141 +142,155 @@
                                     </div>
                                 </div>
                                 <div class="tab-pane" id="tabs-3" role="tabpanel">
-                                        <div class="product__details__tab__desc">
-                                            <h6>Nhận xét của bạn</h6>
+                                    <div class="product__details__tab__desc">
+                                        <h6>Nhận xét của bạn</h6>
 
-                                            @if(session('user'))
-                                                <div class="row">
-                                                    {{-- bình luận --}}
-                                                    <div class="col-md-6">
-                                                        <form action="{{ route('product.comment.store', $product->id) }}" method="POST" class="mb-4">
-                                                            @csrf
-                                                            <div class="form-group">
-                                                                <label for="cmt">Bình luận</label>
-                                                                <textarea class="form-control" name="cmt" rows="3" required></textarea>
-                                                            </div>
-                                                            <button type="submit" class="primary-btn mr-2">Gửi bình luận</button>
-                                                        </form>
-                                                    </div>
+                                        @if (session('user'))
+                                            <div class="row">
+                                                {{-- bình luận --}}
+                                                <div class="col-md-6">
+                                                    <form action="{{ route('product.comment.store', $product->id) }}"
+                                                        method="POST" class="mb-4">
+                                                        @csrf
+                                                        <div class="form-group">
+                                                            <label for="cmt">Bình luận</label>
+                                                            <textarea class="form-control" name="cmt" rows="3" required></textarea>
+                                                        </div>
+                                                        <button type="submit" class="primary-btn mr-2">Gửi bình
+                                                            luận</button>
+                                                    </form>
+                                                </div>
 
-                                                    {{-- Đánh giá --}}
-                                                    <div class="col-md-6 mt-3">
-                                                        <form action="{{ route('product.review.store', $product->id) }}" method="POST" class="mb-4">
-                                                            @csrf
-                                                            <div class="form-group">
-                                                                {{-- <label for="rating">Đánh giá sao</label> --}}
-                                                                <select name="rating" class="form-control w-50" required>
-                                                                    @for($i = 1; $i <= 5; $i++)
-                                                                        <option value="{{ $i }}">{{ $i }} sao</option>
-                                                                    @endfor
-                                                                </select>
-                                                            </div>
-                                                            <button type="submit" class="primary-btn mr-2">Gửi đánh giá</button>
-                                                        </form>
+                                                {{-- Đánh giá --}}
+                                                <div class="col-md-6 mt-3">
+                                                    <form action="{{ route('product.review.store', $product->id) }}"
+                                                        method="POST" class="mb-4">
+                                                        @csrf
+                                                        <div class="form-group">
+                                                            {{-- <label for="rating">Đánh giá sao</label> --}}
+                                                            <select name="rating" class="form-control w-50" required>
+                                                                @for ($i = 1; $i <= 5; $i++)
+                                                                    <option value="{{ $i }}">
+                                                                        {{ $i }} sao</option>
+                                                                @endfor
+                                                            </select>
+                                                        </div>
+                                                        <button type="submit" class="primary-btn mr-2">Gửi đánh
+                                                            giá</button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        @else
+                                            <p>Vui lòng <a href="{{ route('user.login') }}">đăng nhập</a> để bình luận
+                                                hoặc đánh giá.</p>
+                                        @endif
+
+                                        <!-- Related Product Section Begin -->
+                                        <div class="related-product mt-5">
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <div class="section-title related__product__title ">
+                                                        <h2>Sản phẩm liên quan</h2>
+                                                        <hr>
+
+                                                        {{-- Hiển thị danh sách bình luận --}}
+                                                        @if ($product->comments && $product->comments->count())
+                                                            @foreach ($product->comments as $comment)
+                                                                <div class="mb-3 p-3 border rounded bg-white">
+                                                                    <strong>{{ $comment->name }}</strong>
+                                                                    <span
+                                                                        class="text-muted">({{ $comment->created_at->format('d/m/Y H:i') }})</span>
+                                                                    <p class="mb-0">{{ $comment->cmt }}</p>
+                                                                </div>
+                                                            @endforeach
+                                                        @else
+                                                            <p>Chưa có bình luận nào cho sản phẩm này.</p>
+                                                        @endif
                                                     </div>
                                                 </div>
-                                            @else
-                                                <p>Vui lòng <a href="{{ route('user.login') }}">đăng nhập</a> để bình luận hoặc đánh giá.</p>
-                                            @endif
 
-                <!-- Related Product Section Begin -->
-                <div class="related-product mt-5">
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="section-title related__product__title ">
-                                <h2>Sản phẩm liên quan</h2>
-                                            <hr>
+                                            </div>
+                                        </div>
 
-                                            {{-- Hiển thị danh sách bình luận --}}
-                                            @if($product->comments && $product->comments->count())
-                                                @foreach($product->comments as $comment)
-                                                    <div class="mb-3 p-3 border rounded bg-white">
-                                                        <strong>{{ $comment->name }}</strong>
-                                                        <span class="text-muted">({{ $comment->created_at->format('d/m/Y H:i') }})</span>
-                                                        <p class="mb-0">{{ $comment->cmt }}</p>
+                                    </div>
+                                    <!-- Tab mô tả, thông tin, đánh giá -->
+                                    <div class="col-lg-12 mt-5">
+                                        <div class="product__details__tab">
+                                            <ul class="nav nav-tabs" role="tablist">
+                                                <li class="nav-item">
+                                                    <a class="nav-link active" data-toggle="tab" href="#tabs-1"
+                                                        role="tab" aria-selected="true">Mô tả</a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a class="nav-link" data-toggle="tab" href="#tabs-2" role="tab"
+                                                        aria-selected="false">Thông
+                                                        tin</a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a class="nav-link" data-toggle="tab" href="#tabs-3" role="tab"
+                                                        aria-selected="false">Đánh
+                                                        giá <span>({{ $product->reviews_count ?? 0 }})</span></a>
+                                                </li>
+                                            </ul>
+                                            <div class="tab-content p-3 border border-top-0 rounded-bottom bg-light">
+                                                <div class="tab-pane active" id="tabs-1" role="tabpanel">
+                                                    <div class="product__details__tab__desc">
+                                                        <h6>Mô tả sản phẩm</h6>
+                                                        <p>{{ $product->description ?? 'Mô tả sản phẩm sẽ hiển thị ở đây.' }}
+                                                        </p>
                                                     </div>
-                                                @endforeach
-                                            @else
-                                                <p>Chưa có bình luận nào cho sản phẩm này.</p>
-                                            @endif
+                                                </div>
+                                                <div class="tab-pane" id="tabs-2" role="tabpanel">
+                                                    <div class="product__details__tab__desc">
+                                                        <h6>Thông tin chi tiết</h6>
+                                                        <p>Thương hiệu: {{ $product->brand ?? 'Sneaker Shop' }}</p>
+                                                        <p>Chất liệu: {{ $product->material ?? 'Da tổng hợp' }}</p>
+                                                        <p>Kích cỡ: {{ $product->size ?? '40-44' }}</p>
+                                                        <p>Màu sắc: {{ $product->color ?? 'Trắng/Đen' }}</p>
+                                                    </div>
+                                                </div>
+                                                <div class="tab-pane" id="tabs-3" role="tabpanel">
+                                                    <div class="product__details__tab__desc">
+                                                        <h6>Bình luận</h6>
+                                                        {{-- Hiển thị danh sách bình luận --}}
+                                                        @if ($product->comments && $product->comments->count())
+                                                            @foreach ($product->comments as $comment)
+                                                                <div class="mb-3 p-3 border rounded bg-white">
+                                                                    <strong>{{ $comment->name }}</strong>
+                                                                    <span
+                                                                        class="text-muted">({{ $comment->created_at->format('d/m/Y H:i') }})</span>
+                                                                    <p class="mb-0">{{ $comment->cmt }}</p>
+                                                                </div>
+                                                            @endforeach
+                                                        @else
+                                                            <p>Chưa có bình luận nào cho sản phẩm này.</p>
+                                                        @endif
+
+                                                        {{-- Form gửi bình luận --}}
+                                                        @if (session('user'))
+                                                            <form
+                                                                action="{{ route('product.comment.store', $product->id) }}"
+                                                                method="POST">
+                                                                @csrf
+                                                                <div class="form-group">
+                                                                    <label for="content">Bình luận</label>
+                                                                    <textarea class="form-control" name="cmt" rows="3" required></textarea>
+                                                                </div>
+                                                                <button type="submit" class="btn btn-dark mt-2">Gửi bình
+                                                                    luận</button>
+                                                            </form>
+                                                        @else
+                                                            <p>Vui lòng <a href="{{ route('user.login') }}">đăng nhập</a>
+                                                                để bình luận.</p>
+                                                        @endif
+                                                        <p>Chưa có đánh giá nào.</p>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-
                                 </div>
-                </div>
-
-            </div>
-            <!-- Tab mô tả, thông tin, đánh giá -->
-            <div class="col-lg-12 mt-5">
-                <div class="product__details__tab">
-                    <ul class="nav nav-tabs" role="tablist">
-                        <li class="nav-item">
-                            <a class="nav-link active" data-toggle="tab" href="#tabs-1" role="tab"
-                                aria-selected="true">Mô tả</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" data-toggle="tab" href="#tabs-2" role="tab" aria-selected="false">Thông
-                                tin</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" data-toggle="tab" href="#tabs-3" role="tab" aria-selected="false">Đánh
-                                giá <span>({{ $product->reviews_count ?? 0 }})</span></a>
-                        </li>
-                    </ul>
-                    <div class="tab-content p-3 border border-top-0 rounded-bottom bg-light">
-                        <div class="tab-pane active" id="tabs-1" role="tabpanel">
-                            <div class="product__details__tab__desc">
-                                <h6>Mô tả sản phẩm</h6>
-                                <p>{{ $product->description ?? 'Mô tả sản phẩm sẽ hiển thị ở đây.' }}</p>
-                            </div>
-                        </div>
-                        <div class="tab-pane" id="tabs-2" role="tabpanel">
-                            <div class="product__details__tab__desc">
-                                <h6>Thông tin chi tiết</h6>
-                                <p>Thương hiệu: {{ $product->brand ?? 'Sneaker Shop' }}</p>
-                                <p>Chất liệu: {{ $product->material ?? 'Da tổng hợp' }}</p>
-                                <p>Kích cỡ: {{ $product->size ?? '40-44' }}</p>
-                                <p>Màu sắc: {{ $product->color ?? 'Trắng/Đen' }}</p>
-                            </div>
-                        </div>
-                        <div class="tab-pane" id="tabs-3" role="tabpanel">
-                            <div class="product__details__tab__desc">
-                                <h6>Bình luận</h6>
-                                {{-- Hiển thị danh sách bình luận --}}
-                                @if ($product->comments && $product->comments->count())
-                                    @foreach ($product->comments as $comment)
-                                        <div class="mb-3 p-3 border rounded bg-white">
-                                            <strong>{{ $comment->name }}</strong>
-                                            <span
-                                                class="text-muted">({{ $comment->created_at->format('d/m/Y H:i') }})</span>
-                                            <p class="mb-0">{{ $comment->cmt }}</p>
-                                        </div>
-                                    @endforeach
-                                @else
-                                    <p>Chưa có bình luận nào cho sản phẩm này.</p>
-                                @endif
-
-                                {{-- Form gửi bình luận --}}
-                                @if (session('user'))
-                                    <form action="{{ route('product.comment.store', $product->id) }}" method="POST">
-                                        @csrf
-                                        <div class="form-group">
-                                            <label for="content">Bình luận</label>
-                                            <textarea class="form-control" name="cmt" rows="3" required></textarea>
-                                        </div>
-                                        <button type="submit" class="btn btn-dark mt-2">Gửi bình luận</button>
-                                    </form>
-                                @else
-                                    <p>Vui lòng <a href="{{ route('user.login') }}">đăng nhập</a> để bình luận.</p>
-                                @endif
-                                <p>Chưa có đánh giá nào.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- Related Product Section End -->
+                                <!-- Related Product Section End -->
     </section>
     <!-- Related Product Section Begin -->
     <div class="related-product mt-5">

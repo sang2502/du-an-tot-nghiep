@@ -10,9 +10,9 @@
     <title>HP Sneaker</title>
 
     <!-- Google Fonts -->
-    <link
-        href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Montserrat:wght@400;600;700&display=swap"
-        rel="stylesheet">
+     <link href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Lora:400,400i,700,700i&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Amatic+SC:400,700&display=swap" rel="stylesheet">
 
     <!-- Css Styles -->
     <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}" type="text/css">
@@ -28,15 +28,15 @@
             font-family: 'Roboto', 'Montserrat', Arial, sans-serif;
             font-size: 16px;
             color: #111827;
-            background: #f9fafb;
-            padding-top: 150px;
+            background: #fafafa;
+            padding-top: 100px;
         }
 
         /* Nút (Buttons) */
         button,
         .btn,
         .site-btn {
-            background-color: #111827 !important;
+            background-color: #032878 !important;
             /* đen than */
             color: #fff !important;
             border: none;
@@ -47,9 +47,9 @@
         button:hover,
         .btn:hover,
         .site-btn:hover {
-            background-color: #f97316 !important;
+            background-color: #ffffff !important;
             /* cam cháy khi hover */
-            color: #fff !important;
+            color: #000000 !important;
             box-shadow: 0 4px 16px rgba(249, 115, 22, 0.3);
         }
 
@@ -68,7 +68,7 @@
 
         /* Footer */
         .footer {
-            background-color: #1f2937;
+            background-color: #ffffff;
             color: #d1d5db;
         }
 
@@ -92,7 +92,7 @@
             left: 0;
             width: 100%;
             z-index: 1000;
-            background: #fff;
+            background: #023163;
             box-shadow: 0 2px 8px rgb(255, 255, 255);
             transition: all 0.3s;
         }
@@ -117,23 +117,24 @@
         }
 
         .header__menu ul li a {
-            color: #111827;
+            color: #ffffff;
             font-weight: 500;
         }
 
         .header__menu ul li a:hover,
         .header__menu ul li.active a {
-            color: #f97316;
+            color: #000000;
         }
 
         /* Cart and auth icons */
         .header__cart ul li a,
         .header__top__right__auth a {
-            color: #111827;
+            color: #ffffff;
+            margin-top: 30px;
         }
 
         .header__top__right__auth a:hover {
-            color: #f97316;
+            color: #000000;
         }
 
         /* Language switch */
@@ -178,7 +179,12 @@
         .hero__categories.active ul {
             display: block;
         }
-        
+        .hero__categories__all {
+            color: #fff;
+            padding: 10px 15px;
+            background-color: #002f95;
+        }
+
     </style>
 
 </head>
@@ -217,7 +223,7 @@
         </div>
         <nav class="humberger__menu__nav mobile-menu">
             <ul>
-                <li class="active"><a href="{{ url('/') }}">Trang chủ</a></li>
+                <li><a href="{{ url('/') }}">Trang chủ</a></li>
                 <li><a href="{{ url('/shop') }}">Cửa hàng</a></li>
                 <li><a href="#">Trang</a>
                     <ul class="header__menu__dropdown">
@@ -249,39 +255,9 @@
 
     <!-- Desktop Header -->
     <header class="header">
-        <div class="header__top">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-6 col-md-6">
-                    </div>
-                    <div class="col-lg-6 col-md-6">
-                        <div class="header__top__right">
-                            <div class="header__top__right__auth">
-                                @if (session('user'))
-                                    <span style="display: flex; align-items: center;">
-                                        <i class="fa fa-user"></i>
-                                        <a href="{{ route('user.profile.show') }}"
-                                            style="margin: 0 8px 0 4px; color: #222; font-weight: 600; text-decoration: none;">
-                                            {{ session('user.name') }}
-                                        </a>
-                                        <a href="{{ route('user.logout') }}" style="margin-left: 10px; color: #435EBE;"
-                                            onclick="return confirm('Bạn có chắc muốn đăng xuất?')">
-                                            <i class="fa fa-sign-out"></i> Đăng xuất
-                                        </a>
-                                    </span>
-                                @else
-                                    <a href="{{ route('user.login') }}"><i class="fa fa-user"></i> Đăng nhập</a>
-                                @endif
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
         <div class="container">
             <div class="row">
-                <div class="col-lg-3">
+                <div class="col-lg-2">
                     <div class="header__logo">
                         <a href="{{ url('/') }}"><img src="{{ asset('img/logo.png') }}" alt="Logo"></a>
                     </div>
@@ -289,7 +265,7 @@
                 <div class="col-lg-6">
                     <nav class="header__menu">
                         <ul>
-                            <li class="active"><a href="{{ url('/') }}">Trang chủ</a></li>
+                            <li><a href="{{ url('/') }}">Trang chủ</a></li>
                             <li><a href="{{ url('/shop') }}">Cửa hàng</a></li>
                             {{-- <li><a href="#">Trang</a>
                                 <ul class="header__menu__dropdown">
@@ -307,10 +283,30 @@
                 <div class="col-lg-2">
                     <div class="header__cart">
                         <ul>
-                            <li><a href="{{ url('/shop/cart') }}"><i class="fa fa-shopping-bag"></i>
+                            <li><a href="{{ url('/shop/cart') }}"><i class="fa fa-shopping-bag" style="color: #fff"></i>
                                     <span>3</span></a>
                             </li>
                         </ul>
+                    </div>
+                </div>
+                <div class="col-lg-2">
+                    <div class="header__top__right__auth">
+                        @if (session('user'))
+                            <span style="display: flex; align-items: center;">
+                                <i class="fa fa-user"></i>
+                                <a href="{{ route('user.profile.show') }}"
+                                    style="margin: 0 8px 0 4px; color: #222; font-weight: 600; text-decoration: none;">
+                                    {{ session('user.name') }}
+                                </a>
+                                <a href="{{ route('user.logout') }}" style="margin-left: 10px; color: #435EBE;"
+                                    onclick="return confirm('Bạn có chắc muốn đăng xuất?')">
+                                    <i class="fa fa-sign-out"></i> Đăng xuất
+                                </a>
+                            </span>
+                        @else
+                            <a href="{{ route('user.login') }}"><i class="fa fa-user"></i> Đăng nhập</a>
+                        @endif
+
                     </div>
                 </div>
             </div>
@@ -320,10 +316,7 @@
         </div>
     </header>
     <!-- End Desktop Header -->
-    <div class="container">
-        @yield('main')
-    </div>
-
+    @yield('main')
     <!-- Footer -->
     <footer class="footer spad">
         <div class="container">
