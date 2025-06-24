@@ -16,6 +16,10 @@ class CheckoutController extends Controller
     public function index()
     {
         $userId = session('user.id');
+        if (!$userId) {
+            return redirect()->route('user.login')->with('error', 'Vui lòng đăng nhập trước khi đặt hàng!');
+        }
+
         $cart = Cart::where('user_id', $userId)->first();
 
         $cartItems = $cart
@@ -24,7 +28,7 @@ class CheckoutController extends Controller
                 ->get()
             : collect();
 
-        $cartTotal = $cartItems->sum(function($item) {
+        $cartTotal = $cartItems->sum(function ($item) {
             return ($item->variant->price ?? 0) * $item->quantity;
         });
 
@@ -44,6 +48,10 @@ class CheckoutController extends Controller
         ]);
 
         $userId = session('user.id');
+        if (!$userId) {
+            return redirect()->route('user.login')->with('error', 'Vui lòng đăng nhập trước khi đặt hàng!');
+        }
+
         $cart = Cart::where('user_id', $userId)->first();
         if (!$cart) {
             return back()->with('error', 'Giỏ hàng không tồn tại!');
@@ -56,18 +64,20 @@ class CheckoutController extends Controller
         DB::beginTransaction();
         try {
             // Tính tổng tiền
-            $cartTotal = $cartItems->sum(fn($i) => ($i->variant->price ?? 0) * $i->quantity);
+            $cartTotal = $cartItems->sum(fn ($i) => ($i->variant->price ?? 0) * $i->quantity);
 
-            // Tạo đơn hàng (khớp với migration mới)
+            // Tạo đơn hàng, thêm name, email, phone
             $order = Order::create([
-                'user_id'        => $userId,
-                'total_amount'   => $cartTotal,
-                'voucher_id'     => null, // nếu có voucher thì xử lý logic ở đây
-                'discount_applied'=> 0, // nếu có thì xử lý logic ở đây
-                'status'         => 'processing',
-                'payment_method' => $data['payment'],
-                'shipping_address'=> $data['address'],
-                // Nếu bạn có customer_name, email, phone... thì bổ sung vào migration/model!
+                'user_id'          => $userId,
+                'name'             => $data['name'],
+                'email'            => $data['email'],
+                'phone'            => $data['phone'],
+                'total_amount'     => $cartTotal,
+                'voucher_id'       => null,
+                'discount_applied' => 0,
+                'status'           => 'processing',
+                'payment_method'   => $data['payment'],
+                'shipping_address' => $data['address'],
             ]);
 
             // Lưu từng item vào order_items
@@ -86,8 +96,8 @@ class CheckoutController extends Controller
 
             DB::commit();
 
-            // Chuyển sang trang success (hóa đơn), truyền orderId
-            return redirect()->route('checkout.success', $order->id);
+            // Chuyển sang trang success (hóa đơn), truyền đúng biến cho route
+            return redirect()->route('checkout.success', ['orderId' => $order->id]);
 
         } catch (\Exception $e) {
             DB::rollBack();

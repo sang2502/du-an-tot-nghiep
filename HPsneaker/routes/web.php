@@ -20,7 +20,6 @@ use App\Http\Controllers\admin\SizeController;
 use App\Http\Controllers\client\ContactClientController;
 use App\Http\Controllers\admin\BlogPostController;
 use App\Http\Controllers\admin\OrderController;
-use App\Http\Controllers\client\CartController;
 use App\Http\Controllers\Client\ProductCommentController;
 use App\Http\Controllers\client\SearchProductController;
 use App\Http\Controllers\client\ForgotPasswordController;
@@ -182,12 +181,13 @@ Route::prefix('/')->group(function () {
 
 });
         // Check out cline
-        Route::prefix('checkout')->group(function () {
-            Route::get('', [CheckoutController::class, 'index'])->name('checkout.index');
-            Route::post('', [CheckoutController::class, 'submit'])->name('checkout.submit');
-            Route::get('/checkout/success/{orderId}', [CheckoutController::class, 'success'])->name('checkout.success');
-        });
+    Route::prefix('checkout')->group(function () {
+        Route::get('', [CheckoutController::class, 'index'])->name('checkout.index');
+        Route::post('', [CheckoutController::class, 'submit'])->name('checkout.submit');
+        Route::get('success/{orderId}', [CheckoutController::class, 'success'])->name('checkout.success');
     });
+
+});
 // Route cho Login của người dùng
 Route::get('login', [UserAuthController::class, 'showLoginForm'])->name('user.login');
 Route::post('login', [UserAuthController::class, 'login'])->name('user.login.submit');
