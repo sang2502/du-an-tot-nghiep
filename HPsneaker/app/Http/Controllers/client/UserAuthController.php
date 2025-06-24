@@ -23,7 +23,11 @@ class UserAuthController extends Controller
         $user = User::where('email', $request->email)->first();
 
         if ($user && $user->password === $request->password) {
-            session(['user' => $user->toArray()]);
+            session(['user' => [
+            'id'    => $user->id,
+            'name'  => $user->name,
+            'email' => $user->email,
+            ]]);
             return redirect()->route('home.index');
         }
 
