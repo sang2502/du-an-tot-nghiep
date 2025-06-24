@@ -20,9 +20,11 @@ use App\Http\Controllers\admin\SizeController;
 use App\Http\Controllers\client\ContactClientController;
 use App\Http\Controllers\admin\BlogPostController;
 use App\Http\Controllers\admin\OrderController;
-use App\Http\Controllers\client\CartController;
 use App\Http\Controllers\Client\ProductCommentController;
 use App\Http\Controllers\client\SearchProductController;
+use App\Http\Controllers\client\ForgotPasswordController;
+use App\Http\Controllers\client\CartController;
+use App\Http\Controllers\Client\ProductReviewController;
 
 
 // Route cho Admin
@@ -157,6 +159,9 @@ Route::prefix('/')->group(function () {
         Route::get('{name}/{id}', [ShopController::class, 'show'])->name('shop.product.show');
         Route::post('add-to-cart/{id}', [ShopController::class, 'addToCart'])->name('shop.product.addToCart');
         Route::post('{id}/comment', [ShopController::class, 'submitComment'])->name('product.comment');
+        Route::post('/product/{id}/review', [ShopController::class, 'submitReview'])->name('product.review.store');
+        Route::post('/review/{id}', [ProductReviewController::class, 'store'])->name('shop.submitReview');
+
 
 
         // Route cho giỏ hàng
@@ -180,12 +185,18 @@ Route::prefix('/')->group(function () {
 
 });
         // Check out cline
+    Route::prefix('checkout')->group(function () {
+        Route::get('', [CheckoutController::class, 'index'])->name('checkout.index');
+        Route::post('', [CheckoutController::class, 'submit'])->name('checkout.submit');
+        Route::get('success/{orderId}', [CheckoutController::class, 'success'])->name('checkout.success');
+    });
+
+});
         Route::prefix('checkout')->group(function () {
             Route::get('', [CheckoutController::class, 'index'])->name('checkout.index');
             Route::post('', [CheckoutController::class, 'submit'])->name('checkout.submit');
             Route::get('/checkout/success/{orderId}', [CheckoutController::class, 'success'])->name('checkout.success');
         });
-    });
 // Route cho Login của người dùng
 Route::get('login', [UserAuthController::class, 'showLoginForm'])->name('user.login');
 Route::post('login', [UserAuthController::class, 'login'])->name('user.login.submit');
@@ -194,4 +205,7 @@ Route::get('profile', [UserAuthController::class, 'showProfile'])->name('user.pr
 Route::get('edit', [UserAuthController::class, 'editProfile'])->name('user.profile.edit');
 Route::post('update', [UserAuthController::class, 'updateProfile'])->name('user.profile.update');
 
+//Route cho quên mật khẩu
+Route::get('/forgot-password', [ForgotPasswordController::class, 'showForm'])->name('forgot-password.form');
+Route::post('/forgot-password', [ForgotPasswordController::class, 'handleForm'])->name('forgot-password.send');
 

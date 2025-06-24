@@ -1,10 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Đăng nhập - HPsneaker</title>
+    <title>Quên mật khẩu - HPsneaker</title>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
@@ -87,36 +86,23 @@
                 <div class="text-center auth-logo">
                     <img src="/assets/images/logo/logo.png" alt="HPsneaker Logo">
                 </div>
-                <h1 class="auth-title text-center mb-2">Đăng nhập</h1>
-                <p class="auth-subtitle text-center mb-4">Vui lòng nhập thông tin để đăng nhập tài khoản.</p>
-                <form action="{{ route('user.login.submit') }}" method="POST">
+                <h1 class="auth-title text-center mb-2">Quên mật khẩu</h1>
+                <p class="auth-subtitle text-center mb-4">Nhập email của bạn để nhận mật khẩu mới.</p>
+                <form method="POST" action="{{ route('forgot-password.send') }}">
                     @csrf
                     <div class="form-group mb-3">
                         <span class="form-control-icon"><i class="bi bi-envelope"></i></span>
-                        <input type="email" class="form-control form-control-lg" name="email" value="{{ old('email') }}" placeholder="Email" required>
-                    </div>
-                    <div class="form-group mb-3">
-                        <span class="form-control-icon"><i class="bi bi-lock"></i></span>
-                        <input type="password" class="form-control form-control-lg" name="password" placeholder="Mật khẩu" required>
+                        <input type="email" class="form-control form-control-lg" name="email" placeholder="Nhập email của bạn" required>
                         @error('email')
                             <p class="text-danger small mt-1">{{ $message }}</p>
                         @enderror
                     </div>
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                            <label class="form-check-label" for="flexCheckDefault">
-                                Ghi nhớ đăng nhập
-                            </label>
-                        </div>
-                        <a class="text-link" href="{{ route('forgot-password.form') }}">Quên mật khẩu?</a>
-                    </div>
-                    <button class="btn btn-gradient w-100 btn-lg mb-3" type="submit">Đăng nhập</button>
+                    <button class="btn btn-gradient w-100 btn-lg mb-3" type="submit">Gửi mật khẩu mới</button>
                 </form>
                 <div class="text-center mt-3">
-                    <span>Chưa có tài khoản? <a href="auth-register.html" class="text-link">Đăng ký</a></span>
+                    <a href="{{ route('user.login') }}" class="text-link">Quay lại đăng nhập</a>
                 </div>
+            </div>
         </div>
     </div>
 </body>
-</html>
