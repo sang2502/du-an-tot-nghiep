@@ -200,24 +200,7 @@
                                             </div>
                                         @else
                                             <p>Vui lòng <a href="{{ route('user.login') }}">đăng nhập</a> để bình luận hoặc đánh giá.</p>
-                                        @endif
-
-                                        {{-- Hiển thị danh sách bình luận --}}
-                                        <hr>
-                                        @if($product->comments && $product->comments->count())
-                                            @foreach($product->comments as $comment)
-                                                <div class="mb-3 p-3 border rounded bg-white">
-                                                    <strong>{{ $comment->name }}</strong>
-                                                    <span class="text-muted">({{ $comment->created_at->format('d/m/Y H:i') }})</span>
-                                                    <p class="mb-0">{{ $comment->cmt }}</p>
-                                                </div>
-                                            @endforeach
-                                        @else
-                                            <p>Chưa có bình luận nào cho sản phẩm này.</p>
-                                        @endif
-
-                                    </div>
-                                        <h6>Bình luận</h6>
+                                        @endif                                      
                                         {{-- Hiển thị danh sách bình luận --}}
                                 @if($comments && $comments->count())
                                 @foreach($comments as $comment)
@@ -244,64 +227,12 @@
                                     <p>Chưa có bình luận nào cho sản phẩm này.</p>
                                 @endif
 
-                                        {{-- Form gửi bình luận --}}
-                                        @if(session('user'))
-                                            <form action="{{ route('product.comment.store', $product->id) }}" method="POST">
-                                                @csrf
-                                                <div class="form-group">
-                                                    <label for="content">Bình luận</label>
-                                                    <textarea class="form-control" name="cmt" rows="3" required></textarea>
-                                                </div>
-                                                <button type="submit" class="btn btn-dark mt-2">Gửi bình luận</button>
-                                            </form>
-                                        @else
-                                            <p>Vui lòng <a href="{{ route('user.login') }}">đăng nhập</a> để bình luận.</p>
-                                        @endif
-
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
-                <!-- Related Product Section Begin -->
-                <div class="related-product mt-5">
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="section-title related__product__title">
-                                <h2>Sản phẩm liên quan</h2>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        @foreach($relatedProducts as $item)
-                            <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
-                                <div class="product__item h-100 d-flex flex-column">
-                                    <div class="product__item__pic mb-2">
-                                        <img src="{{ asset($item->thumbnail) }}" alt="{{ $item->name }}"
-                                            class="img-fluid rounded" style="height:180px;object-fit:cover;width:100%;">
-                                        <ul class="product__item__pic__hover">
-                                            <li><a href="#"><i class="fa fa-heart"></i></a></li>
-                                            <li><a href="#"><i class="fa fa-retweet"></i></a></li>
-                                            <li><a href="#"><i class="fa fa-shopping-cart"></i></a></li>
-                                        </ul>
-                                    </div>
-                                    <div class="product__item__text flex-grow-1 d-flex flex-column justify-content-between">
-                                        <h6 class="mb-2">
-                                            <a
-                                                href="{{ route('shop.product.show', ['name' => Str::slug($item->name), 'id' => $item->id]) }}">
-                                                {{ $item->name }}
-                                            </a>
-                                        </h6>
-                                        <h5 class="text-danger mb-0">{{ number_format($item->price, 0, ',', '.') }} đ</h5>
-                                    </div>
-                                </div>
-                            </div>
-                        @endforeach
-                    </div>
-                </div>
-                <!-- Related Product Section End -->
             </div>
         </div>
     </section>
