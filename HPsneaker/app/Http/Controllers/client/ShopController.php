@@ -46,41 +46,30 @@
             // Lấy gallery nếu có
             $gallery = ProductImage::where('product_id', $product->id)->get();
             $product->gallery = $gallery;
-            $comments = Comment::where('product_id', $product->id)
+            $commentsRaw = Comment::where('product_id', $product->id)
             ->where('status', true)
             ->orderBy('created_at', 'desc')
             ->get();
+
+            $reviews = Review::where('product_id', $product->id)->get();
+
+            // Gắn rating vào từng comment nếu user_id khớp
+            $comments = $commentsRaw->map(function ($comment) use ($reviews) {
+            $comment->rating = optional($reviews->firstWhere('user_id', $comment->user_id))->rating;
+            return $comment;
+            });
             $commentCount = $comments->count();
             $reviews = Review::where('product_id', $product->id)->get();
             $averageRating = $reviews->avg('rating') ?? 0;
+            $existingRating = null;
+            if (session('user')) {
+            $existingRating = Review::where('product_id', $product->id)
+            ->where('user_id', session('user.id'))
+            ->value('rating');
+            }
 
-            return view('client.shop.product-detail', compact('product', 'relatedProducts', 'variant', 'comments', 'commentCount', 'averageRating', 'reviews'));
+            return view('client.shop.product-detail', compact('product', 'relatedProducts', 'variant', 'comments', 'commentCount', 'averageRating', 'reviews', 'existingRating'));
         }
-        // rating
-        public function submitReview(Request $request, $id)
-        {
-        Review::create([
-            'user_id' => session('user.id'),
-            'product_id' => $id,
-            'rating' => $request->rating,
-            'comment' => $request->comment,
-        ]);
-
-        return back()->with('success', 'Đánh giá đã được gửi.');
-        }
-        // comment
-        public function submitComment(Request $request, $id)
-    {
-        Comment::create([
-            'product_id' => $id,
-            'name' => $request->name,
-            'email' => $request->email,
-            'cmt' => $request->cmt,
-            'status' => true, // bạn có thể cho là false nếu muốn kiểm duyệt trước
-        ]);
-
-        return back()->with('success', 'Bình luận đã được gửi.');
-    }
 
         public function addToCart(Request $request, $id)
         {

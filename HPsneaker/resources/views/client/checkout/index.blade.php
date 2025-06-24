@@ -1,5 +1,6 @@
 @extends('client.layout.master')
 @section('main')
+<<<<<<< HEAD
     @if(session('error'))
         <div class="alert alert-danger">{{ session('error') }}</div>
     @endif
@@ -14,6 +15,8 @@
         </div>
     @endif
 
+=======
+>>>>>>> cc7bb114a52f6635d7b10d2f5c3d60d290286aef
     <section class="checkout spad">
         <div class="container">
             <div class="row">

@@ -26,6 +26,7 @@ class ProductCommentController extends Controller
         'email'      => $user['email'],
         'cmt'        => $request->cmt,
         'status'     => true,
+        'user_id'    => $user['id'],
     ]);
 
     return back()->with('success', 'Bình luận đã được gửi.');
