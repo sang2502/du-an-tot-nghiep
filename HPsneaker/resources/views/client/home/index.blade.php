@@ -1,7 +1,7 @@
 @extends('client.layout.master')
 @section('main')
     <!-- Hero Section Begin -->
-    <section class="hero">
+    {{-- <section class="hero">
         <div class="container">
             <div class="row">
                 <!-- Danh mục bên trái -->
@@ -21,37 +21,21 @@
                     </div>
                 </div>
                 <!-- Tìm kiếm và banner -->
-                <div class="col-lg-9">
-                    <div class="hero__search">
-                        <div class="hero__search__form">
-                            {{-- tìm kiếm --}}
-                            <form action="{{ route('product.search') }}" method="GET">
-                                <input type="text" placeholder="Tìm kiếm sản phẩm" name="keyword">
-                                <button type="submit" class="site-btn">Tìm kiếm</button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {{-- Banner --}}
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="hero__item set-bg" data-setbg="{{ asset('img/hero/banner.jpg') }}" style="width: ;">
-                        <div class="hero__text">
-                            <span>SNEAKER HOT</span>
-                            <h2>Bộ sưu tập <br />2025</h2>
-                            <p>Miễn phí vận chuyển toàn quốc</p>
-                            <a href="{{ route('shop.index') }}" class="primary-btn">MUA NGAY</a>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
-    </section>
+    </section> --}}
     <!-- Hero Section End -->
-
+    {{-- Banner --}}
+    <div class="row">
+        <div class="col-lg-12">
+            <img class="banner1" src="{{ asset('img/banner/banner4.jpeg') }}" alt="">
+        </div>
+    </div>
     <!-- Categories Section Begin -->
     <section class="categories">
+        <div class="section-title">
+                        <h2>Thương hiệu</h2>
+                    </div>
         <div class="container">
             <div class="row">
                 <div class="categories__slider owl-carousel">
@@ -77,14 +61,14 @@
                     <div class="section-title">
                         <h2>Sản phẩm nổi bật</h2>
                     </div>
-                    <div class="featured__controls">
+                    {{-- <div class="featured__controls">
                         <ul>
                             <li class="active" data-filter="*">Tất cả</li>
                             <li data-filter=".giay-the-thao">Giày thể thao</li>
                             <li data-filter=".giay-chay-bo">Giày chạy bộ</li>
                             <li data-filter=".phu-kien">Phụ kiện</li>
                         </ul>
-                    </div>
+                    </div> --}}
                 </div>
             </div>
             <div class="row featured__filter">
@@ -119,12 +103,12 @@
             <div class="row">
                 <div class="col-lg-6 col-md-6 col-sm-6">
                     <div class="banner__pic">
-                        <img src="{{ asset('img/banner/banner-1.jpg') }}" alt="">
+                        <img src="{{ asset('img/banner/banner2.jpeg') }}" alt="">
                     </div>
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-6">
                     <div class="banner__pic">
-                        <img src="{{ asset('img/banner/banner-2.jpg') }}" alt="">
+                        <img src="{{ asset('img/banner/banner3.jpeg') }}" alt="">
                     </div>
                 </div>
             </div>

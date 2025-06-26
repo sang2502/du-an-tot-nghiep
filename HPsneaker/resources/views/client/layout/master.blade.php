@@ -29,14 +29,14 @@
             font-size: 16px;
             color: #111827;
             background: #f9fafb;
-            padding-top: 150px;
+            padding-top: 100px;
         }
 
         /* Nút (Buttons) */
         button,
         .btn,
         .site-btn {
-            background-color: #111827 !important;
+            background-color: #ffffff;
             /* đen than */
             color: #fff !important;
             border: none;
@@ -47,7 +47,7 @@
         button:hover,
         .btn:hover,
         .site-btn:hover {
-            background-color: #f97316 !important;
+            background-color: #f97316;
             /* cam cháy khi hover */
             color: #fff !important;
             box-shadow: 0 4px 16px rgba(249, 115, 22, 0.3);
@@ -68,7 +68,7 @@
 
         /* Footer */
         .footer {
-            background-color: #1f2937;
+            background-color: #ffffff;
             color: #d1d5db;
         }
 
@@ -85,14 +85,13 @@
 
         /* Header */
         .header {
-            background-color: #ffffff;
             border-bottom: 0.1px solid #ffffff;
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             z-index: 1000;
-            background: #fff;
+            background: #ffffff;
             box-shadow: 0 2px 8px rgb(255, 255, 255);
             transition: all 0.3s;
         }
@@ -130,6 +129,8 @@
         .header__cart ul li a,
         .header__top__right__auth a {
             color: #111827;
+            margin-top: 28px;
+            font-size: 25px;
         }
 
         .header__top__right__auth a:hover {
@@ -178,7 +179,58 @@
         .hero__categories.active ul {
             display: block;
         }
-        
+
+        .header__logo img {
+            max-height: 55px;
+            transition: max-height 0.3s;
+        }
+
+        .banner1 {
+            width: 100%;
+            height: 700px;
+            display: block;
+            margin: 0 auto;
+            padding-top: 20px;
+        }
+
+        .input-group {
+            display: flex;
+            align-items: center;
+            margin-top: 20px;
+            color: #ced4da;
+        }
+
+        .input-group input {
+            border: 1px solid #fffffff1;
+            border-radius: 5px 5 5 5px;
+            padding: 10px;
+            width: 100%;
+            font-size: 16px;
+        }
+
+        .input-group-text {
+            background-color: #ffffff;
+            color: #000000;
+            border: none;
+            box-shadow: none
+        }
+
+        .input-group-text:hover {
+            background-color: #ffffff;
+            box-shadow: #ffffff 0px 0px 0px 1px inset;
+        }
+
+        .input-group input:focus {
+            box-shadow: none;
+            outline: none;
+            border-color: #ffffff;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-top: 40px;
+        }
     </style>
 
 </head>
@@ -249,47 +301,17 @@
 
     <!-- Desktop Header -->
     <header class="header">
-        <div class="header__top">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-6 col-md-6">
-                    </div>
-                    <div class="col-lg-6 col-md-6">
-                        <div class="header__top__right">
-                            <div class="header__top__right__auth">
-                                @if (session('user'))
-                                    <span style="display: flex; align-items: center;">
-                                        <i class="fa fa-user"></i>
-                                        <a href="{{ route('user.profile.show') }}"
-                                            style="margin: 0 8px 0 4px; color: #222; font-weight: 600; text-decoration: none;">
-                                            {{ session('user.name') }}
-                                        </a>
-                                        <a href="{{ route('user.logout') }}" style="margin-left: 10px; color: #435EBE;"
-                                            onclick="return confirm('Bạn có chắc muốn đăng xuất?')">
-                                            <i class="fa fa-sign-out"></i> Đăng xuất
-                                        </a>
-                                    </span>
-                                @else
-                                    <a href="{{ route('user.login') }}"><i class="fa fa-user"></i> Đăng nhập</a>
-                                @endif
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
         <div class="container">
             <div class="row">
-                <div class="col-lg-3">
+                <div class="col-lg-2">
                     <div class="header__logo">
-                        <a href="{{ url('/') }}"><img src="{{ asset('img/logo.png') }}" alt="Logo"></a>
+                        <a href="{{ url('/') }}"><img src="{{ asset('img/logo3.png') }}" alt="Logo"></a>
                     </div>
                 </div>
-                <div class="col-lg-6">
+                <div class="col-lg-6 col-md-6">
                     <nav class="header__menu">
                         <ul>
-                            <li class="active"><a href="{{ url('/') }}">Trang chủ</a></li>
+                            <li><a href="{{ url('/') }}">Trang chủ</a></li>
                             <li><a href="{{ url('/shop') }}">Cửa hàng</a></li>
                             {{-- <li><a href="#">Trang</a>
                                 <ul class="header__menu__dropdown">
@@ -304,13 +326,43 @@
                         </ul>
                     </nav>
                 </div>
-                <div class="col-lg-2">
+                {{-- Tìm kiếm --}}
+                <div class="col-lg-2 col-md-6">
+                    <form class="input-group" action="{{ route('product.search') }}" method="GET">
+                        <button type="submit" class="input-group-text"><i class="fa fa-search"
+                                style="color: #222"></i></button>
+                        <input type="text" name="keyword" class="form-control" placeholder="Tìm sản phẩm...">
+                    </form>
+                </div>
+
+                <div class="col-lg-1 col-md-6">
                     <div class="header__cart">
                         <ul>
-                            <li><a href="{{ url('/shop/cart') }}"><i class="fa fa-shopping-bag"></i>
+                            <li><a href="{{ url('/shop/cart') }}"><i class="fa fa-shopping-bag"
+                                        style="font-size: 20px;"></i>
                                     <span>3</span></a>
                             </li>
                         </ul>
+                    </div>
+                </div>
+                <div class="col-lg-1 col-md-6">
+                    <div class="header__top__right__auth">
+                        @if (session('user'))
+                            <span
+                                style="display: flex; align-items: center; justify-content: center;margin-top: 1px;">
+                                <a href="{{ route('user.profile.show') }}"
+                                    style="margin: 0 8px 0 4px; color: #222; font-weight: 60; text-decoration: none; font-size: 16px;">
+                                    {{ collect(explode(' ', session('user.name')))->last() }}
+                                </a>
+                                <a href="{{ route('user.logout') }}" style="margin-left: 10px; margin-bottom:20px; color: #435EBE;"
+                                    onclick="return confirm('Bạn có chắc muốn đăng xuất?')">
+                                    <i class="fa fa-sign-out"></i>
+                                </a>
+                            </span>
+                        @else
+                            <a href="{{ route('user.login') }}"><i class="fa fa-user"></i></a>
+                        @endif
+
                     </div>
                 </div>
             </div>
@@ -320,10 +372,7 @@
         </div>
     </header>
     <!-- End Desktop Header -->
-    <div class="container">
-        @yield('main')
-    </div>
-
+    @yield('main')
     <!-- Footer -->
     <footer class="footer spad">
         <div class="container">
