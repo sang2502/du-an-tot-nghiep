@@ -178,7 +178,7 @@
         .hero__categories.active ul {
             display: block;
         }
-        
+
     </style>
 
 </head>
@@ -358,7 +358,7 @@
                             <li><a href="#">Dự án</a></li>
                             <li><a href="#">Liên hệ</a></li>
                             <li><a href="#">Đổi mới</a></li>
-                            <li><a href="#">Khách hàng nói gì</a></li>
+                            <li><a href="{{ route('shop.feedback.index') }}">Khách hàng nói gì</a></li>
                         </ul>
                     </div>
                 </div>
@@ -448,7 +448,7 @@
             }
 
         });
-        // 
+        //
     </script>
 </body>
 
