@@ -23,8 +23,8 @@ use App\Http\Controllers\admin\OrderController;
 use App\Http\Controllers\Client\ProductCommentController;
 use App\Http\Controllers\client\SearchProductController;
 use App\Http\Controllers\client\ForgotPasswordController;
-use App\Http\Controllers\client\CartController;
 use App\Http\Controllers\Client\ProductReviewController;
+
 
 
 // Route cho Admin
@@ -188,15 +188,13 @@ Route::prefix('/')->group(function () {
     Route::prefix('checkout')->group(function () {
         Route::get('', [CheckoutController::class, 'index'])->name('checkout.index');
         Route::post('', [CheckoutController::class, 'submit'])->name('checkout.submit');
+        Route::post('vnpay', [CheckoutController::class, 'vnpay'])->name('checkout.vnpay');
         Route::get('success/{orderId}', [CheckoutController::class, 'success'])->name('checkout.success');
+        Route::get('vnpay-return', [CheckoutController::class, 'vnpayReturn'])->name('checkout.vnpay_return');
+        Route::match(['get', 'post'], 'vnpay-ipn', [CheckoutController::class, 'vnpayIpn'])->name('checkout.vnpay_ipn');
     });
 
 });
-        Route::prefix('checkout')->group(function () {
-            Route::get('', [CheckoutController::class, 'index'])->name('checkout.index');
-            Route::post('', [CheckoutController::class, 'submit'])->name('checkout.submit');
-            Route::get('/checkout/success/{orderId}', [CheckoutController::class, 'success'])->name('checkout.success');
-        });
 // Route cho Login của người dùng
 Route::get('login', [UserAuthController::class, 'showLoginForm'])->name('user.login');
 Route::post('login', [UserAuthController::class, 'login'])->name('user.login.submit');

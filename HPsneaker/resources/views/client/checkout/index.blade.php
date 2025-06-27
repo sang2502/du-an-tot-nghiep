@@ -1,6 +1,5 @@
 @extends('client.layout.master')
 @section('main')
-<<<<<<< HEAD
     @if(session('error'))
         <div class="alert alert-danger">{{ session('error') }}</div>
     @endif
@@ -14,9 +13,6 @@
             </ul>
         </div>
     @endif
-
-=======
->>>>>>> cc7bb114a52f6635d7b10d2f5c3d60d290286aef
     <section class="checkout spad">
         <div class="container">
             <div class="row">
@@ -26,7 +22,7 @@
             </div>
             <div class="checkout__form">
                 <h4>Thông tin giao hàng</h4>
-                <form action="{{ route('checkout.submit') }}" method="POST">
+                <form id="checkout-form" action="{{ route('checkout.submit') }}" method="POST">
                     @csrf
                     <div class="row">
                         <div class="col-lg-8 col-md-6">
@@ -56,7 +52,7 @@
                             </div>
                             <div class="checkout__input">
                                 <p>Phương thức thanh toán<span>*</span></p>
-                                <select name="payment" required class="form-control">
+                                <select name="payment" required class="form-control" id="payment-method">
                                     <option value="COD">Thanh toán khi nhận hàng</option>
                                     <option value="VNPAY">VNPAY</option>
                                     <option value="MOMO">MOMO</option>
@@ -96,4 +92,44 @@
             </div>
         </div>
     </section>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('checkout-form');
+            form.addEventListener('submit', function(e) {
+                const payment = form.querySelector('select[name="payment"]').value;
+                if(payment === 'VNPAY') {
+                    e.preventDefault();
+                    // Gửi AJAX đến route checkout.vnpay, lấy link chuyển hướng và chuyển hướng trình duyệt
+                    fetch("{{ route('checkout.vnpay') }}", {
+                        method: "POST",
+                        headers: {
+                            "X-CSRF-TOKEN": document.querySelector('input[name="_token"]').value,
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            name: form.querySelector('input[name="name"]').value,
+                            email: form.querySelector('input[name="email"]').value,
+                            phone: form.querySelector('input[name="phone"]').value,
+                            address: form.querySelector('input[name="address"]').value,
+                            note: form.querySelector('input[name="note"]').value,
+                            payment: payment,
+                        })
+                    })
+                        .then(res => res.json())
+                        .then(data => {
+                            // Chỉ chuyển hướng (window.location.href), không fetch sang domain khác
+                            if(data && data.redirect) {
+                                window.location.href = data.redirect;
+                            } else if(data && data.vnp_Url) {
+                                window.location.href = data.vnp_Url;
+                            } else {
+                                alert("Lỗi khi chuyển hướng VNPAY!");
+                            }
+                        })
+                        .catch(() => alert("Không thể kết nối tới VNPAY!"));
+                }
+                // Nếu không phải VNPAY thì submit bình thường
+            });
+        });
+    </script>
 @endsection
