@@ -111,6 +111,7 @@
                                         {{ session('error') }}
                                     </div>
                                 @endif
+                                {{-- voucher html --}}
                                 <div class="d-flex align-items-center gap-2" id="voucherAction">
                                     <form id="voucherForm" action="{{ route('cart.applyVoucher') }}" method="POST" class="d-flex align-items-center">
                                         @csrf
@@ -118,7 +119,7 @@
                                         <button type="submit" class="btn btn-link text-dark ms-2">Áp dụng</button>
                                     </form>
                                     @if(session('voucher'))
-                                        <form id="removeVoucherForm" action="{{ route('cart.removeVoucher') }}" method="POST">
+                                        <form id="removeVoucherForm" action="{{ route('cart.removeVoucher') }}" method="POST" style="margin-left:16px">
                                             @csrf
                                             <button type="submit" class="btn btn-link text-danger">
                                                 <i class="bi bi-x-circle"></i> Hủy mã
