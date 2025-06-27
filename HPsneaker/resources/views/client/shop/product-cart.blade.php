@@ -295,9 +295,9 @@ function renderVoucherAction(hasVoucher) {
     `;
     if (hasVoucher) {
         html += `
-        <form id="removeVoucherForm" action="{{ route('cart.removeVoucher') }}" method="POST">
+        <form id="removeVoucherForm" action="{{ route('cart.removeVoucher') }}" method="POST" style="margin-left:16px;"">
             @csrf
-            <button type="submit" class="btn btn-link text-danger">
+            <button type="submit" class="btn btn-link text-danger ">
                 <i class="bi bi-x-circle"></i> Hủy mã
             </button>
         </form>
