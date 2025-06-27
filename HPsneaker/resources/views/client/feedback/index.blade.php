@@ -1,16 +1,15 @@
 @extends('client.layout.master')
 @section('main')
-
 <!-- Breadcrumb Section Begin -->
     <section class="breadcrumb-section set-bg" data-setbg="img/breadcrumb.jpg">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12 text-center">
                     <div class="breadcrumb__text">
-                        <h2>Liên hệ với chúng tôi</h2>
+                        <h2>Phản hồi của khách hàng</h2>
                         <div class="breadcrumb__option">
                             <a href="{{ url('/') }}">Trang chủ</a>
-                            <span>Liên hệ với chúng tôi</span>
+                            <span>Phản hồi của khách hàng</span>
                         </div>
                     </div>
                 </div>
@@ -19,7 +18,7 @@
     </section>
     <!-- Breadcrumb Section End -->
 
-    <!-- Contact Section Begin -->
+    <!-- feedback Section Begin -->
     <section class="contact spad">
         <div class="container">
             <div class="row">
@@ -48,7 +47,7 @@
                     <div class="contact__widget">
                         <span class="icon_mail_alt"></span>
                         <h4>Email</h4>
-                        <p>hello@colorlib.com</p>
+                        <p>bebestyasuo@gmail.com</p>
                     </div>
                 </div>
             </div>
@@ -74,13 +73,13 @@
     </div>
     <!-- Map End -->
 
-    <!-- Contact Form Begin -->
+    <!-- feedback Form Begin -->
     <div class="contact-form spad">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
                     <div class="contact__form__title">
-                        <h2>Liên hệ với chúng tôi</h2>
+                        <h2>Phản hồi của khách hàng</h2>
                     </div>
                 </div>
             </div>
@@ -89,14 +88,15 @@
             {{ session('success') }}
             </div>
             @endif
-            <form action="{{ route('shop.contact.submit') }}" method="POST">
+            <form action="{{ route('shop.feedback.submit') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="row">
                     <div class="col-lg-6 col-md-6">
                         <input type="text" placeholder="Tên của bạn" name="name" required>
                     </div>
-                    <div class="col-lg-6 col-md-6">
-                        <input type="email" placeholder="Email của bạn" name="email" required>
+                    <div class="col-lg-6 text-center">
+                        {{-- <label for="file-upload" class="btn btn-outline-secondary">📷 Tải ảnh lên</label> --}}
+                        <input class="site-btn" id="file-upload" type="file" name="img" />
                     </div>
                     <div class="col-lg-12 text-center">
                         <textarea placeholder="Lời nhắn" name="mess" required></textarea>
@@ -106,5 +106,5 @@
             </form>
         </div>
     </div>
-    <!-- Contact Form End -->
+    <!-- feedback Form End -->
 @endsection

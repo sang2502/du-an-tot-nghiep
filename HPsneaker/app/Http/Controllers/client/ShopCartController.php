@@ -33,22 +33,73 @@ class ShopCartController extends Controller
 
         return redirect()->route('shop.cart.index')->with('success', 'Sản phẩm đã được xóa khỏi giỏ hàng.');
     }
-    public function applyVoucher(Request $request) {
-        $voucher = Voucher::where('code', $request->voucher_code)
-            ->where(function($q) {
-                $q->whereNull('valid_to')->orWhere('valid_to', '>=', now());
-            })
-            ->first();
+    public function applyVoucher(Request $request)
+{
+    $voucher = Voucher::where('code', $request->voucher_code)
+        ->where(function($q) {
+            $q->whereNull('valid_to')->orWhere('valid_to', '>=', now());
+        })
+        ->first();
 
-        if (!$voucher) {
-            return back()->with('error', 'Mã giảm giá không hợp lệ hoặc đã hết hạn.');
+    if (!$voucher) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Mã giảm giá không hợp lệ hoặc đã hết hạn.'
+        ]);
+    }
+
+    session(['voucher' => $voucher]);
+
+    // Lấy lại cartItems giống như hàm index()
+    $cartItems = CartItem::with(['variant.product', 'variant.size', 'variant.color'])
+        ->whereHas('cart', function ($q) {
+            $q->where('user_id', session('user.id'));
+        })
+        ->get();
+
+    $subtotal = $cartItems->sum(function($i) {
+        return ($i->variant->price ?? 0) * $i->quantity;
+    });
+
+    $discount = 0;
+    if ($voucher->discount_type == 'percent') {
+        $discount = round($subtotal * $voucher->discount_value / 100);
+        if ($voucher->max_discount && $discount > $voucher->max_discount) {
+            $discount = $voucher->max_discount;
         }
+    } else {
+        $discount = $voucher->discount_value;
+    }
+    if ($discount > $subtotal) $discount = $subtotal;
+    $total = $subtotal - $discount;
 
-        session(['voucher' => $voucher]);
-        return back()->with('success', 'Áp dụng mã giảm giá thành công!');
-    }
-    public function removeVoucher() {
-        session()->forget('voucher');
-        return back()->with('success', 'Đã xóa mã giảm giá khỏi giỏ hàng.');
-    }
+    return response()->json([
+        'success' => true,
+        'message' => 'Áp dụng mã giảm giá thành công!',
+        'voucher' => $voucher,
+        'discount' => number_format($discount, 0, ',', '.'),
+        'total' => number_format($total, 0, ',', '.'),
+        'subtotal' => number_format($subtotal, 0, ',', '.'),
+        'voucher_code' => $voucher->code,
+    ]);
+}
+public function removeVoucher()
+{
+    session()->forget('voucher');
+    $cartItems = CartItem::with(['variant.product', 'variant.size', 'variant.color'])
+        ->whereHas('cart', function ($q) {
+            $q->where('user_id', session('user.id'));
+        })
+        ->get();
+    $subtotal = $cartItems->sum(function($i) {
+        return ($i->variant->price ?? 0) * $i->quantity;
+    });
+    $total = $subtotal;
+    return response()->json([
+        'success' => true,
+        'message' => 'Đã hủy mã giảm giá.',
+        'subtotal' => number_format($subtotal, 0, ',', '.'),
+        'total' => number_format($total, 0, ',', '.'),
+    ]);
+}
 }

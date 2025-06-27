@@ -19,12 +19,14 @@ use App\Http\Controllers\admin\CommentController;
 use App\Http\Controllers\admin\SizeController;
 use App\Http\Controllers\client\ContactClientController;
 use App\Http\Controllers\admin\BlogPostController;
+use App\Http\Controllers\admin\FeedbackController;
 use App\Http\Controllers\admin\OrderController;
 use App\Http\Controllers\Client\ProductCommentController;
 use App\Http\Controllers\client\SearchProductController;
 use App\Http\Controllers\client\ForgotPasswordController;
+use App\Http\Controllers\client\CartController;
+use App\Http\Controllers\client\FeedbackClientController;
 use App\Http\Controllers\Client\ProductReviewController;
-
 
 
 // Route cho Admin
@@ -146,6 +148,12 @@ Route::prefix('admin')->group(function () {
             Route::get('show/{id}', [OrderController::class, 'show'])->name('order.show');
             Route::get('delete/{id}', [OrderController::class, 'delete'])->name('order.delete');
         });
+        // Quản lý feedback
+        Route::prefix('feedback')->group(function () {
+            Route::get('', [FeedbackController::class, 'index'])->name('feedback.index');
+            Route::get('delete/{id}', [FeedbackController::class, 'delete'])->name('feedback.delete');
+            Route::get('show/{id}', [FeedbackController::class, 'show'])->name('feedback.show');
+        });
     });
 });
 
@@ -174,7 +182,11 @@ Route::prefix('/')->group(function () {
     Route::prefix('contact')->group(function () {
             Route::get('', [ContactClientController::class, 'index'])->name('shop.contact.index');
             Route::post('', [ContactClientController::class, 'submit'])->name('shop.contact.submit');
-        });
+    });
+    Route::prefix('feedback')->group(function () {
+            Route::get('', [FeedbackClientController::class, 'index'])->name('shop.feedback.index');
+            Route::post('', [FeedbackClientController::class, 'submit'])->name('shop.feedback.submit');
+    });
         // Route cho nhập voucher
         Route::post('/cart/apply-voucher', [ShopCartController::class, 'applyVoucher'])->name('cart.applyVoucher');
         Route::post('/cart/remove-voucher', [ShopCartController::class, 'removeVoucher'])->name('cart.removeVoucher');
@@ -195,6 +207,11 @@ Route::prefix('/')->group(function () {
     });
 
 });
+        Route::prefix('checkout')->group(function () {
+            Route::get('', [CheckoutController::class, 'index'])->name('checkout.index');
+            Route::post('', [CheckoutController::class, 'submit'])->name('checkout.submit');
+            Route::get('/checkout/success/{orderId}', [CheckoutController::class, 'success'])->name('checkout.success');
+        });
 // Route cho Login của người dùng
 Route::get('login', [UserAuthController::class, 'showLoginForm'])->name('user.login');
 Route::post('login', [UserAuthController::class, 'login'])->name('user.login.submit');
