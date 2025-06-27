@@ -28,7 +28,7 @@
             font-family: 'Roboto', 'Montserrat', Arial, sans-serif;
             font-size: 16px;
             color: #111827;
-            background: #f9fafb;
+            background: #eff2f6;
             padding-top: 100px;
         }
 
@@ -91,7 +91,7 @@
             left: 0;
             width: 100%;
             z-index: 1000;
-            background: #ffffff;
+            background: #f4f2f2;
             box-shadow: 0 2px 8px rgb(255, 255, 255);
             transition: all 0.3s;
         }
@@ -212,9 +212,11 @@
             background-color: #ffffff;
             color: #000000;
             border: none;
-            box-shadow: none
+            box-shadow: none;
+            height: 38px;
+            width: 28px;
+            border-radius: 5px 0 0 5px;
         }
-
         .input-group-text:hover {
             background-color: #ffffff;
             box-shadow: #ffffff 0px 0px 0px 1px inset;
@@ -245,7 +247,7 @@
     <div class="humberger__menu__overlay"></div>
     <div class="humberger__menu__wrapper">
         <div class="humberger__menu__logo">
-            <a href="{{ url('/') }}"><img src="{{ asset('img/logo.png') }}" alt="Logo"></a>
+            <a href="{{ url('/') }}"><img src="{{ asset('img/logo3.png') }}" alt="Logo"></a>
         </div>
         <div class="humberger__menu__cart">
             <ul>
@@ -331,7 +333,7 @@
                     <form class="input-group" action="{{ route('product.search') }}" method="GET">
                         <button type="submit" class="input-group-text"><i class="fa fa-search"
                                 style="color: #222"></i></button>
-                        <input type="text" name="keyword" class="form-control" placeholder="Tìm sản phẩm...">
+                        <input type="text" name="keyword" class="form-control" placeholder="Tìm kiếm...">
                     </form>
                 </div>
 
@@ -380,7 +382,7 @@
                 <div class="col-lg-3 col-md-6 col-sm-6">
                     <div class="footer__about">
                         <div class="footer__about__logo">
-                            <a href="{{ url('/') }}"><img src="{{ asset('img/logo.png') }}"
+                            <a href="{{ url('/') }}"><img src="{{ asset('img/logo3.png') }}"
                                     alt="Logo"></a>
                         </div>
                         <ul>

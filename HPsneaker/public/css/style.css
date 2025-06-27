@@ -936,11 +936,12 @@ ol {
 
 .featured__item__text h6 a {
 	color: #252525;
+	font-weight: 500;
 }
 
 .featured__item__text h5 {
 	color: #252525;
-	font-weight: 700;
+	font-weight: 500;
 }
 
 /*---------------------
