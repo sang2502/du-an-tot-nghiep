@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\client;
 use App\Http\Controllers\Controller;
 use App\Models\Feedback;
+use Illuminate\Support\Facades\Auth;
+
 use Illuminate\Support\Facades\Mail;
 use App\Mail\ThankYouForContacting;
 
@@ -15,7 +17,8 @@ class FeedbackClientController extends Controller
      */
     public function index()
     {
-        return view('client.feedback.index');
+        $feedbacks = Feedback::latest()->get();
+        return view('client.feedback.index', compact('feedbacks'));
     }
 
     /**
@@ -31,25 +34,31 @@ class FeedbackClientController extends Controller
      */
     public function submit(Request $request)
     {
+        $user = session('user');
+
+        if (!$user) {
+            return redirect()->route('user.login')->with('error', 'Vui lòng đăng nhập để gửi phản hồi.');
+        }
+
         $request->validate([
-        'name' => 'required|string|max:255',
-        'mess' => 'required|string',
-        'img' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-    ]);
+            'mess' => 'required|string|max:1000',
+            'img'  => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
 
         $imagePath = null;
         if ($request->hasFile('img')) {
-        $imagePath = 'feedback_images/' . $request->file('img')->hashName();
-        $request->file('img')->storeAs('public/feedback_images', $request->file('img')->hashName());
-    }
+            $imagePath = 'feedback_images/' . $request->file('img')->hashName();
+            $request->file('img')->storeAs('public/feedback_images', $request->file('img')->hashName());
+        }
 
         Feedback::create([
-        'name' => $request->name,
-        'mess' => $request->mess,
-        'img' => $imagePath,
-    ]);
+            'user_id' => $user['id'],
+            'name'    => $user['name'],
+            'mess'    => $request->mess,
+            'img'     => $imagePath,
+        ]);
 
-        return redirect()->back()->with('success', 'Cảm ơn bạn đã phản hồi!');
+        return back()->with('success', 'Cảm ơn bạn đã phản hồi!');
     }
 
     /**

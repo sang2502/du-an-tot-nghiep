@@ -11,13 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-    if (Schema::hasTable('feedback')) {
-    Schema::table('feedback', function (Blueprint $table) {
+        Schema::table('comments', function (Blueprint $table) {
         $table->dropForeign(['user_id']);
         $table->unsignedBigInteger('user_id')->nullable(false)->change();
         $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-    });
-}
+        });
     }
 
     /**
@@ -25,7 +23,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('feedback', function (Blueprint $table) {
+        Schema::table('comments', function (Blueprint $table) {
         $table->dropForeign(['user_id']);
         $table->unsignedBigInteger('user_id')->nullable()->change();
         $table->foreign('user_id')->references('id')->on('users')->onDelete('set null');

@@ -168,7 +168,6 @@
                                 <div class="tab-pane" id="tabs-3" role="tabpanel">
                                     <div class="product__details__tab__desc">
                                         <h6>Nhận xét của bạn</h6>
-
                                         @if(session('user'))
                                             <div class="row">
                                                 {{-- bình luận --}}
@@ -182,25 +181,10 @@
                                                         <button type="submit" class="primary-btn mr-2">Gửi bình luận</button>
                                                     </form>
                                                 </div>
-
-                                                {{-- Đánh giá --}}
-                                                <div class="col-md-6 mt-3">
-                                                    <form action="{{ route('product.review.store', $product->id) }}" method="POST" class="mb-4">
-                                                        @csrf
-                                                        <div class="form-group">
-                                                            <select name="rating" class="form-control w-50" required>
-                                                                @for($i = 1; $i <= 5; $i++)
-                                                                    <option value="{{ $i }}">{{ $i }} sao</option>
-                                                                @endfor
-                                                            </select>
-                                                        </div>
-                                                        <button type="submit" class="primary-btn mr-2">Gửi đánh giá</button>
-                                                    </form>
-                                                </div>
                                             </div>
                                         @else
                                             <p>Vui lòng <a href="{{ route('user.login') }}">đăng nhập</a> để bình luận hoặc đánh giá.</p>
-                                        @endif                                      
+                                        @endif
                                         {{-- Hiển thị danh sách bình luận --}}
                                 @if($comments && $comments->count())
                                 @foreach($comments as $comment)
