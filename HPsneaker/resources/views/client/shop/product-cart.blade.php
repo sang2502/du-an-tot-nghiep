@@ -111,22 +111,22 @@
                                         {{ session('error') }}
                                     </div>
                                 @endif
-                                <div class="d-flex align-items-center">
-                                    <form action="{{ route('cart.applyVoucher') }}" method="POST" class="d-flex align-items-center" style="margin-right:16px;">
+                                <div class="d-flex align-items-center gap-2" id="voucherAction">
+                                    <form id="voucherForm" action="{{ route('cart.applyVoucher') }}" method="POST" class="d-flex align-items-center">
                                         @csrf
                                         <input type="text" name="voucher_code" placeholder="Nhập mã giảm giá" required class="form-control" style="max-width: 180px;">
                                         <button type="submit" class="btn btn-link text-dark ms-2">Áp dụng</button>
                                     </form>
                                     @if(session('voucher'))
-                                        <form action="{{ route('cart.removeVoucher') }}" method="POST">
+                                        <form id="removeVoucherForm" action="{{ route('cart.removeVoucher') }}" method="POST">
                                             @csrf
-                                            <button type="submit" class="btn btn-link text-danger"
-                                                onclick="return confirm('Bạn có chắc muốn xóa mã giảm giá?')">
+                                            <button type="submit" class="btn btn-link text-danger">
                                                 <i class="bi bi-x-circle"></i> Hủy mã
                                             </button>
                                         </form>
                                     @endif
                                 </div>
+                                <div id="voucherMessage"></div>
                             </div>
                         </div>
                     </div>
@@ -150,14 +150,16 @@
                                 }
                                 $total = $subtotal - $discount;
                             @endphp
-                            <ul>
-                                <li>Tạm tính <span>{{ number_format($subtotal, 0, ',', '.') }} đ</span></li>
-                                @if($voucher)
-                                    <li>Giảm giá ({{ $voucher->code }}) <span>-{{ number_format($discount, 0, ',', '.') }} đ</span></li>
-                                @endif
-                                <li>Tổng cộng <span>{{ number_format($total, 0, ',', '.') }} đ</span></li>
-                            </ul>
-                            <a href="{{ route('checkout.index') }}" class="primary-btn">Thanh toán</a>
+                            <div id="cartSummary">
+                                <ul>
+                                    <li>Tạm tính <span>{{ number_format($subtotal, 0, ',', '.') }} đ</span></li>
+                                    @if($voucher)
+                                        <li>Giảm giá ({{ $voucher->code }}) <span>-{{ number_format($discount, 0, ',', '.') }} đ</span></li>
+                                    @endif
+                                    <li>Tổng cộng <span>{{ number_format($total, 0, ',', '.') }} đ</span></li>
+                                </ul>
+                                <a href="{{ route('checkout.index') }}" class="primary-btn">Thanh toán</a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -165,4 +167,216 @@
         </div>
     </section>
     <!-- Shoping Cart Section End -->
+    <script>
+        document.getElementById('voucherForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    let form = this;
+    let formData = new FormData(form);
+    fetch(form.action, {
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': form.querySelector('[name="_token"]').value,
+            'Accept': 'application/json'
+        },
+        body: formData
+    })
+    .then(res => res.json())
+    .then(data => {
+        let msgDiv = document.getElementById('voucherMessage');
+        if(data.success) {
+            msgDiv.innerHTML = `<div class="alert alert-success">${data.message}</div>`;
+            document.getElementById('cartSummary').innerHTML = `
+                <ul>
+                    <li>Tạm tính <span>${data.subtotal} đ</span></li>
+                    <li>Giảm giá (${data.voucher_code}) <span>-${data.discount} đ</span></li>
+                    <li>Tổng cộng <span>${data.total} đ</span></li>
+                </ul>
+                <a href="{{ route('checkout.index') }}" class="primary-btn">Thanh toán</a>
+            `;
+            // Thêm nút hủy mã ngay sau khi áp dụng thành công
+            document.getElementById('voucherAction').innerHTML = `
+    <form id="voucherForm" action="{{ route('cart.applyVoucher') }}" method="POST" class="d-flex align-items-center">
+        @csrf
+        <input type="text" name="voucher_code" placeholder="Nhập mã giảm giá" required class="form-control" style="max-width: 180px;">
+        <button type="submit" class="btn btn-link text-dark ms-2">Áp dụng</button>
+    </form>
+    <form id="removeVoucherForm" action="{{ route('cart.removeVoucher') }}" method="POST">
+        @csrf
+        <button type="submit" class="btn btn-link text-danger">
+            <i class="bi bi-x-circle"></i> Hủy mã
+        </button>
+    </form>
+`;
+            // Gắn lại sự kiện cho form mới
+            attachVoucherEvents();
+        } else {
+            msgDiv.innerHTML = `<div class="alert alert-danger">${data.message}</div>`;
+        }
+    });
+});
+
+// Hàm gắn lại sự kiện cho các form động
+function attachVoucherEvents() {
+    // Gắn lại sự kiện cho form áp dụng voucher
+    let voucherForm = document.getElementById('voucherForm');
+    if (voucherForm) {
+        voucherForm.onsubmit = function(e) {
+            e.preventDefault();
+            let form = this;
+            let formData = new FormData(form);
+            fetch(form.action, {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': form.querySelector('[name="_token"]').value,
+                    'Accept': 'application/json'
+                },
+                body: formData
+            })
+            .then(res => res.json())
+            .then(data => {
+                let msgDiv = document.getElementById('voucherMessage');
+                if(data.success) {
+                    msgDiv.innerHTML = `<div class="alert alert-success">${data.message}</div>`;
+                    document.getElementById('voucherAction').innerHTML = `
+                        <form id="voucherForm" action="{{ route('cart.applyVoucher') }}" method="POST" class="d-flex align-items-center">
+                            @csrf
+                            <input type="text" name="voucher_code" placeholder="Nhập mã giảm giá" required class="form-control" style="max-width: 180px;">
+                            <button type="submit" class="btn btn-link text-dark ms-2">Áp dụng</button>
+                        </form>
+                    `;
+                    document.getElementById('cartSummary').innerHTML = `
+                        <ul>
+                            <li>Tạm tính <span>${data.subtotal} đ</span></li>
+                            <li>Tổng cộng <span>${data.total} đ</span></li>
+                        </ul>
+                        <a href="{{ route('checkout.index') }}" class="primary-btn">Thanh toán</a>
+                    `;
+                    attachVoucherEvents();
+                } else {
+                    msgDiv.innerHTML = `<div class="alert alert-danger">${data.message}</div>`;
+                }
+            });
+        }
+    }
+
+    // Gắn lại sự kiện cho form hủy voucher
+    let removeForm = document.getElementById('removeVoucherForm');
+    if(removeForm){
+        removeForm.onsubmit = function(e){
+            e.preventDefault();
+            if(confirm('Bạn có chắc muốn xóa mã giảm giá?')){
+                fetch(this.action, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': this.querySelector('[name="_token"]').value,
+                        'Accept': 'application/json'
+                    }
+                })
+                .then(res => res.json())
+                .then(data => {
+                    let msgDiv = document.getElementById('voucherMessage');
+                    if(data.success){
+                        msgDiv.innerHTML = `<div class="alert alert-success">${data.message}</div>`;
+                        // Cập nhật lại vùng voucherAction và cartSummary nếu muốn
+                        location.reload();
+                    }
+                });
+            }
+        }
+    }
+}
+function renderVoucherAction(hasVoucher) {
+    let html = `
+        <form id="voucherForm" action="{{ route('cart.applyVoucher') }}" method="POST" class="d-flex align-items-center">
+            @csrf
+            <input type="text" name="voucher_code" placeholder="Nhập mã giảm giá" required class="form-control" style="max-width: 180px;">
+            <button type="submit" class="btn btn-link text-dark ms-2">Áp dụng</button>
+        </form>
+    `;
+    if (hasVoucher) {
+        html += `
+        <form id="removeVoucherForm" action="{{ route('cart.removeVoucher') }}" method="POST">
+            @csrf
+            <button type="submit" class="btn btn-link text-danger">
+                <i class="bi bi-x-circle"></i> Hủy mã
+            </button>
+        </form>
+        `;
+    }
+    document.getElementById('voucherAction').innerHTML = html;
+    attachVoucherEvents();
+}
+
+function attachVoucherEvents() {
+    let voucherForm = document.getElementById('voucherForm');
+    if (voucherForm) {
+        voucherForm.onsubmit = function(e) {
+            e.preventDefault();
+            let form = this;
+            let formData = new FormData(form);
+            fetch(form.action, {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': form.querySelector('[name="_token"]').value,
+                    'Accept': 'application/json'
+                },
+                body: formData
+            })
+            .then(res => res.json())
+            .then(data => {
+                let msgDiv = document.getElementById('voucherMessage');
+                if(data.success) {
+                    msgDiv.innerHTML = `<div class="alert alert-success">${data.message}</div>`;
+                    document.getElementById('cartSummary').innerHTML = `
+                        <ul>
+                            <li>Tạm tính <span>${data.subtotal} đ</span></li>
+                            <li>Giảm giá (${data.voucher_code}) <span>-${data.discount} đ</span></li>
+                            <li>Tổng cộng <span>${data.total} đ</span></li>
+                        </ul>
+                        <a href="{{ route('checkout.index') }}" class="primary-btn">Thanh toán</a>
+                    `;
+                    // Hiện nút hủy mã
+                    renderVoucherAction(true);
+                } else {
+                    msgDiv.innerHTML = `<div class="alert alert-danger">${data.message}</div>`;
+                }
+            });
+        }
+    }
+
+    let removeForm = document.getElementById('removeVoucherForm');
+    if(removeForm){
+        removeForm.onsubmit = function(e){
+            e.preventDefault();
+            if(confirm('Bạn có chắc muốn xóa mã giảm giá?')){
+                fetch(this.action, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': this.querySelector('[name="_token"]').value,
+                        'Accept': 'application/json'
+                    }
+                })
+                .then(res => res.json())
+                .then(data => {
+                    let msgDiv = document.getElementById('voucherMessage');
+                    if(data.success){
+                        msgDiv.innerHTML = `<div class="alert alert-success">${data.message}</div>`;
+                        // Ẩn nút hủy mã
+                        document.getElementById('cartSummary').innerHTML = `
+                            <ul>
+                                <li>Tạm tính <span>${data.subtotal} đ</span></li>
+                                <li>Tổng cộng <span>${data.total} đ</span></li>
+                            </ul>
+                            <a href="{{ route('checkout.index') }}" class="primary-btn">Thanh toán</a>
+                        `;
+                        renderVoucherAction(false);
+                    }
+                });
+            }
+        }
+    }
+}
+
+attachVoucherEvents();
+        </script>
 @endsection
