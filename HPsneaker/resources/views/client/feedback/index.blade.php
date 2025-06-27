@@ -91,11 +91,7 @@
             <form action="{{ route('shop.feedback.submit') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="row">
-                    <div class="col-lg-6 col-md-6">
-                        <input type="text" placeholder="Tên của bạn" name="name" required>
-                    </div>
                     <div class="col-lg-6 text-center">
-                        {{-- <label for="file-upload" class="btn btn-outline-secondary">📷 Tải ảnh lên</label> --}}
                         <input class="site-btn" id="file-upload" type="file" name="img" />
                     </div>
                     <div class="col-lg-12 text-center">
@@ -106,5 +102,37 @@
             </form>
         </div>
     </div>
+
+            <!-- Hiển thị danh sách phản hồi -->
+
+<div class="row mt-5">
+    <div class="col-lg-12">
+        <h3 class="text-center mb-4">Phản hồi gần đây</h3>
+        <div class="p-4 rounded shadow-sm border bg-light">
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                @forelse ($feedbacks as $feedback)
+                    <div class="col">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center mb-3">
+                                    <h6 class="mb-0">
+                                    {{ $feedback->user->name ?? $feedback->name }}
+                                    <span class="text-muted">({{ $feedback->created_at->format('d/m/Y H:i') }})</span>
+                                    </h6>
+                                </div>
+                                <p class="mb-2">{{ $feedback->mess }}</p>
+                                @if ($feedback->img)
+                                    <img src="{{ asset('storage/' . $feedback->img) }}" class="img-fluid rounded" alt="feedback image" style="max-height: 180px; object-fit: cover;">
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                @empty
+                    <p class="text-muted text-center">Chưa có phản hồi nào.</p>
+                @endforelse
+            </div>
+        </div>
+    </div>
+</div>
     <!-- feedback Form End -->
 @endsection
