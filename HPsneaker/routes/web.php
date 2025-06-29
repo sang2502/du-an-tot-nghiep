@@ -216,8 +216,17 @@ Route::get('logout', [UserAuthController::class, 'logout'])->name('user.logout')
 Route::get('profile', [UserAuthController::class, 'showProfile'])->name('user.profile.show');
 Route::get('edit', [UserAuthController::class, 'editProfile'])->name('user.profile.edit');
 Route::post('update', [UserAuthController::class, 'updateProfile'])->name('user.profile.update');
+// Route cho đăng ký tài khoản
+Route::get('register', [UserAuthController::class, 'showRegisterForm'])->name('user.register');
+Route::post('register', [UserAuthController::class, 'register'])->name('user.register.submit');
 
-//Route cho quên mật khẩu
-Route::get('/forgot-password', [ForgotPasswordController::class, 'showForm'])->name('forgot-password.form');
-Route::post('/forgot-password', [ForgotPasswordController::class, 'handleForm'])->name('forgot-password.send');
+
+// Route cho quên mật khẩu
+Route::get('/forgot-password', [ForgotPasswordController::class, 'showForm'])->name('client.account.forgot-password.form');
+Route::post('/forgot-password', [ForgotPasswordController::class, 'handleForm'])->name('client.account.forgot-password.send');
+// Route cho xác minh OTP và đặt lại mật khẩu
+Route::get('/verify-otp', [ForgotPasswordController::class, 'showOtpForm'])->name('client.account.verify-otp-form');
+Route::post('/verify-otp', [ForgotPasswordController::class, 'verifyOtp'])->name('client.account.verify-otp');
+Route::get('/reset-password', [ForgotPasswordController::class, 'showResetPasswordForm'])->name('client.account.reset-password-form');
+Route::post('/reset-password', [ForgotPasswordController::class, 'resetPassword'])->name('client.account.reset-password');
 
