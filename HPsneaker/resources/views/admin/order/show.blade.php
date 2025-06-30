@@ -28,12 +28,16 @@
                             <tr>
                                 <td><b>Trạng thái:</b></td>
                                 <td>
-                                    @if($order->status == 1)
-                                        <span class="badge bg-success rounded-pill px-3 py-2">Đang xử lý</span>
-                                    @else
-                                        <span class="badge bg-secondary rounded-pill px-3 py-2">Hoàn tất</span>
-                                    @endif
-                                </td>
+                                        @if($order->status == 'completed')
+                                            <span class="badge bg-secondary rounded-pill px-3 py-2">Hoàn tất</span>
+                                        @elseif($order->status == 'processing')
+                                            <span class="badge bg-warning text-dark rounded-pill px-3 py-2">Đang xử lý</span>
+                                        @elseif($order->status == 'cancelled')
+                                            <span class="badge bg-danger rounded-pill px-3 py-2">Đã hủy</span>
+                                        @else
+                                            <span class="badge bg-info rounded-pill px-3 py-2">{{ $item->status }}</span>
+                                        @endif
+                                    </td>
                             </tr>
                             <tr>
                                 <td><b>Thanh toán:</b></td>

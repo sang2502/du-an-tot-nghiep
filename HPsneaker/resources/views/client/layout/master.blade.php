@@ -38,7 +38,7 @@
         .site-btn {
             background-color: #6868f9;
             /* đen than */
-            color: #ffffff ;
+            color: #ffffff;
             border: none;
             transition: background 0.2s, box-shadow 0.2s;
             box-shadow: 0 2px 8px rgba(17, 24, 39, 0.1);
@@ -217,6 +217,7 @@
             width: 28px;
             border-radius: 5px 0 0 5px;
         }
+
         .input-group-text:hover {
             background-color: #ffffff;
             box-shadow: #ffffff 0px 0px 0px 1px inset;
@@ -232,6 +233,14 @@
             text-align: center;
             margin-bottom: 30px;
             padding-top: 40px;
+        }
+
+        .optionimage.selected {
+            background-color: #e0e0e0;
+            /* màu nền khi được chọn */
+            border: 2px solid #007bff;
+            /* viền nổi bật */
+            color: #000;
         }
     </style>
 
@@ -350,13 +359,13 @@
                 <div class="col-lg-1 col-md-6">
                     <div class="header__top__right__auth">
                         @if (session('user'))
-                            <span
-                                style="display: flex; align-items: center; justify-content: center;margin-top: 1px;">
+                            <span style="display: flex; align-items: center; justify-content: center;margin-top: 1px;">
                                 <a href="{{ route('user.profile.show') }}"
                                     style="margin: 0 8px 0 4px; color: #222; font-weight: 60; text-decoration: none; font-size: 16px;">
                                     {{ collect(explode(' ', session('user.name')))->last() }}
                                 </a>
-                                <a href="{{ route('user.logout') }}" style="margin-left: 10px; margin-bottom:20px; color: #435EBE;"
+                                <a href="{{ route('user.logout') }}"
+                                    style="margin-left: 10px; margin-bottom:20px; color: #435EBE;"
                                     onclick="return confirm('Bạn có chắc muốn đăng xuất?')">
                                     <i class="fa fa-sign-out"></i>
                                 </a>
