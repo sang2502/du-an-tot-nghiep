@@ -9,7 +9,6 @@ class Order extends Model
 {
     use HasFactory;
 
-    // Khớp hoàn toàn với migration mới!
     protected $fillable = [
         'user_id',
         'name',
@@ -23,19 +22,16 @@ class Order extends Model
         'shipping_address'
     ];
 
-    // Quan hệ với order_items
     public function orderItems()
     {
         return $this->hasMany(OrderItem::class);
     }
 
-    // Quan hệ với voucher (nếu có)
     public function voucher()
     {
         return $this->belongsTo(Voucher::class);
     }
 
-    // Quan hệ với user
     public function user()
     {
         return $this->belongsTo(User::class);
