@@ -1,9 +1,10 @@
+
 <!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quên mật khẩu - HPsneaker</title>
+    <title>Xác minh OTP - HPsneaker</title>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
@@ -86,18 +87,31 @@
                 <div class="text-center auth-logo">
                     <img src="/assets/images/logo/logo.png" alt="HPsneaker Logo">
                 </div>
-                <h1 class="auth-title text-center mb-2">Quên mật khẩu</h1>
-                <p class="auth-subtitle text-center mb-4">Nhập email của bạn để nhận mật khẩu mới.</p>
-                <form method="POST" action="{{ route('client.account.forgot-password.send') }}">
+                <h1 class="auth-title text-center mb-2">Xác minh OTP</h1>
+                <p class="auth-subtitle text-center mb-4">Nhập email và mã OTP đã gửi đến email của bạn.</p>
+                @if(session('error'))
+                    <div class="alert alert-danger">{{ session('error') }}</div>
+                @endif
+                @if(session('success'))
+                    <div class="alert alert-success">{{ session('success') }}</div>
+                @endif
+                <form method="POST" action="{{ route('client.account.verify-otp') }}">
                     @csrf
                     <div class="form-group mb-3">
                         <span class="form-control-icon"><i class="bi bi-envelope"></i></span>
-                        <input type="email" class="form-control form-control-lg" name="email" placeholder="Nhập email của bạn" required>
+                        <input type="email" class="form-control form-control-lg" name="email" placeholder="Nhập email của bạn" value="{{ old('email') }}" required>
                         @error('email')
                             <p class="text-danger small mt-1">{{ $message }}</p>
                         @enderror
                     </div>
-                    <button class="btn btn-gradient w-100 btn-lg mb-3" type="submit">Gửi mã OTP</button>
+                    <div class="form-group mb-3">
+                        <span class="form-control-icon"><i class="bi bi-shield-lock"></i></span>
+                        <input type="text" class="form-control form-control-lg" name="otp" placeholder="Nhập mã OTP" maxlength="6" required>
+                        @error('otp')
+                            <p class="text-danger small mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+                    <button class="btn btn-gradient w-100 btn-lg mb-3" type="submit">Xác minh OTP</button>
                 </form>
                 <div class="text-center mt-3">
                     <a href="{{ route('user.login') }}" class="text-link">Quay lại đăng nhập</a>
@@ -106,3 +120,4 @@
         </div>
     </div>
 </body>
+</html>
