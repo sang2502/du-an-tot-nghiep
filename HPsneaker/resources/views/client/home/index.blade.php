@@ -118,7 +118,7 @@
 
     <!-- Latest Product Section Begin -->
     <section class="latest-product spad">
-        <div class="container">
+        <div class="container" style="font-weight: 500;">
             <div class="row">
                 {{-- Cột 1: Mới nhất --}}
                 <div class="col-lg-4 col-md-6">

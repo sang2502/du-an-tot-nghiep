@@ -36,9 +36,9 @@
         button,
         .btn,
         .site-btn {
-            background-color: #ffffff;
+            background-color: #6868f9;
             /* đen than */
-            color: #fff !important;
+            color: #ffffff ;
             border: none;
             transition: background 0.2s, box-shadow 0.2s;
             box-shadow: 0 2px 8px rgba(17, 24, 39, 0.1);
@@ -282,7 +282,7 @@
                     </ul>
                 </li>
                 <li><a href="{{ url('/blog') }}">Tin tức</a></li>
-                <li><a href="{{ route('shop.contact.index') }}"">Liên hệ</a></li>
+                <li><a href="{{ route('shop.contact.index') }}">Liên hệ</a></li>
             </ul>
         </nav>
         <div id="mobile-menu-wrap"></div>
