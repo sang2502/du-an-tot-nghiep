@@ -28,7 +28,7 @@
             font-family: 'Roboto', 'Montserrat', Arial, sans-serif;
             font-size: 16px;
             color: #111827;
-            background: #eff2f6;
+            background: #ffffff;
             padding-top: 100px;
         }
 
