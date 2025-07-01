@@ -1,69 +1,519 @@
 {
     "roles": [
         {
+            "id": 1,
             "name": "Admin"
         },
         {
+            "id": 2,
             "name": "Customer"
         }
     ],
     "users": [
         {
+            "id": 1,
             "name": "Admin User",
             "email": "admin@example.com",
             "password": "123",
-            "role_id": 1
+            "phone": null,
+            "gender": null,
+            "birth_date": null,
+            "address": null,
+            "points": 0,
+            "tier": null,
+            "role_id": 1,
+            "created_at": "2025-07-01 14:13:47",
+            "updated_at": "2025-07-01 14:13:47",
+            "reset_otp": null,
+            "otp_expires_at": null
         }
     ],
     "categories": [
         {
+            "id": 1,
             "name": "Giày Nam",
-            "slug": "giay-nam"
+            "slug": "giay-nam",
+            "status": 1,
+            "created_at": "2025-07-01 14:13:47",
+            "updated_at": "2025-07-01 14:13:47"
         },
         {
+            "id": 2,
             "name": "Giày Nữ",
-            "slug": "giay-nu"
+            "slug": "giay-nu",
+            "status": 1,
+            "created_at": "2025-07-01 14:13:47",
+            "updated_at": "2025-07-01 14:13:47"
         }
     ],
     "products": [
         {
-            "name": "Giày Sneaker Trắng",
+            "id": 1,
+            "name": "Giày Nike DownShifter 13 Nam - Đen Trắng",
             "slug": "giay-sneaker-trang",
-            "thumbnail": "uploads/products/sp1.jpg",
+            "description": "Mẫu giày sneaker trắng thời trang và dễ phối đồ.",
             "category_id": 1,
-            "price": 1200000,
-            "description": "Mẫu giày sneaker trắng thời trang và dễ phối đồ."
+            "price": "1200000.00",
+            "thumbnail": "uploads\/products\/1751379356_sp1.jpg",
+            "status": 1,
+            "created_at": "2025-07-01 14:13:47",
+            "updated_at": "2025-07-01 14:15:56",
+            "deleted_at": null
+        },
+        {
+            "id": 2,
+            "name": "Giày Nike Court Vision Low Nam - Đen Trắng",
+            "slug": "giay-nike",
+            "description": "Mẫu giày năng động vào thời trang.",
+            "category_id": 1,
+            "price": "2000000.00",
+            "thumbnail": "uploads\/products\/1751379425_sp2.jpg",
+            "status": 1,
+            "created_at": "2025-07-01 14:17:05",
+            "updated_at": "2025-07-01 14:55:11",
+            "deleted_at": null
+        },
+        {
+            "id": 3,
+            "name": "Giày Nike Vomero 18 Nam - Trắng Xám",
+            "slug": "giay-nike",
+            "description": "Mẫu giày năng động và thời trang",
+            "category_id": 1,
+            "price": "2000000.00",
+            "thumbnail": "uploads\/products\/1751381816_sp11.jpg",
+            "status": 1,
+            "created_at": "2025-07-01 14:56:56",
+            "updated_at": "2025-07-01 14:56:56",
+            "deleted_at": null
+        },
+        {
+            "id": 4,
+            "name": "Giày Nike Court Vision Low Nam - Be Trắng",
+            "slug": "giay-nike",
+            "description": "Mẫu giày năng động",
+            "category_id": 1,
+            "price": "2500000.00",
+            "thumbnail": "uploads\/products\/1751381912_sp4.jpg",
+            "status": 1,
+            "created_at": "2025-07-01 14:58:32",
+            "updated_at": "2025-07-01 14:58:32",
+            "deleted_at": null
+        },
+        {
+            "id": 5,
+            "name": "Giày Nike Dunk Low Retro Nam - Trắng Đỏ",
+            "slug": "giay-nike",
+            "description": "Mẫu giày năng động và thể thao",
+            "category_id": 1,
+            "price": "2599999.00",
+            "thumbnail": "uploads\/products\/1751382010_sp5.jpg",
+            "status": 1,
+            "created_at": "2025-07-01 15:00:10",
+            "updated_at": "2025-07-01 15:00:10",
+            "deleted_at": null
+        },
+        {
+            "id": 6,
+            "name": "Giày adidas Campus 2 Nam - Đỏ",
+            "slug": "giay-nike",
+            "description": "Mẫu giày năng động và cá tính",
+            "category_id": 1,
+            "price": "2599999.00",
+            "thumbnail": "uploads\/products\/1751382106_sp6.jpg",
+            "status": 1,
+            "created_at": "2025-07-01 15:01:46",
+            "updated_at": "2025-07-01 15:01:46",
+            "deleted_at": null
+        },
+        {
+            "id": 7,
+            "name": "Giày Adidas Pureboost 5 Nam - Đen Trắng",
+            "slug": "giay-adidas",
+            "description": "Mẫu giày thể thao",
+            "category_id": 1,
+            "price": "2599999.00",
+            "thumbnail": "uploads\/products\/1751382190_sp7.jpg",
+            "status": 1,
+            "created_at": "2025-07-01 15:03:10",
+            "updated_at": "2025-07-01 15:03:10",
+            "deleted_at": null
+        },
+        {
+            "id": 8,
+            "name": "Giày Puma Shuffle Trainers Nam - Trắng Xanh Lá",
+            "slug": "giay-puma",
+            "description": "Mẫu giày thể thao",
+            "category_id": 1,
+            "price": "4499999.00",
+            "thumbnail": "uploads\/products\/1751382337_sp8.jpg",
+            "status": 1,
+            "created_at": "2025-07-01 15:05:37",
+            "updated_at": "2025-07-01 15:05:37",
+            "deleted_at": null
+        },
+        {
+            "id": 9,
+            "name": "Giày Nike Air Force 1 '07 Nữ - Trắng",
+            "slug": "giay-nike",
+            "description": "Mẫu giày năng động",
+            "category_id": 2,
+            "price": "2500000.00",
+            "thumbnail": "uploads\/products\/1751382405_sp9.jpg",
+            "status": 1,
+            "created_at": "2025-07-01 15:06:45",
+            "updated_at": "2025-07-01 15:06:45",
+            "deleted_at": null
+        },
+        {
+            "id": 10,
+            "name": "Giày Nike Dunk Low Retro Nam - Trắng Navy",
+            "slug": "giay-nike",
+            "description": "Mẫu giày thể thao",
+            "category_id": 1,
+            "price": "2500000.00",
+            "thumbnail": "uploads\/products\/1751382513_sp10.jpg",
+            "status": 1,
+            "created_at": "2025-07-01 15:08:33",
+            "updated_at": "2025-07-01 15:08:33",
+            "deleted_at": null
         }
     ],
     "sizes": [
         {
-            "value": "38"
+            "id": 1,
+            "value": "38",
+            "created_at": null,
+            "updated_at": null,
+            "deleted_at": null
         },
         {
-            "value": "39"
+            "id": 2,
+            "value": "39",
+            "created_at": null,
+            "updated_at": null,
+            "deleted_at": null
         },
         {
-            "value": "40"
+            "id": 3,
+            "value": "40",
+            "created_at": null,
+            "updated_at": null,
+            "deleted_at": null
+        },
+        {
+            "id": 4,
+            "value": "41",
+            "created_at": null,
+            "updated_at": null,
+            "deleted_at": null
+        },
+        {
+            "id": 5,
+            "value": "42",
+            "created_at": null,
+            "updated_at": null,
+            "deleted_at": null
         }
     ],
     "colors": [
         {
+            "id": 1,
             "name": "Trắng",
             "hex_code": "#FFFFFF"
         },
         {
+            "id": 2,
             "name": "Đen",
             "hex_code": "#000000"
+        },
+        {
+            "id": 4,
+            "name": "Be",
+            "hex_code": "#f5e0e0"
+        },
+        {
+            "id": 5,
+            "name": "Xanh dương",
+            "hex_code": "#47a6ff"
+        },
+        {
+            "id": 6,
+            "name": "Đỏ",
+            "hex_code": "#ff0000"
+        },
+        {
+            "id": 7,
+            "name": "Vàng",
+            "hex_code": "#fbff00"
+        },
+        {
+            "id": 8,
+            "name": "Cam",
+            "hex_code": "#ffda24"
+        },
+        {
+            "id": 9,
+            "name": "Xanh lá",
+            "hex_code": "#05ff22"
+        },
+        {
+            "id": 10,
+            "name": "Trắng xám",
+            "hex_code": "#e3d9d9"
         }
     ],
     "product_variants": [
         {
+            "id": 1,
             "product_id": 1,
             "size_id": 1,
             "color_id": 1,
-            "sku": "SP1",
             "stock": 10,
-            "price": 1200000
+            "price": "1200000.00",
+            "sku": "SP1",
+            "image": null,
+            "created_at": "2025-07-01 14:13:47",
+            "updated_at": "2025-07-01 14:13:47"
+        },
+        {
+            "id": 2,
+            "product_id": 1,
+            "size_id": 2,
+            "color_id": 2,
+            "stock": 11,
+            "price": "1200000.00",
+            "sku": "SP122",
+            "image": null,
+            "created_at": "2025-07-01 14:15:56",
+            "updated_at": "2025-07-01 14:15:56"
+        },
+        {
+            "id": 3,
+            "product_id": 2,
+            "size_id": 1,
+            "color_id": 2,
+            "stock": 12,
+            "price": "2000000.00",
+            "sku": "SP212",
+            "image": null,
+            "created_at": "2025-07-01 14:17:05",
+            "updated_at": "2025-07-01 14:17:05"
+        },
+        {
+            "id": 4,
+            "product_id": 2,
+            "size_id": 2,
+            "color_id": 2,
+            "stock": 12,
+            "price": "2000000.00",
+            "sku": "SP222",
+            "image": null,
+            "created_at": "2025-07-01 14:17:05",
+            "updated_at": "2025-07-01 14:17:05"
+        },
+        {
+            "id": 5,
+            "product_id": 3,
+            "size_id": 2,
+            "color_id": 10,
+            "stock": 12,
+            "price": "2000000.00",
+            "sku": "SP3210",
+            "image": null,
+            "created_at": "2025-07-01 14:56:56",
+            "updated_at": "2025-07-01 14:56:56"
+        },
+        {
+            "id": 6,
+            "product_id": 3,
+            "size_id": 3,
+            "color_id": 10,
+            "stock": 12,
+            "price": "2300000.00",
+            "sku": "SP3310",
+            "image": null,
+            "created_at": "2025-07-01 14:56:56",
+            "updated_at": "2025-07-01 14:56:56"
+        },
+        {
+            "id": 7,
+            "product_id": 4,
+            "size_id": 3,
+            "color_id": 4,
+            "stock": 45,
+            "price": "2000000.00",
+            "sku": "SP434",
+            "image": null,
+            "created_at": "2025-07-01 14:58:32",
+            "updated_at": "2025-07-01 14:58:32"
+        },
+        {
+            "id": 8,
+            "product_id": 4,
+            "size_id": 5,
+            "color_id": 4,
+            "stock": 23,
+            "price": "2000000.00",
+            "sku": "SP454",
+            "image": null,
+            "created_at": "2025-07-01 14:58:32",
+            "updated_at": "2025-07-01 14:58:32"
+        },
+        {
+            "id": 9,
+            "product_id": 5,
+            "size_id": 4,
+            "color_id": 6,
+            "stock": 23,
+            "price": "1200000.00",
+            "sku": "SP546",
+            "image": null,
+            "created_at": "2025-07-01 15:00:10",
+            "updated_at": "2025-07-01 15:00:10"
+        },
+        {
+            "id": 10,
+            "product_id": 5,
+            "size_id": 5,
+            "color_id": 6,
+            "stock": 24,
+            "price": "1200000.00",
+            "sku": "SP556",
+            "image": null,
+            "created_at": "2025-07-01 15:00:10",
+            "updated_at": "2025-07-01 15:00:10"
+        },
+        {
+            "id": 11,
+            "product_id": 5,
+            "size_id": 3,
+            "color_id": 6,
+            "stock": 12,
+            "price": "1200000.00",
+            "sku": "SP536",
+            "image": null,
+            "created_at": "2025-07-01 15:00:10",
+            "updated_at": "2025-07-01 15:00:10"
+        },
+        {
+            "id": 12,
+            "product_id": 6,
+            "size_id": 1,
+            "color_id": 6,
+            "stock": 23,
+            "price": "1200000.00",
+            "sku": "SP616",
+            "image": null,
+            "created_at": "2025-07-01 15:01:46",
+            "updated_at": "2025-07-01 15:01:46"
+        },
+        {
+            "id": 13,
+            "product_id": 6,
+            "size_id": 5,
+            "color_id": 6,
+            "stock": 14,
+            "price": "2300000.00",
+            "sku": "SP656",
+            "image": null,
+            "created_at": "2025-07-01 15:01:46",
+            "updated_at": "2025-07-01 15:01:46"
+        },
+        {
+            "id": 14,
+            "product_id": 7,
+            "size_id": 2,
+            "color_id": 2,
+            "stock": 23,
+            "price": "2400000.00",
+            "sku": "SP722",
+            "image": null,
+            "created_at": "2025-07-01 15:03:10",
+            "updated_at": "2025-07-01 15:03:10"
+        },
+        {
+            "id": 15,
+            "product_id": 7,
+            "size_id": 3,
+            "color_id": 2,
+            "stock": 23,
+            "price": "2300000.00",
+            "sku": "SP732",
+            "image": null,
+            "created_at": "2025-07-01 15:03:10",
+            "updated_at": "2025-07-01 15:03:10"
+        },
+        {
+            "id": 16,
+            "product_id": 8,
+            "size_id": 2,
+            "color_id": 1,
+            "stock": 12,
+            "price": "4900000.00",
+            "sku": "SP821",
+            "image": null,
+            "created_at": "2025-07-01 15:05:37",
+            "updated_at": "2025-07-01 15:05:37"
+        },
+        {
+            "id": 17,
+            "product_id": 8,
+            "size_id": 5,
+            "color_id": 1,
+            "stock": 10,
+            "price": "4800000.00",
+            "sku": "SP851",
+            "image": null,
+            "created_at": "2025-07-01 15:05:37",
+            "updated_at": "2025-07-01 15:05:37"
+        },
+        {
+            "id": 18,
+            "product_id": 9,
+            "size_id": 2,
+            "color_id": 1,
+            "stock": 12,
+            "price": "2500000.00",
+            "sku": "SP921",
+            "image": null,
+            "created_at": "2025-07-01 15:06:45",
+            "updated_at": "2025-07-01 15:06:45"
+        },
+        {
+            "id": 19,
+            "product_id": 9,
+            "size_id": 5,
+            "color_id": 8,
+            "stock": 14,
+            "price": "2500000.00",
+            "sku": "SP958",
+            "image": null,
+            "created_at": "2025-07-01 15:06:45",
+            "updated_at": "2025-07-01 15:06:45"
+        },
+        {
+            "id": 20,
+            "product_id": 10,
+            "size_id": 3,
+            "color_id": 5,
+            "stock": 12,
+            "price": "2500000.00",
+            "sku": "SP1035",
+            "image": null,
+            "created_at": "2025-07-01 15:08:33",
+            "updated_at": "2025-07-01 15:08:33"
+        },
+        {
+            "id": 21,
+            "product_id": 10,
+            "size_id": 4,
+            "color_id": 5,
+            "stock": 14,
+            "price": "2500000.00",
+            "sku": "SP1045",
+            "image": null,
+            "created_at": "2025-07-01 15:08:33",
+            "updated_at": "2025-07-01 15:08:33"
         }
     ],
     "vouchers": [
@@ -72,13 +522,15 @@
             "code": "HP10",
             "description": "Giảm 10% cho đơn hàng đầu tiên",
             "discount_type": "percent",
-            "discount_value": 10,
-            "max_discount": 50000,
-            "min_order_value": 300000,
+            "discount_value": "10.00",
+            "max_discount": "50000.00",
+            "min_order_value": "300000.00",
             "usage_limit": 100,
             "used_count": 0,
             "valid_from": "2025-07-01 00:00:00",
-            "valid_to": "2025-12-31 23:59:59"
+            "valid_to": "2025-12-31 23:59:59",
+            "created_at": "2025-07-01 14:13:47",
+            "updated_at": "2025-07-01 14:13:47"
         }
     ],
     "blog_categories": [
@@ -103,17 +555,23 @@
         {
             "id": 1,
             "name": "Sneaker",
-            "slug": "sneaker"
+            "slug": "sneaker",
+            "created_at": "2025-07-01 14:13:47",
+            "updated_at": "2025-07-01 14:13:47"
         },
         {
             "id": 2,
             "name": "Thời trang",
-            "slug": "thoi-trang"
+            "slug": "thoi-trang",
+            "created_at": "2025-07-01 14:13:47",
+            "updated_at": "2025-07-01 14:13:47"
         },
         {
             "id": 3,
             "name": "Giày trắng",
-            "slug": "giay-trang"
+            "slug": "giay-trang",
+            "created_at": "2025-07-01 14:13:47",
+            "updated_at": "2025-07-01 14:13:47"
         }
     ],
     "blog_posts": [
@@ -122,7 +580,7 @@
             "blog_category_id": 1,
             "title": "Cách chọn giày sneaker phù hợp",
             "slug": "cach-chon-giay-sneaker-phu-hop",
-            "thumbnail": "uploads/blog/sneaker1.jpg",
+            "thumbnail": "uploads\/blog\/sneaker1.jpg",
             "content": "Nội dung bài viết về cách chọn giày sneaker phù hợp với phong cách của bạn...",
             "status": 1,
             "published_at": "2025-07-01 08:00:00",
@@ -134,7 +592,7 @@
             "blog_category_id": 2,
             "title": "5 cách phối đồ với giày trắng",
             "slug": "5-cach-phoi-do-voi-giay-trang",
-            "thumbnail": "uploads/blog/phoi-do-giay-trang.jpg",
+            "thumbnail": "uploads\/blog\/phoi-do-giay-trang.jpg",
             "content": "Giày trắng là item thời trang không thể thiếu. Dưới đây là 5 cách phối đồ cực chuẩn...",
             "status": 1,
             "published_at": "2025-07-01 10:00:00",
@@ -144,12 +602,18 @@
     ],
     "blog_post_tags": [
         {
+            "id": 1,
             "blog_post_id": 1,
-            "blog_tag_id": 1
+            "blog_tag_id": 1,
+            "created_at": null,
+            "updated_at": null
         },
         {
+            "id": 2,
             "blog_post_id": 1,
-            "blog_tag_id": 2
+            "blog_tag_id": 2,
+            "created_at": null,
+            "updated_at": null
         }
     ]
 }
