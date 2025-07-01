@@ -1,6 +1,5 @@
 @extends('client.layout.master')
 @section('main')
-
     <section class="breadcrumb-section set-bg" data-setbg="{{ asset('img/breadcrumb.jpg') }}">
         <div class="container">
             <div class="row">
@@ -28,7 +27,7 @@
                         <div class="sidebar__item">
                             <h4>Danh mục giày</h4>
                             <ul>
-                                @foreach($categories as $category)
+                                @foreach ($categories as $category)
                                     <li><a href="#">{{ $category->name }}</a></li>
                                 @endforeach
                             </ul>
@@ -109,7 +108,7 @@
                                 <h4>Giày mới nhất</h4>
                                 <div class="latest-product__slider owl-carousel">
                                     <div class="latest-prdouct__slider__item">
-                                        @foreach($products->sortByDesc('created_at')->take(3) as $product)
+                                        @foreach ($products->sortByDesc('created_at')->take(3) as $product)
                                             <a href="#" class="latest-product__item">
                                                 <div class="latest-product__item__pic">
                                                     <img src="{{ $product->thumbnail }}" alt="">
@@ -176,7 +175,7 @@
                         @endforelse
                     </div>
                     {{-- Phân trang nếu có --}}
-                    {{-- {!! $products->links() !!} --}}
+                    {!! $products->links() !!}
                 </div>
             </div>
         </div>

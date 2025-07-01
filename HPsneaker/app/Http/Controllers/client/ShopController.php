@@ -16,7 +16,7 @@
     {
         public function index()
         {
-            $products = Product::where('status', 1)->get();
+            $products = Product::where('status', 1)->paginate(9);
             $categories = Category::all();
             return view('client.shop.index', compact('products', 'categories'));
         }

@@ -1109,7 +1109,7 @@ ol {
 	position: relative;
 }
 
-.sidebar__item .latest-product__text h4 {
+.sidebar__item .latest-product__text h6 {
 	margin-bottom: 45px;
 }
 
@@ -1609,15 +1609,18 @@ ol {
 
 .product__item__text h6 {
 	margin-bottom: 10px;
+
 }
 
 .product__item__text h6 a {
 	color: #252525;
+	font-weight: 500;
+	
 }
 
 .product__item__text h5 {
 	color: #252525;
-	font-weight: 700;
+	font-weight: 500;
 }
 
 .product__pagination,

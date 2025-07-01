@@ -34,8 +34,8 @@
     <!-- Categories Section Begin -->
     <section class="categories">
         <div class="section-title">
-                        <h2>Thương hiệu</h2>
-                    </div>
+            <h2>Thương hiệu</h2>
+        </div>
         <div class="container">
             <div class="row">
                 <div class="categories__slider owl-carousel">
@@ -86,7 +86,7 @@
                                 <h6><a
                                         href="{{ route('shop.product.show', ['name' => Str::slug($product->name), 'id' => $product->id]) }}}}">
                                         {{ $product->name }}</a></h6>
-                                <h5>{{ $product->price }} đ</h5>
+                                <h5>{{ number_format($product->price, 0, ',', '.') }} đ</h5>
                             </div>
                         </div>
                     </div>
@@ -133,8 +133,10 @@
                                             <img src="{{ $product->thumbnail }}" alt="">
                                         </div>
                                         <div class="latest-product__item__text">
-                                            <h6>{{ $product->name }}</h6>
-                                            <span>{{ number_format($product->price, 0, ',', '.') }} đ</span>
+                                            <h6 style="font-weight: 500;">{{ $product->name }}</h6>
+                                            <span
+                                                style="font-weight: 300;">{{ number_format($product->price, 0, ',', '.') }}
+                                                đ</span>
                                         </div>
                                     </a>
                                 @endforeach
@@ -154,8 +156,9 @@
                                         <img src="{{ $product->thumbnail }}" alt="">
                                     </div>
                                     <div class="latest-product__item__text">
-                                        <h6>{{ $product->name }}</h6>
-                                        <span>{{ number_format($product->price, 0, ',', '.') }} đ</span>
+                                        <h6 style="font-weight: 500;">{{ $product->name }}</h6>
+                                        <span style="font-weight: 300;">{{ number_format($product->price, 0, ',', '.') }}
+                                            đ</span>
                                     </div>
                                 </a>
 
@@ -175,8 +178,9 @@
                                         <img src="{{ $product->thumbnail }}" alt="">
                                     </div>
                                     <div class="latest-product__item__text">
-                                        <h6>{{ $product->name }}</h6>
-                                        <span>{{ number_format($product->price, 0, ',', '.') }} đ</span>
+                                        <h6 style="font-weight: 500;">{{ $product->name }}</h6>
+                                        <span style="font-weight: 300;">{{ number_format($product->price, 0, ',', '.') }}
+                                            đ</span>
                                     </div>
                                 </a>
 
