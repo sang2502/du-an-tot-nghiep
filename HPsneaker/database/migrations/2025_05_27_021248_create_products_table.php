@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('slug');
             $table->text('description')->nullable();
             $table->foreignId('category_id')->constrained('categories');
+            $table->foreignId('brand_id')->constrained('brands');
             $table->decimal('price', 10, 2);
             $table->string('thumbnail')->nullable();
             $table->boolean('status')->default(true); // visible/hidden

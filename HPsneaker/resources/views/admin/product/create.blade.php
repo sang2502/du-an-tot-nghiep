@@ -28,6 +28,16 @@
                             </select>
                         </div>
                         <div class="mb-3">
+                            <label for="brand_id" class="form-label">Thương hiệu</label>
+                            <select class="form-select" id="brand_id" name="brand_id" required
+                                style="max-width: 200px;">
+                                <option value="">-- Chọn thương hiệu --</option>
+                                @foreach($brands as $brand)
+                                    <option value="{{ $brand->id }}">{{ $brand->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="mb-3">
                             <label for="slug" class="form-label">Slug</label>
                             <input type="text" class="form-control" id="slug" name="slug" required>
                         </div>
