@@ -28,7 +28,7 @@
     {{-- Banner --}}
     <div class="row">
         <div class="col-lg-12">
-            <img class="banner1" src="{{ asset('img/banner/banner4.jpeg') }}" alt="">
+            <img class="banner1" src="{{ asset('img/banner/banner4.jpeg') }}" alt="" >
         </div>
     </div>
     <!-- Categories Section Begin -->
@@ -39,11 +39,10 @@
         <div class="container">
             <div class="row">
                 <div class="categories__slider owl-carousel">
-                    @foreach ($categories as $i => $category)
+                    @foreach ($brands as $i => $brand)
                         <div class="col-lg-3">
                             <div class="categories__item set-bg"
-                                data-setbg="{{ asset('img/categories/cat-' . $i . '.jpg') }}">
-                                <h5><a href="#">{{ $category->name }}</a></h5>
+                                data-setbg="{{ asset($brand->logo) }}" style="width: 140px;">
                             </div>
                         </div>
                     @endforeach

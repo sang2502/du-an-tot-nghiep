@@ -1,11 +1,11 @@
 @extends('client.layout.master')
 @section('main')
-    <section class="breadcrumb-section set-bg" data-setbg="{{ asset('img/breadcrumb.jpg') }}">
+    <section class="breadcrumb-section set-bg" data-setbg="{{ asset('img/br2.jpg') }}">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12 text-center">
                     <div class="breadcrumb__text">
-                        <h2>Shop Giày Sneaker</h2>
+                        <h2>Cửa hàng</h2>
                         <div class="breadcrumb__option">
                             <a href="{{ url('/') }}">Trang chủ</a>
                             <span>Cửa hàng</span>
