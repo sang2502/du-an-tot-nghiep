@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\client;
+
 use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
@@ -24,9 +25,9 @@ class UserAuthController extends Controller
 
         if ($user && $user->password === $request->password) {
             session(['user' => [
-            'id'    => $user->id,
-            'name'  => $user->name,
-            'email' => $user->email,
+                'id'    => $user->id,
+                'name'  => $user->name,
+                'email' => $user->email,
             ]]);
             return redirect()->route('home.index');
         }
@@ -74,33 +75,32 @@ class UserAuthController extends Controller
         return view('client.account.edit', compact('user'));
     }
     public function showRegisterForm()
-{
-    return view('client.account.register');
-}
+    {
+        return view('client.account.register');
+    }
 
-public function register(Request $request)
-{
-    $request->validate([
-        'name' => 'required|string|max:255',
-        'email' => 'required|email|unique:users,email',
-        'password' => 'required|min:6|confirmed',
-    ]);
+    public function register(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|min:6|confirmed',
+        ]);
 
-    $user = new User();
-    $user->name = $request->name;
-    $user->email = $request->email;
-    $user->password = $request->password;
-    $user->role_id = 3;
-    $user->save();
+        $user = new User();
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->password = $request->password;
+        $user->role_id = 2;
+        $user->save();
 
-    // Đăng nhập luôn cho user mới
-    session(['user' => [
-        'id'    => $user->id,
-        'name'  => $user->name,
-        'email' => $user->email,
-    ]]);
+        // Đăng nhập luôn cho user mới
+        session(['user' => [
+            'id'    => $user->id,
+            'name'  => $user->name,
+            'email' => $user->email,
+        ]]);
 
-    return redirect()->route('home.index')->with('success', 'Đăng ký thành công!');
-}
-    
+        return redirect()->route('home.index')->with('success', 'Đăng ký thành công!');
+    }
 }
