@@ -186,6 +186,7 @@ Route::prefix('/')->group(function () {
     Route::prefix('cart')->group(function () {
             Route::get('', [ShopCartController::class, 'index'])->name('shop.cart.index');
             Route::get('remove/{id}', [ShopCartController::class, 'removeCart'])->name('cart.remove');
+            Route::post('/cart/update-quantity', [ShopCartController::class, 'updateQuantity'])->name('cart.updateQuantity');
     });
 
         //route contact ở phía client
