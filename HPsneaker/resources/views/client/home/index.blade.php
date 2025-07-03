@@ -1,7 +1,7 @@
 @extends('client.layout.master')
 @section('main')
     <!-- Hero Section Begin -->
-    {{-- <section class="hero">
+    <section class="hero">
         <div class="container">
             <div class="row">
                 <!-- Danh mục bên trái -->
@@ -21,14 +21,32 @@
                     </div>
                 </div>
                 <!-- Tìm kiếm và banner -->
+                <div class="col-lg-9">
+                    <div class="hero__search">
+                        <div class="hero__search__form">
+                            <form action="{{ route('product.search') }}" method="GET">
+                                <input type="text" placeholder="Tìm kiếm sản phẩm" name="keyword">
+                                <button type="submit" class="site-btn">Tìm kiếm</button>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="hero__search__phone">
+                            <div class="hero__search__phone__icon">
+                                <i class="fa fa-phone"></i>
+                            </div>
+                            <div class="hero__search__phone__text">
+                                <h5>8888.888</h5>
+                                <span>Hỗ trợ 24/7</span>
+                            </div>
+                        </div>
+                </div>
             </div>
-        </div>
-    </section> --}}
+    </section>
     <!-- Hero Section End -->
     {{-- Banner --}}
     <div class="row">
         <div class="col-lg-12">
-            <img class="banner1" src="{{ asset('img/banner/banner4.jpeg') }}" alt="" >
+            <img class="banner1" src="{{ asset('img/banner/banner4.jpeg') }}" alt="">
         </div>
     </div>
     <!-- Categories Section Begin -->
@@ -41,8 +59,8 @@
                 <div class="categories__slider owl-carousel">
                     @foreach ($brands as $i => $brand)
                         <div class="col-lg-3">
-                            <div class="categories__item set-bg"
-                                data-setbg="{{ asset($brand->logo) }}" style="width: 140px;">
+                            <div class="categories__item set-bg" data-setbg="{{ asset($brand->logo) }}"
+                                style="width: 140px;">
                             </div>
                         </div>
                     @endforeach
