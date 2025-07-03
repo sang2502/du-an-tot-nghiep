@@ -27,6 +27,7 @@
                                     <th>ID</th>
                                     <th>Tên</th>
                                     <th>Nội dung</th>
+                                    <th>Trạng thái</th>
                                     <th>Hình ảnh</th>
                                     <th>Ngày gửi</th>
                                     <th>Hành động</th>
@@ -38,6 +39,13 @@
                                         <td>{{ $feedback->id }}</td>
                                         <td>{{ $feedback->name }}</td>
                                         <td>{{ $feedback->mess }}</td>
+                                        <td>
+                                            @if($feedback->status == 1)
+                                                <span class="badge bg-success rounded-pill px-3 py-2">Hiển thị</span>
+                                            @else
+                                                <span class="badge bg-danger rounded-pill px-3 py-2">Chặn</span>
+                                            @endif
+                                        </td>
                                         <td>
                                             @if ($feedback->img)
                                                 <img src="{{ $feedback->img ? asset('storage/' . $feedback->img) : asset('img/default-feedback.png') }}"
@@ -56,6 +64,10 @@
                                             <a href="{{ route('feedback.show', $feedback->id) }}"
                                                 class="btn btn-sm btn-info rounded-pill px-3 py-1 d-inline-flex align-items-center me-1">
                                                 <i class="bi bi-eye me-1"></i> Chi tiết
+                                            </a>
+                                            <a href="{{ route('feedback.edit', $feedback->id) }}"
+                                                class="btn btn-sm btn-warning rounded-pill px-3 py-1 d-inline-flex align-items-center me-1">
+                                                <i class="bi bi-pencil-square me-1"></i> Sửa
                                             </a>
 
                                         </td>

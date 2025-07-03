@@ -294,19 +294,20 @@
                 <li><a href="{{ route('shop.contact.index') }}">Liên hệ</a></li>
             </ul>
         </nav>
-        <div id="mobile-menu-wrap"></div>
-        <div class="header__top__right__social">
-            <a href="#"><i class="fa fa-facebook"></i></a>
-            <a href="#"><i class="fa fa-twitter"></i></a>
-            <a href="#"><i class="fa fa-linkedin"></i></a>
-            <a href="#"><i class="fa fa-pinterest-p"></i></a>
-        </div>
-        <div class="humberger__menu__contact">
-            <ul>
-                <li><i class="fa fa-envelope"></i> hello@colorlib.com</li>
-                <li>Miễn phí vận chuyển cho đơn từ 99$</li>
-            </ul>
-        </div>
+        <div id=" mobile-menu-wrap">
+    </div>
+    <div class="header__top__right__social">
+        <a href="#"><i class="fa fa-facebook"></i></a>
+        <a href="#"><i class="fa fa-twitter"></i></a>
+        <a href="#"><i class="fa fa-linkedin"></i></a>
+        <a href="#"><i class="fa fa-pinterest-p"></i></a>
+    </div>
+    <div class="humberger__menu__contact">
+        <ul>
+            <li><i class="fa fa-envelope"></i> hello@colorlib.com</li>
+            <li>Miễn phí vận chuyển cho đơn từ 99$</li>
+        </ul>
+    </div>
     </div>
     <!-- End Mobile Menu -->
 
@@ -343,6 +344,12 @@
                         <button type="submit" class="input-group-text"><i class="fa fa-search"
                                 style="color: #222"></i></button>
                         <input type="text" name="keyword" class="form-control" placeholder="Tìm kiếm...">
+                <div class="col-lg-2 col-md-6 d-flex align-items-center mb-4">
+                    <form class="input-group w-100" action="{{ route('product.search') }}" method="GET">
+                        <input type="text" class="form-control" placeholder="Tìm kiếm..." name="keyword">
+                        <button type="submit" class="btn btn-outline-secondary">
+                            <i class="fa fa-search" style="color: #222"></i>
+                        </button>
                     </form>
                 </div>
 
@@ -393,6 +400,7 @@
                         <div class="footer__about__logo">
                             <a href="{{ url('/') }}"><img src="{{ asset('img/logo3.png') }}"
                                     alt="Logo"></a>
+                            <a href="{{ url('/') }}"><img src="{{ asset('img/logo.png') }}" alt="Logo"></a>
                         </div>
                         <ul>
                             <li>Địa chỉ: 60-49 Road 11378 New York</li>
@@ -472,11 +480,11 @@
     <script src="{{ asset('js/owl.carousel.min.js') }}"></script>
     <script src="{{ asset('js/main.js') }}"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            document.querySelectorAll('.product__details__option .optionimage').forEach(function(btn) {
-                btn.addEventListener('click', function() {
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('.product__details__option .optionimage').forEach(function (btn) {
+                btn.addEventListener('click', function () {
                     document.querySelectorAll('.product__details__option .optionimage').forEach(
-                        function(b) {
+                        function (b) {
                             b.classList.remove('active');
                         });
                     this.classList.add('active');
@@ -486,10 +494,10 @@
     </script>
     {{-- Category toggle --}}
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const catAll = document.querySelector('.hero__categories__all');
             const heroCat = document.querySelector('.hero__categories');
-            catAll.addEventListener('click', function() {
+            catAll.addEventListener('click', function () {
                 heroCat.classList.toggle('active');
             });
         });
@@ -497,7 +505,7 @@
     {{-- Menu --}}
     <script>
         let lastScroll = 0;
-        window.addEventListener('scroll', function() {
+        window.addEventListener('scroll', function () {
             const topBar = document.getElementById('topBar');
             if (!topBar) return;
             if (window.scrollY > 30) {
