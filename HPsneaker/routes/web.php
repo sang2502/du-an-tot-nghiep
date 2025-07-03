@@ -153,6 +153,8 @@ Route::prefix('admin')->group(function () {
             Route::get('', [FeedbackController::class, 'index'])->name('feedback.index');
             Route::get('delete/{id}', [FeedbackController::class, 'delete'])->name('feedback.delete');
             Route::get('show/{id}', [FeedbackController::class, 'show'])->name('feedback.show');
+            Route::get('edit/{id}', [FeedbackController::class, 'edit'])->name('feedback.edit');
+            Route::get('update/{id}', [FeedbackController::class, 'update'])->name('feedback.update');
         });
     });
 });

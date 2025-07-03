@@ -283,19 +283,20 @@
                 <li><a href="{{ route('shop.contact.index') }}"">Liên hệ</a></li>
             </ul>
         </nav>
-        <div id="mobile-menu-wrap"></div>
-        <div class="header__top__right__social">
-            <a href="#"><i class="fa fa-facebook"></i></a>
-            <a href="#"><i class="fa fa-twitter"></i></a>
-            <a href="#"><i class="fa fa-linkedin"></i></a>
-            <a href="#"><i class="fa fa-pinterest-p"></i></a>
-        </div>
-        <div class="humberger__menu__contact">
-            <ul>
-                <li><i class="fa fa-envelope"></i> hello@colorlib.com</li>
-                <li>Miễn phí vận chuyển cho đơn từ 99$</li>
-            </ul>
-        </div>
+        <div id=" mobile-menu-wrap">
+    </div>
+    <div class="header__top__right__social">
+        <a href="#"><i class="fa fa-facebook"></i></a>
+        <a href="#"><i class="fa fa-twitter"></i></a>
+        <a href="#"><i class="fa fa-linkedin"></i></a>
+        <a href="#"><i class="fa fa-pinterest-p"></i></a>
+    </div>
+    <div class="humberger__menu__contact">
+        <ul>
+            <li><i class="fa fa-envelope"></i> hello@colorlib.com</li>
+            <li>Miễn phí vận chuyển cho đơn từ 99$</li>
+        </ul>
+    </div>
     </div>
     <!-- End Mobile Menu -->
 
@@ -327,11 +328,12 @@
                     </nav>
                 </div>
                 {{-- Tìm kiếm --}}
-                <div class="col-lg-2 col-md-6">
-                    <form class="input-group" action="{{ route('product.search') }}" method="GET">
-                        <button type="submit" class="input-group-text"><i class="fa fa-search"
-                                style="color: #222"></i></button>
-                        <input type="text" name="keyword" class="form-control" placeholder="Tìm sản phẩm...">
+                <div class="col-lg-2 col-md-6 d-flex align-items-center mb-4">
+                    <form class="input-group w-100" action="{{ route('product.search') }}" method="GET">
+                        <input type="text" class="form-control" placeholder="Tìm kiếm..." name="keyword">
+                        <button type="submit" class="btn btn-outline-secondary">
+                            <i class="fa fa-search" style="color: #222"></i>
+                        </button>
                     </form>
                 </div>
 
@@ -348,13 +350,13 @@
                 <div class="col-lg-1 col-md-6">
                     <div class="header__top__right__auth">
                         @if (session('user'))
-                            <span
-                                style="display: flex; align-items: center; justify-content: center;margin-top: 1px;">
+                            <span style="display: flex; align-items: center; justify-content: center;margin-top: 1px;">
                                 <a href="{{ route('user.profile.show') }}"
                                     style="margin: 0 8px 0 4px; color: #222; font-weight: 60; text-decoration: none; font-size: 16px;">
                                     {{ collect(explode(' ', session('user.name')))->last() }}
                                 </a>
-                                <a href="{{ route('user.logout') }}" style="margin-left: 10px; margin-bottom:20px; color: #435EBE;"
+                                <a href="{{ route('user.logout') }}"
+                                    style="margin-left: 10px; margin-bottom:20px; color: #435EBE;"
                                     onclick="return confirm('Bạn có chắc muốn đăng xuất?')">
                                     <i class="fa fa-sign-out"></i>
                                 </a>
@@ -380,8 +382,7 @@
                 <div class="col-lg-3 col-md-6 col-sm-6">
                     <div class="footer__about">
                         <div class="footer__about__logo">
-                            <a href="{{ url('/') }}"><img src="{{ asset('img/logo.png') }}"
-                                    alt="Logo"></a>
+                            <a href="{{ url('/') }}"><img src="{{ asset('img/logo.png') }}" alt="Logo"></a>
                         </div>
                         <ul>
                             <li>Địa chỉ: 60-49 Road 11378 New York</li>
@@ -461,11 +462,11 @@
     <script src="{{ asset('js/owl.carousel.min.js') }}"></script>
     <script src="{{ asset('js/main.js') }}"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            document.querySelectorAll('.product__details__option .optionimage').forEach(function(btn) {
-                btn.addEventListener('click', function() {
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('.product__details__option .optionimage').forEach(function (btn) {
+                btn.addEventListener('click', function () {
                     document.querySelectorAll('.product__details__option .optionimage').forEach(
-                        function(b) {
+                        function (b) {
                             b.classList.remove('active');
                         });
                     this.classList.add('active');
@@ -475,10 +476,10 @@
     </script>
     {{-- Category toggle --}}
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const catAll = document.querySelector('.hero__categories__all');
             const heroCat = document.querySelector('.hero__categories');
-            catAll.addEventListener('click', function() {
+            catAll.addEventListener('click', function () {
                 heroCat.classList.toggle('active');
             });
         });
@@ -486,7 +487,7 @@
     {{-- Menu --}}
     <script>
         let lastScroll = 0;
-        window.addEventListener('scroll', function() {
+        window.addEventListener('scroll', function () {
             const topBar = document.getElementById('topBar');
             if (!topBar) return;
             if (window.scrollY > 30) {
