@@ -27,6 +27,7 @@ use App\Http\Controllers\client\ForgotPasswordController;
 use App\Http\Controllers\client\CartController;
 use App\Http\Controllers\client\FeedbackClientController;
 use App\Http\Controllers\Client\ProductReviewController;
+use App\Http\Controllers\admin\BrandController;
 
 
 
@@ -79,6 +80,12 @@ Route::prefix('admin')->group(function () {
                 Route::get('delete/{id}', [SizeController::class, 'destroy'])->name('product.size.delete');
             });
 
+        });
+        // Quản lý thương hiệu
+        Route::prefix('brand')->group(function () {
+            Route::get('', [BrandController::class, 'index'])->name('brand.index');
+            Route::post('store', [BrandController::class, 'store'])->name('brand.store');
+            Route::get('delete/{id}', [BrandController::class, 'destroy'])->name('brand.delete');
         });
 
 

@@ -8,29 +8,34 @@ use Illuminate\Database\Eloquent\Model;
 class Product extends Model
 {
     use HasFactory;
-    protected $fillable = ['name', 'slug', 'description', 'category_id', 'price', 'thumbnail', 'status'];
+    protected $fillable = ['name', 'slug', 'description', 'category_id', 'brand_id', 'price', 'thumbnail', 'status'];
 
-    public function category() {
+    public function category()
+    {
         return $this->belongsTo(Category::class);
     }
 
-    public function variants() {
+    public function variants()
+    {
         return $this->hasMany(ProductVariant::class);
     }
 
-    public function images() {
+    public function images()
+    {
         return $this->hasMany(ProductImage::class, 'product_id', 'id');
     }
 
-      public function comments()
+    public function comments()
     {
-    return $this->hasMany(Comment::class);
+        return $this->hasMany(Comment::class);
     }
 
     public function reviews()
     {
-    return $this->hasMany(\App\Models\Review::class);
+        return $this->hasMany(\App\Models\Review::class);
     }
-
+    public function brand()
+    {
+        return $this->belongsTo(Brand::class, 'brand_id');
+    }
 }
-

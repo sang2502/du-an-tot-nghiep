@@ -11,6 +11,7 @@ use App\Models\ProductImage;
 use App\Models\ProductVariant;
 use App\Models\Color;
 use App\Models\Size;
+use App\Models\Brand;
 use Illuminate\Support\Facades\Log;
 
 class ProductController extends Controller
@@ -40,79 +41,81 @@ class ProductController extends Controller
         $categories = Category::all();
         $sizes = Size::all();
         $colors = Color::all();
-        return view('admin.product.create', compact('categories', 'sizes', 'colors'));
+        $brands = Brand::all();
+        return view('admin.product.create', compact('categories', 'sizes', 'colors', 'brands'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
 
-public function store(Request $request)
-{
-    DB::beginTransaction();
-    try {
-        // upload image
-        $imagePath = null;
-        if ($request->hasFile('image')) {
-            $image = $request->file('image');
-            $imageName = time() . '_' . $image->getClientOriginalName();
-            $image->move(public_path('uploads/products/'), $imageName);
-            $imagePath = 'uploads/products/' . $imageName;
-        }
+    public function store(Request $request)
+    {
+        DB::beginTransaction();
+        try {
+            // upload image
+            $imagePath = null;
+            if ($request->hasFile('image')) {
+                $image = $request->file('image');
+                $imageName = time() . '_' . $image->getClientOriginalName();
+                $image->move(public_path('uploads/products/'), $imageName);
+                $imagePath = 'uploads/products/' . $imageName;
+            }
 
-        // Kiểm tra biến thể
-        $hasValidVariant = false;
-        if ($request->has('variants')) {
-            foreach ($request->variants as $variant) {
-                if (!empty($variant['size_id']) && !empty($variant['color_id'])) {
-                    $hasValidVariant = true;
-                    break;
+            // Kiểm tra biến thể
+            $hasValidVariant = false;
+            if ($request->has('variants')) {
+                foreach ($request->variants as $variant) {
+                    if (!empty($variant['size_id']) && !empty($variant['color_id'])) {
+                        $hasValidVariant = true;
+                        break;
+                    }
                 }
             }
-        }
-        if (!$hasValidVariant) {
-            return redirect()->back()
-                ->withInput()
-                ->with('error', 'Bạn phải thêm ít nhất một biến thể sản phẩm!');
-        }
+            if (!$hasValidVariant) {
+                return redirect()->back()
+                    ->withInput()
+                    ->with('error', 'Bạn phải thêm ít nhất một biến thể sản phẩm!');
+            }
 
-        // Thêm mới sản phẩm
-        $product = Product::create([
-            'name' => $request->name,
-            'category_id' => $request->category_id,
-            'slug' => $request->slug,
-            'price' => $request->price,
-            'description' => $request->description,
-            'status' => $request->status,
-            'thumbnail' => $imagePath,
-        ]);
-        // Thêm vào bảng product_images
-        if ($imagePath) {
-            ProductImage::create([
-                'product_id' => $product->id,
-                'url' => $imagePath,
+            // Thêm mới sản phẩm
+            $product = Product::create([
+                'name' => $request->name,
+                'category_id' => $request->category_id,
+                'brand_id' => $request->brand_id,
+                'slug' => $request->slug,
+                'price' => $request->price,
+                'description' => $request->description,
+                'status' => $request->status,
+                'thumbnail' => $imagePath,
             ]);
+            // Thêm vào bảng product_images
+            if ($imagePath) {
+                ProductImage::create([
+                    'product_id' => $product->id,
+                    'url' => $imagePath,
+                ]);
+            }
+            // Thêm biến thể sản phẩm
+            foreach ($request->variants as $variant) {
+                if (empty($variant['size_id']) || empty($variant['color_id']))
+                    continue;
+                ProductVariant::create([
+                    'product_id' => $product->id,
+                    'size_id' => $variant['size_id'],
+                    'color_id' => $variant['color_id'],
+                    'price' => $variant['price'],
+                    'stock' => $variant['stock'],
+                    'sku' => 'SP' . $product->id . $variant['size_id'] . $variant['color_id'],
+                ]);
+            }
+            DB::commit();
+            return redirect()->route('product.index')->with('success', 'Thêm sản phẩm thành công');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->withInput()->with('error', 'Đã xảy ra lỗi!');
         }
-        // Thêm biến thể sản phẩm
-        foreach ($request->variants as $variant) {
-            if (empty($variant['size_id']) || empty($variant['color_id']))
-                continue;
-            ProductVariant::create([
-                'product_id' => $product->id,
-                'size_id' => $variant['size_id'],
-                'color_id' => $variant['color_id'],
-                'price' => $variant['price'],
-                'stock' => $variant['stock'],
-                'sku' => 'SP' . $product->id . $variant['size_id'] . $variant['color_id'],
-            ]);
-        }
-        DB::commit();
-        return redirect()->route('product.index')->with('success', 'Thêm sản phẩm thành công');
-    } catch (\Exception $e) {
-        DB::rollBack();
-        return redirect()->back()->withInput()->with('error', 'Đã xảy ra lỗi!');
     }
-}
 
     /**
      * Display the specified resource.
@@ -131,9 +134,10 @@ public function store(Request $request)
     {
         $product = Product::find($id);
         $categories = Category::all();
+        $brands = Brand::all();
         $sizes = Size::all();
         $colors = Color::all();
-        return view('admin.product.update', compact('product', 'categories', 'sizes', 'colors'));
+        return view('admin.product.update', compact('product', 'categories','brands', 'sizes', 'colors'));
     }
 
     /**
@@ -148,7 +152,7 @@ public function store(Request $request)
 
             if ($request->hasFile('image')) {
                 $image = $request->file('image');
-                $imageName = time() . '_' . $image->getClientOriginalName();
+                $imageName = $image->getClientOriginalName();
                 $image->move(public_path('uploads/products/'), $imageName);
                 $imagePath = 'uploads/products/' . $imageName;
                 // Xóa ảnh cũ nếu có
@@ -164,6 +168,7 @@ public function store(Request $request)
             $product->update([
                 'name' => $request->name,
                 'category_id' => $request->category_id,
+                'brand_id' => $request->brand_id,
                 'slug' => $request->slug,
                 'price' => $request->price,
                 'description' => $request->description,

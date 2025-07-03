@@ -65,7 +65,7 @@
                                         <td>{{ $product->id }}</td>
                                         <td>{{ $product->category ? $product->category->name : '' }}</td>
                                         <td>{{ $product->name }}</td>
-                                        <td>{{ $product->price }}VND</td>
+                                        <td>{{ number_format($product->price, 0, ',', '.') }}VND</td>
                                         <td>
                                             @if ($product->thumbnail)
                                                 <img src="{{ asset($product->thumbnail) }}" alt="Ảnh sản phẩm"

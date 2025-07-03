@@ -110,6 +110,9 @@
                                     <a href="{{ url('admin/product') }}">Sản phẩm</a>
                                 </li>
                                 <li class="submenu-item {{ request()->is('admin/product*') ? 'active' : '' }}">
+                                    <a href="{{ url('admin/brand') }}">Thương hiệu</a>
+                                </li>
+                                <li class="submenu-item {{ request()->is('admin/product*') ? 'active' : '' }}">
                                     <a href="{{ url('admin/product/color') }}">Màu sắc</a>
                                 </li>
                                 <li class="submenu-item {{ request()->is('admin/product*') ? 'active' : '' }}">
