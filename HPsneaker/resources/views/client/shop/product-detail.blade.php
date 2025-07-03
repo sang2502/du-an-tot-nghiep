@@ -46,12 +46,18 @@
                     <div class="product__details__text">
                         <h3 class="mb-2">{{ $product->name ?? 'Tên sản phẩm' }}</h3>
                         <div class="product__details__rating mb-2">
+
+                         {{-- rating avg --}}
+
+                        <div class="average-rating mb-2" style="font-size: 20px;">
                             @php
-                                $stars = round($averageRating ?? ($product->rating ?? 0));
+                                $average = $averageRating ?? 0;
                             @endphp
                             @for ($i = 1; $i <= 5; $i++)
-                                @if ($i <= $stars)
+                                @if ($average >= $i)
                                     <i class="fa fa-star text-warning"></i>
+                                @elseif ($average >= $i - 0.5)
+                                    <i class="fa fa-star-half-o text-warning"></i>
                                 @else
                                     <i class="fa fa-star-o text-warning"></i>
                                 @endif
@@ -99,6 +105,21 @@
                             <div class="product__details__quantity mb-3">
                                 <div class="quantity d-inline-flex align-items-center">
                                     <span class="mr-2">Số lượng:</span>
+                            <span class="ml-2 text-muted">({{ number_format($average, 1) }} trên {{ $reviews->count() }} lượt đánh giá)</span>
+                        </div>
+                        <div class="product__details__price mb-3 h4 text-danger">
+                            {{ number_format($product->price ?? 0, 0, ',', '.') }} đ
+                        </div>
+                        @if ($product->variants && $product->variants->count())
+                            <div class="product__details__option mb-3">
+                                <span>Chọn size:</span>
+                                <div class="d-flex flex-wrap mt-2">
+                                    @foreach ($product->variants as $variant)
+                                        <label class="optionimage btn btn-outline-white me-2 mb-2"
+                                            rel="{{ $variant->id }}">
+                                            <span class="option-value">{{ $variant->size->value }}</span>
+                                        </label>
+                                    @endforeach
                                 </div>
                             </div>
                             <form action="{{ route('shop.product.addToCart', ['id' => $product->id]) }}" method="POST"
@@ -182,6 +203,52 @@
                                                 <div class="form-group">
                                                     <label for="cmt">Bình luận</label>
                                                     <textarea class="form-control" name="cmt" rows="3" required></textarea>
+                            <div class="tab-content p-3 border border-top-0 rounded-bottom bg-light">
+                                <div class="tab-pane active" id="tabs-1" role="tabpanel">
+                                    <div class="product__details__tab__desc">
+                                        <h6>Mô tả sản phẩm</h6>
+                                        <p>{{ $product->description ?? 'Mô tả sản phẩm sẽ hiển thị ở đây.' }}</p>
+                                    </div>
+                                </div>
+                                <div class="tab-pane" id="tabs-2" role="tabpanel">
+                                    <div class="product__details__tab__desc">
+                                        <h6>Thông tin chi tiết</h6>
+                                        <p>Thương hiệu: {{ $product->brand ?? 'Sneaker Shop' }}</p>
+                                        <p>Chất liệu: {{ $product->material ?? 'Da tổng hợp' }}</p>
+                                        <p>Kích cỡ: {{ $product->size ?? '40-44' }}</p>
+                                        <p>Màu sắc: {{ $product->color ?? 'Trắng/Đen' }}</p>
+                                    </div>
+                                </div>
+                                <div class="tab-pane" id="tabs-3" role="tabpanel">
+                                    <div class="product__details__tab__desc">
+                                        <h5>Nhận xét của bạn</h5>
+                                        @if(session('user'))
+                                            <div class="row">
+                                                {{-- bình luận --}}
+                                                <div class="col-md-12">
+                                                    @if(session('user'))
+                                                    <form method="POST" action="{{ route('shop.submitReview', $product->id) }}" id="starRatingForm">
+                                                        @csrf
+                                                        <div class="form-group mb-2">
+                                                            <div id="interactiveRating" style="font-size: 24px;">
+                                                                @for ($i = 1; $i <= 5; $i++)
+                                                                    <i class="fa fa-star-o star" data-value="{{ $i }}"></i>
+                                                                @endfor
+                                                            </div>
+                                                        </div>
+                                                        <input type="hidden" name="rating" id="ratingInput" value="{{ $existingRating ?? '' }}">
+                                                    </form>
+                                        @else
+                                        <p>Vui lòng <a href="{{ route('user.login') }}">đăng nhập</a> để đánh giá.</p>
+                                        @endif
+                                                    <form action="{{ route('product.comment.store', $product->id) }}" method="POST" class="mb-4">
+                                                        @csrf
+                                                        <div class="form-group">
+                                                            <label for="cmt">Bình luận</label>
+                                                            <textarea class="form-control" name="cmt" rows="3" required></textarea>
+                                                        </div>
+                                                        <button type="submit" class="primary-btn mr-2">Gửi bình luận</button>
+                                                    </form>
                                                 </div>
                                                 <button type="submit" class="primary-btn mr-2">Gửi bình
                                                     luận</button>
@@ -228,6 +295,7 @@
 
     <!-- Related Product Section Begin -->
     <div class="related-product mt-5">
+        <div class="container">
         <div class="row">
             <div class="col-lg-12">
                 <div class="section-title related__product__title ">
@@ -265,6 +333,7 @@
                     </div>
                 @endforeach
             </div>
+        </div>
         </div>
     </div>
     <!-- Product Details Section End -->

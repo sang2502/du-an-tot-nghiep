@@ -105,24 +105,40 @@
 
             <!-- Hiển thị danh sách phản hồi -->
 
-<div class="row mt-5">
-    <div class="col-lg-12">
+<div class="row mt-5 justify-content-center">
+    <div class="col-lg-10">
         <h3 class="text-center mb-4">Phản hồi gần đây</h3>
         <div class="p-4 rounded shadow-sm border bg-light">
-            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+            <div class="row justify-content-center">
                 @forelse ($feedbacks as $feedback)
-                    <div class="col">
+                    <div class="col-lg-8 mb-4 mx-auto">
                         <div class="card h-100">
                             <div class="card-body">
                                 <div class="d-flex align-items-center mb-3">
                                     <h6 class="mb-0">
-                                    {{ $feedback->user->name ?? $feedback->name }}
-                                    <span class="text-muted">({{ $feedback->created_at->format('d/m/Y H:i') }})</span>
+                                        {{ $feedback->user->name ?? $feedback->name }}
+                                        <span class="text-muted">({{ $feedback->created_at->format('d/m/Y H:i') }})</span>
                                     </h6>
                                 </div>
-                                <p class="mb-2">{{ $feedback->mess }}</p>
+                                <h5 class="mb-2">{{ $feedback->mess }}</h5  >
                                 @if ($feedback->img)
-                                    <img src="{{ asset('storage/' . $feedback->img) }}" class="img-fluid rounded" alt="feedback image" style="max-height: 180px; object-fit: cover;">
+                                    <a href="{{ asset('storage/' . $feedback->img) }}" data-bs-toggle="modal" data-bs-toggle="modal" data-bs-target="#imageModal{{ $feedback->id }}">
+                                        <img src="{{ asset('storage/' . $feedback->img) }}" class="img-fluid rounded" alt="feedback image" style="max-height: 180px; object-fit: cover;">
+                                    </a>
+
+                                    <!-- Modal xem ảnh -->
+                                    <div class="modal fade" id="imageModal{{ $feedback->id }}" tabindex="-1" aria-labelledby="imageModalLabel{{ $feedback->id }}" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered modal-lg">
+                                            <div class="modal-content">
+                                                <div class="modal-header border-0">
+                                                    <button type="button" class="btn-close ms-auto" data-bs-dismiss="modal" aria-label="Đóng"></button>
+                                                </div>
+                                                <div class="modal-body p-0">
+                                                    <img src="{{ asset('storage/' . $feedback->img) }}" class="img-fluid w-100" alt="Full size image">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 @endif
                             </div>
                         </div>
@@ -135,4 +151,5 @@
     </div>
 </div>
     <!-- feedback Form End -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 @endsection
