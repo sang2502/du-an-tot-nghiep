@@ -46,6 +46,9 @@ class DatabaseSeeder extends Seeder
         foreach ($dataArray['categories'] as $data) {
             Category::create($data);
         }
+        foreach ($dataArray['brands'] as $data) {
+            Brand::create($data);
+        }
 
         foreach ($dataArray['products'] as $data) {
             Product::create($data);
@@ -82,8 +85,6 @@ class DatabaseSeeder extends Seeder
         foreach ($dataArray['blog_post_tags'] as $data) {
             DB::table('blog_post_tags')->insert($data);
         }
-        foreach ($dataArray['brands'] as $data) {
-            Brand::create($data);
-        }
+
     }
 }
