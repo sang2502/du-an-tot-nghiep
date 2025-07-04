@@ -30,7 +30,7 @@ class ExportProductsJson extends Command
         'roles' => DB::table('roles')->get(),
         'users' => DB::table('users')->get(),
         'categories' => DB::table('categories')->get(),
-        'brand'=>DB::table('brands')->get(),
+        'brands'=>DB::table('brands')->get(),
         'products' => DB::table('products')->get(),
         'sizes' => DB::table('sizes')->get(),
         'colors' => DB::table('colors')->get(),
