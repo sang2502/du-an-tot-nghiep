@@ -49,8 +49,6 @@ class ShopCartController extends Controller
     }
 
     session(['voucher' => $voucher]);
-
-    // Lấy lại cartItems giống như hàm index()
     $cartItems = CartItem::with(['variant.product', 'variant.size', 'variant.color'])
         ->whereHas('cart', function ($q) {
             $q->where('user_id', session('user.id'));
@@ -73,14 +71,18 @@ class ShopCartController extends Controller
     if ($discount > $subtotal) $discount = $subtotal;
     $total = $subtotal - $discount;
 
+    // Render lại HTML tổng tiền
+    $cart_summary_html = view('client.shop.cart-summary', [
+        'subtotal' => $subtotal,
+        'voucher' => $voucher,
+        'discount' => $discount,
+        'total' => $total
+    ])->render();
+
     return response()->json([
         'success' => true,
         'message' => 'Áp dụng mã giảm giá thành công!',
-        'voucher' => $voucher,
-        'discount' => number_format($discount, 0, ',', '.'),
-        'total' => number_format($total, 0, ',', '.'),
-        'subtotal' => number_format($subtotal, 0, ',', '.'),
-        'voucher_code' => $voucher->code,
+        'cart_summary_html' => $cart_summary_html,
     ]);
 }
 public function updateQuantity(Request $request)
@@ -109,7 +111,7 @@ public function updateQuantity(Request $request)
         }
         $total = $subtotal - $discount;
         // Render lại HTML tổng tiền
-        $cart_summary_html = view('client.shop._cart-summary', compact('subtotal', 'voucher', 'discount', 'total'))->render();
+        $cart_summary_html = view('client.shop.cart-summary', compact('subtotal', 'voucher', 'discount', 'total'))->render();
         return response()->json([
             'success' => true,
             'item_total' => number_format(($item->variant->price ?? 0) * $item->quantity, 0, ',', '.'),
@@ -129,12 +131,21 @@ public function removeVoucher()
     $subtotal = $cartItems->sum(function($i) {
         return ($i->variant->price ?? 0) * $i->quantity;
     });
+    $voucher = null;
+    $discount = 0;
     $total = $subtotal;
+
+    $cart_summary_html = view('client.shop.cart-summary', [
+        'subtotal' => $subtotal,
+        'voucher' => $voucher,
+        'discount' => $discount,
+        'total' => $total
+    ])->render();
+
     return response()->json([
         'success' => true,
         'message' => 'Đã hủy mã giảm giá.',
-        'subtotal' => number_format($subtotal, 0, ',', '.'),
-        'total' => number_format($total, 0, ',', '.'),
+        'cart_summary_html' => $cart_summary_html,
     ]);
 }
 }
