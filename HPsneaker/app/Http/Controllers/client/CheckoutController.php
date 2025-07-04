@@ -32,7 +32,31 @@ class CheckoutController extends Controller
             : collect();
         $cartTotal = $cartItems->sum(fn($item) => ($item->variant->price ?? 0) * $item->quantity);
 
-        return view('client.checkout.index', compact('cartItems', 'cartTotal'));
+        // Lấy thông tin voucher từ session (nếu có)
+        $voucher = session('voucher');
+        $voucherId = $voucher->id ?? null;
+        $voucherCode = $voucher->code ?? null;
+        $voucherDiscount = 0;
+        if ($voucher) {
+            if ($voucher->discount_type == 'percent') {
+                $voucherDiscount = round($cartTotal * $voucher->discount_value / 100);
+                if ($voucher->max_discount && $voucherDiscount > $voucher->max_discount) {
+                    $voucherDiscount = $voucher->max_discount;
+                }
+            } else {
+                $voucherDiscount = $voucher->discount_value;
+            }
+            if ($voucherDiscount > $cartTotal) $voucherDiscount = $cartTotal;
+        }
+        $cartFinalTotal = $cartTotal - $voucherDiscount;
+
+        return view('client.checkout.index', compact(
+            'cartItems',
+            'cartTotal',
+            'voucherCode',
+            'voucherDiscount',
+            'cartFinalTotal'
+        ));
     }
 
     // Đặt hàng COD hoặc MOMO
@@ -54,22 +78,39 @@ class CheckoutController extends Controller
         $cartItems = CartItem::with(['variant'])->where('cart_id', $cart->id)->get();
         if ($cartItems->isEmpty()) return back()->with('error', 'Giỏ hàng rỗng!');
 
+        // Lấy lại voucher từ session để tính chính xác
+        $voucher = session('voucher');
+        $voucherId = $voucher->id ?? null;
+        $voucherDiscount = 0;
+        $cartTotal = $cartItems->sum(fn($i) => ($i->variant->price ?? 0) * $i->quantity);
+        if ($voucher) {
+            if ($voucher->discount_type == 'percent') {
+                $voucherDiscount = round($cartTotal * $voucher->discount_value / 100);
+                if ($voucher->max_discount && $voucherDiscount > $voucher->max_discount) {
+                    $voucherDiscount = $voucher->max_discount;
+                }
+            } else {
+                $voucherDiscount = $voucher->discount_value;
+            }
+            if ($voucherDiscount > $cartTotal) $voucherDiscount = $cartTotal;
+        }
+        $cartFinalTotal = $cartTotal - $voucherDiscount;
+
         DB::beginTransaction();
         try {
-            $cartTotal = $cartItems->sum(fn ($i) => ($i->variant->price ?? 0) * $i->quantity);
-
             $order = Order::create([
                 'user_id'          => $userId,
                 'name'             => $data['name'],
                 'email'            => $data['email'],
                 'phone'            => $data['phone'],
-                'total_amount'     => $cartTotal,
-                'voucher_id'       => null,
-                'discount_applied' => 0,
+                'total_amount'     => $cartFinalTotal,
+                'voucher_id'       => $voucherId,
+                'discount_applied' => $voucherDiscount,
                 'status'           => 'processing',
                 'payment_method'   => $data['payment'],
                 'shipping_address' => $data['address'],
             ]);
+
             foreach ($cartItems as $item) {
                 OrderItem::create([
                     'order_id'           => $order->id,
@@ -82,6 +123,8 @@ class CheckoutController extends Controller
             $cart->delete();
 
             DB::commit();
+            // Xóa voucher khỏi session sau khi đặt hàng thành công
+            session()->forget('voucher');
             return redirect()->route('checkout.success', ['orderId' => $order->id]);
         } catch (\Exception $e) {
             DB::rollBack();
@@ -98,8 +141,25 @@ class CheckoutController extends Controller
 
         $cart = Cart::where('user_id', $userId)->first();
         $cartItems = $cart ? CartItem::with(['variant'])->where('cart_id', $cart->id)->get() : collect();
-        $cartTotal = $cartItems->sum(fn ($i) => ($i->variant->price ?? 0) * $i->quantity);
+        $cartTotal = $cartItems->sum(fn($i) => ($i->variant->price ?? 0) * $i->quantity);
         if ($cartItems->isEmpty()) return response()->json(['redirect' => route('shop.cart.index')]);
+
+        // Lấy lại voucher từ session
+        $voucher = session('voucher');
+        $voucherId = $voucher->id ?? null;
+        $voucherDiscount = 0;
+        if ($voucher) {
+            if ($voucher->discount_type == 'percent') {
+                $voucherDiscount = round($cartTotal * $voucher->discount_value / 100);
+                if ($voucher->max_discount && $voucherDiscount > $voucher->max_discount) {
+                    $voucherDiscount = $voucher->max_discount;
+                }
+            } else {
+                $voucherDiscount = $voucher->discount_value;
+            }
+            if ($voucherDiscount > $cartTotal) $voucherDiscount = $cartTotal;
+        }
+        $cartFinalTotal = $cartTotal - $voucherDiscount;
 
         // Tạo đơn hàng trạng thái pending
         DB::beginTransaction();
@@ -109,9 +169,9 @@ class CheckoutController extends Controller
                 'name'             => $data['name'] ?? '',
                 'email'            => $data['email'] ?? '',
                 'phone'            => $data['phone'] ?? '',
-                'total_amount'     => $cartTotal,
-                'voucher_id'       => null,
-                'discount_applied' => 0,
+                'total_amount'     => $cartFinalTotal,
+                'voucher_id'       => $voucherId,
+                'discount_applied' => $voucherDiscount,
                 'status'           => 'pending',
                 'payment_method'   => 'VNPAY',
                 'shipping_address' => $data['address'] ?? '',
@@ -125,6 +185,8 @@ class CheckoutController extends Controller
                 ]);
             }
             DB::commit();
+            // Xóa voucher khỏi session sau khi đặt hàng thành công
+            session()->forget('voucher');
         } catch (\Exception $e) {
             DB::rollBack();
             return response()->json(['error' => 'Lỗi tạo đơn hàng: ' . $e->getMessage()]);
@@ -136,9 +198,9 @@ class CheckoutController extends Controller
         $vnp_Url        = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
         $vnp_ReturnUrl  = env('APP_URL') . "/checkout/vnpay-return";
         $orderId        = $order->id;
-        $orderDesc      = "Thanh toan don hang {$orderId}"; // Không dấu hai chấm và ký tự lạ
+        $orderDesc      = "Thanh toan don hang {$orderId}";
         $orderType      = "billpayment";
-        $amount         = (int)$cartTotal * 100;
+        $amount         = (int)$cartFinalTotal * 100;
         $locale         = "vn";
         $ipAddr         = $request->ip();
         $expire         = date('YmdHis', strtotime('+15 minutes'));
@@ -163,7 +225,7 @@ class CheckoutController extends Controller
         ksort($inputData);
         $hashdataArr = [];
         foreach ($inputData as $key => $value) {
-            $hashdataArr[] = $key . "=" . urlencode($value); // PHẢI ENCODE value
+            $hashdataArr[] = $key . "=" . urlencode($value);
         }
         $hashdata = implode('&', $hashdataArr);
         $vnpSecureHash = hash_hmac('sha512', $hashdata, $vnp_HashSecret);
@@ -183,7 +245,7 @@ class CheckoutController extends Controller
     // Trang hóa đơn sau khi thanh toán thành công hoặc thất bại
     public function success($orderId)
     {
-        $order = Order::with(['orderItems.variant.product'])->findOrFail($orderId);
+        $order = Order::with(['orderItems.variant.product', 'voucher'])->findOrFail($orderId);
         return view('client.checkout.success', compact('order'));
     }
 
@@ -224,6 +286,4 @@ class CheckoutController extends Controller
             abort(403, "Chữ ký không hợp lệ");
         }
     }
-
-
 }

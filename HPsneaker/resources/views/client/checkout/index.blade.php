@@ -81,8 +81,19 @@
                                 <div class="checkout__order__subtotal">
                                     Tạm tính <span>{{ number_format($cartTotal, 0, ',', '.') }} đ</span>
                                 </div>
+
+                                @if(!empty($voucherCode) && $voucherDiscount > 0)
+                                    <div class="checkout__order__voucher" style="margin-bottom: 8px;">
+                                        Voucher đã áp dụng: <b>{{ $voucherCode }}</b>
+                                        <span style="float:right;color:green;">-{{ number_format($voucherDiscount, 0, ',', '.') }} đ</span>
+                                    </div>
+                                @endif
+
                                 <div class="checkout__order__total">
-                                    Tổng cộng <span>{{ number_format($cartTotal, 0, ',', '.') }} đ</span>
+                                    Tổng cộng
+                                    <span>
+                                        {{ number_format($cartFinalTotal ?? $cartTotal, 0, ',', '.') }} đ
+                                    </span>
                                 </div>
                                 <button type="submit" class="site-btn">ĐẶT HÀNG</button>
                             </div>
