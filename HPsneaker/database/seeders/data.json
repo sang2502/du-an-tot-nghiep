@@ -78,6 +78,30 @@
             "logo": "uploads\/brands\/logo1.jpg",
             "created_at": "2025-07-03 10:10:11",
             "updated_at": "2025-07-03 10:10:11"
+        },
+        {
+            "id": 5,
+            "name": "Lacoste",
+            "slug": "lacoste",
+            "logo": "uploads\/brands\/lacoste.jpg",
+            "created_at": "2025-07-04 05:33:48",
+            "updated_at": "2025-07-04 05:33:48"
+        },
+        {
+            "id": 7,
+            "name": "New Balance",
+            "slug": "new-balance",
+            "logo": "uploads\/brands\/balance.jpg",
+            "created_at": "2025-07-04 05:35:14",
+            "updated_at": "2025-07-04 05:35:14"
+        },
+        {
+            "id": 8,
+            "name": "Vans",
+            "slug": "vans",
+            "logo": "uploads\/brands\/vans.jpg",
+            "created_at": "2025-07-04 05:35:56",
+            "updated_at": "2025-07-04 05:35:56"
         }
     ],
     "products": [

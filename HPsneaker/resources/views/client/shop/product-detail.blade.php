@@ -114,11 +114,11 @@
                             <a class="nav-link active" data-toggle="tab" href="#tabs-1" role="tab"
                                 aria-selected="true">Mô tả</a>
                         </li>
-                        <li class="nav-item">
+                        {{-- <li class="nav-item">
                             <a class="nav-link" data-toggle="tab" href="#tabs-2" role="tab" aria-selected="false">
                                 Thông tin
                             </a>
-                        </li>
+                        </li> --}}
                         <li class="nav-item">
                             <a class="nav-link" data-toggle="tab" href="#tabs-3" role="tab" aria-selected="false">
                                 Bình luận <span>({{ $comments->count() }})</span>
@@ -132,7 +132,7 @@
                                 <p>{{ $product->description ?? 'Mô tả sản phẩm sẽ hiển thị ở đây.' }}</p>
                             </div>
                         </div>
-                        <div class="tab-pane" id="tabs-2" role="tabpanel">
+                        {{-- <div class="tab-pane" id="tabs-2" role="tabpanel">
                             <div class="product__details__tab__desc">
                                 <h6>Thông tin chi tiết</h6>
                                 <p>Thương hiệu: {{ $product->brand ?? 'Sneaker Shop' }}</p>
@@ -140,7 +140,7 @@
                                 <p>Kích cỡ: {{ $product->size ?? '40-44' }}</p>
                                 <p>Màu sắc: {{ $product->color ?? 'Trắng/Đen' }}</p>
                             </div>
-                        </div>
+                        </div> --}}
                         <div class="tab-pane" id="tabs-3" role="tabpanel">
                             <div class="product__details__tab__desc">
                                 <h6>Nhận xét của bạn</h6>
