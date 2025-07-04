@@ -18,7 +18,7 @@ use App\Models\BlogCategory;
 use App\Models\BlogTag;
 use App\Models\BlogPost;
 use App\Models\BlogPostTag;
-
+use App\Models\Brand;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -83,7 +83,7 @@ class DatabaseSeeder extends Seeder
             DB::table('blog_post_tags')->insert($data);
         }
         foreach ($dataArray['brands'] as $data) {
-            DB::table('brands')->insert($data);
+            Brand::create($data);
         }
     }
 }
