@@ -28,17 +28,17 @@
             font-family: 'Roboto', 'Montserrat', Arial, sans-serif;
             font-size: 16px;
             color: #111827;
-            background: #f9fafb;
-            padding-top: 100px;
+            background: #ffffff;
+            padding-top: 120px;
         }
 
         /* Nút (Buttons) */
         button,
         .btn,
         .site-btn {
-            background-color: #ffffff;
+            background-color: #6868f9;
             /* đen than */
-            color: #fff !important;
+            color: #ffffff;
             border: none;
             transition: background 0.2s, box-shadow 0.2s;
             box-shadow: 0 2px 8px rgba(17, 24, 39, 0.1);
@@ -91,7 +91,7 @@
             left: 0;
             width: 100%;
             z-index: 1000;
-            background: #ffffff;
+            background: #f4f2f2;
             box-shadow: 0 2px 8px rgb(255, 255, 255);
             transition: all 0.3s;
         }
@@ -190,7 +190,8 @@
             height: 700px;
             display: block;
             margin: 0 auto;
-            padding-top: 20px;
+            padding-top: 5px;
+            padding-bottom: 10px;
         }
 
         .input-group {
@@ -212,7 +213,10 @@
             background-color: #ffffff;
             color: #000000;
             border: none;
-            box-shadow: none
+            box-shadow: none;
+            height: 38px;
+            width: 28px;
+            border-radius: 5px 0 0 5px;
         }
 
         .input-group-text:hover {
@@ -231,6 +235,14 @@
             margin-bottom: 30px;
             padding-top: 40px;
         }
+
+        .optionimage.selected {
+            background-color: #e0e0e0;
+            /* màu nền khi được chọn */
+            border: 2px solid #007bff;
+            /* viền nổi bật */
+            color: #000;
+        }
     </style>
 
 </head>
@@ -245,7 +257,7 @@
     <div class="humberger__menu__overlay"></div>
     <div class="humberger__menu__wrapper">
         <div class="humberger__menu__logo">
-            <a href="{{ url('/') }}"><img src="{{ asset('img/logo.png') }}" alt="Logo"></a>
+            <a href="{{ url('/') }}"><img src="{{ asset('img/logo3.png') }}" alt="Logo"></a>
         </div>
         <div class="humberger__menu__cart">
             <ul>
@@ -254,15 +266,6 @@
             </ul>
         </div>
         <div class="humberger__menu__widget">
-            <div class="header__top__right__language">
-                <img src="{{ asset('img/language.png') }}" alt="">
-                <div>Tiếng Việt</div>
-                <span class="arrow_carrot-down"></span>
-                <ul>
-                    <li><a href="#">English</a></li>
-                    <li><a href="#">Tiếng Việt</a></li>
-                </ul>
-            </div>
             <div class="header__top__right__auth">
                 <a href="#"><i class="fa fa-user"></i> Đăng nhập</a>
             </div>
@@ -271,19 +274,20 @@
             <ul>
                 <li class="active"><a href="{{ url('/') }}">Trang chủ</a></li>
                 <li><a href="{{ url('/shop') }}">Cửa hàng</a></li>
-                <li><a href="#">Trang</a>
+                {{-- <li><a href="#">Trang</a>
                     <ul class="header__menu__dropdown">
                         <li><a href="{{ url('/shop-details') }}">Chi tiết sản phẩm</a></li>
                         <li><a href="{{ url('/shopping-cart') }}">Giỏ hàng</a></li>
                         <li><a href="{{ url('/checkout') }}">Thanh toán</a></li>
                         <li><a href="{{ url('/blog-details') }}">Chi tiết tin tức</a></li>
                     </ul>
-                </li>
+                </li> --}}
                 <li><a href="{{ url('/blog') }}">Tin tức</a></li>
-                <li><a href="{{ route('shop.contact.index') }}"">Liên hệ</a></li>
+                <li><a href="{{ route('shop.contact.index') }}">Liên hệ</a></li>
             </ul>
         </nav>
-        <div id="mobile-menu-wrap"></div>
+        <div id=" mobile-menu-wrap">
+        </div>
         <div class="header__top__right__social">
             <a href="#"><i class="fa fa-facebook"></i></a>
             <a href="#"><i class="fa fa-twitter"></i></a>
@@ -308,7 +312,7 @@
                         <a href="{{ url('/') }}"><img src="{{ asset('img/logo3.png') }}" alt="Logo"></a>
                     </div>
                 </div>
-                <div class="col-lg-6 col-md-6">
+                <div class="col-lg-7 col-md-6">
                     <nav class="header__menu">
                         <ul>
                             <li><a href="{{ url('/') }}">Trang chủ</a></li>
@@ -326,21 +330,13 @@
                         </ul>
                     </nav>
                 </div>
-                {{-- Tìm kiếm --}}
-                <div class="col-lg-2 col-md-6">
-                    <form class="input-group" action="{{ route('product.search') }}" method="GET">
-                        <button type="submit" class="input-group-text"><i class="fa fa-search"
-                                style="color: #222"></i></button>
-                        <input type="text" name="keyword" class="form-control" placeholder="Tìm sản phẩm...">
-                    </form>
-                </div>
-
+             {{-- Giỏ hàng --}}
                 <div class="col-lg-1 col-md-6">
                     <div class="header__cart">
                         <ul>
                             <li><a href="{{ url('/shop/cart') }}"><i class="fa fa-shopping-bag"
                                         style="font-size: 20px;"></i>
-                                    <span>3</span></a>
+                                    <span></span></a>
                             </li>
                         </ul>
                     </div>
@@ -348,13 +344,13 @@
                 <div class="col-lg-1 col-md-6">
                     <div class="header__top__right__auth">
                         @if (session('user'))
-                            <span
-                                style="display: flex; align-items: center; justify-content: center;margin-top: 1px;">
+                            <span style="display: flex; align-items: center; justify-content: center;margin-top: 1px;">
                                 <a href="{{ route('user.profile.show') }}"
                                     style="margin: 0 8px 0 4px; color: #222; font-weight: 60; text-decoration: none; font-size: 16px;">
                                     {{ collect(explode(' ', session('user.name')))->last() }}
                                 </a>
-                                <a href="{{ route('user.logout') }}" style="margin-left: 10px; margin-bottom:20px; color: #435EBE;"
+                                <a href="{{ route('user.logout') }}"
+                                    style="margin-left: 10px; margin-bottom:20px; color: #435EBE;"
                                     onclick="return confirm('Bạn có chắc muốn đăng xuất?')">
                                     <i class="fa fa-sign-out"></i>
                                 </a>
@@ -380,6 +376,8 @@
                 <div class="col-lg-3 col-md-6 col-sm-6">
                     <div class="footer__about">
                         <div class="footer__about__logo">
+                            <a href="{{ url('/') }}"><img src="{{ asset('img/logo3.png') }}"
+                                    alt="Logo"></a>
                             <a href="{{ url('/') }}"><img src="{{ asset('img/logo.png') }}"
                                     alt="Logo"></a>
                         </div>

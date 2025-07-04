@@ -11,13 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('feedback', function (Blueprint $table) {
+        Schema::create('brands', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 255);
-            $table->string('mess', 255);
-            $table->string('img')->nullable();
+            $table->string('name')->unique();
+            $table->string('slug')->unique(); // URL-friendly version of the brand name
+            $table->string('logo')->nullable(); // URL or path to the brand logo
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 
@@ -26,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('feedback');
+        Schema::dropIfExists('brands');
     }
 };

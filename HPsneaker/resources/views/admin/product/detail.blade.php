@@ -35,6 +35,10 @@
                                     class="badge bg-info text-dark">{{ $product->category->name ?? 'Không có danh mục' }}</span>
                             </div>
                             <div class="mb-2">
+                                <span class="text-muted">Thương hiệu:</span>
+                                <span class="text-muted">{{ $product->brand ? $product->brand->name : 'Không có thương hiệu' }}</span>
+                            </div>
+                            <div class="mb-2">
                                 <span class="text-muted">Mã sản phẩm:</span>
                                 <span class="text-muted ">{{ $variant->sku }}</span>
                             </div>

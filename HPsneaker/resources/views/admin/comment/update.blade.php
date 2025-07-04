@@ -14,8 +14,8 @@
                     <div class="mb-3">
                         <label class="form-label">Trạng thái</label>
                         <select class="form-select" name="status">
-                            <option value="1" @if($comment->status == 1) selected @endif>Đang xử lý</option>
-                            <option value="0" @if($comment->status == 0) selected @endif>Đã xử lý</option>
+                            <option value="1" @if($comment->status == 1) selected @endif>Đã xử lý</option>
+                            <option value="0" @if($comment->status == 0) selected @endif>Đang xử lý</option>
                         </select>
                     </div>
                     <div class="d-flex justify-content-between">

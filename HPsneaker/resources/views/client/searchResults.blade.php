@@ -10,7 +10,7 @@
             <div class="col-md-3 mb-4">
                 <div class="card">
                     <a href="{{ route('shop.product.show', ['name' => Str::slug($product->name), 'id' => $product->id]) }}">
-                        <img src="{{ asset('storage/' . $product->thumbnail) }}" class="card-img-top" alt="{{ $product->name }}">
+                        <img src="{{ asset($product->thumbnail) }}" class="card-img-top" alt="{{ $product->name }}">
                     </a>
                     <div class="card-body">
                         <h5 class="card-title">

@@ -43,9 +43,9 @@
                                         <td>{{ $contact->mess }}</td>
                                         <td>
                                             @if($contact->status == 1)
-                                                <span class="badge bg-success rounded-pill px-3 py-2">Đang xử lý</span>
+                                                <span class="badge bg-success rounded-pill px-3 py-2">Đã gửi</span>
                                             @else
-                                                <span class="badge bg-danger rounded-pill px-3 py-2">Đã xử lý</span>
+                                                <span class="badge bg-danger rounded-pill px-3 py-2">Đang xử lý</span>
                                             @endif
                                         </td>
                                         <td>{{ $contact->created_at }}</td>

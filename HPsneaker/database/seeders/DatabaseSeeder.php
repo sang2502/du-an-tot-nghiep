@@ -1,11 +1,24 @@
 <?php
 
 namespace Database\Seeders;
+
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
 use Carbon\Carbon;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Role;
+use App\Models\User;
+use App\Models\Category;
+use App\Models\Product;
+use App\Models\Size;
+use App\Models\Color;
+use App\Models\ProductVariant;
+use App\Models\Voucher;
+use App\Models\BlogCategory;
+use App\Models\BlogTag;
+use App\Models\BlogPost;
+use App\Models\BlogPostTag;
+use App\Models\Brand;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -21,138 +34,56 @@ class DatabaseSeeder extends Seeder
         //     'name' => 'Test User',
         //     'email' => 'test@example.com',
         // ]);
-        DB::table('roles')->insert([
-            ['name' => 'admin'],
-            ['name' => 'staff'],
-            ['name' => 'customer'],
-        ]);
+        $jsonFile = database_path('seeders/data.json');
+        $dataArray = json_decode(file_get_contents($jsonFile), true);
 
-        DB::table('users')->insert([
-            [
-                'name' => 'Admin User',
-                'email' => 'admin@example.com',
-                'password' => Hash::make('password'),
-                'role_id' => 1,
-                'points' => 1000,
-                'created_at' => now(),
-                'updated_at' => now()
-            ],
-            [
-                'name' => 'Customer User',
-                'email' => 'customer@example.com',
-                'password' => Hash::make('password'),
-                'role_id' => 3,
-                'points' => 500,
-                'created_at' => now(),
-                'updated_at' => now()
-            ],
-        ]);
+        foreach ($dataArray['roles'] as $data) {
+            Role::create($data);
+        }
+        foreach ($dataArray['users'] as $data) {
+            User::create($data);
+        }
+        foreach ($dataArray['categories'] as $data) {
+            Category::create($data);
+        }
 
-        DB::table('categories')->insert([
-            ['name' => 'Sneakers', 'slug' => 'sneakers', 'status' => true],
-            ['name' => 'Boots', 'slug' => 'boots', 'status' => true],
-        ]);
+        foreach ($dataArray['products'] as $data) {
+            Product::create($data);
+        }
 
-        DB::table('products')->insert([
-            [
-                'name' => 'Air Max 2025',
-                'slug' => 'air-max-2025',
-                'description' => 'A great new sneaker.',
-                'category_id' => 1,
-                'price' => 2500000,
-                'thumbnail' => 'airmax2025.jpg',
-                'status' => true,
-                'created_at' => now(),
-                'updated_at' => now()
-            ]
-        ]);
+        foreach ($dataArray['sizes'] as $data) {
+            Size::create($data);
+        }
 
-        DB::table('sizes')->insert([
-            ['value' => '39'],
-            ['value' => '40'],
-            ['value' => '41']
-        ]);
+        foreach ($dataArray['colors'] as $data) {
+            Color::create($data);
+        }
 
-        DB::table('colors')->insert([
-            ['name' => 'Đỏ', 'hex_code' => '#FF0000'],
-            ['name' => 'Trắng', 'hex_code' => '#FFFFFF']
-        ]);
+        foreach ($dataArray['product_variants'] as $data) {
+            ProductVariant::create($data);
+        }
 
-        DB::table('product_variants')->insert([
-            [
-                'product_id' => 1,
-                'size_id' => 2, // 40
-                'color_id' => 1, // Đỏ
-                'stock' => 50,
-                'price' => 2550000,
-                'sku' => 'AM25-R40',
-                'image' => 'am25_red_40.jpg',
-                'created_at' => now(),
-                'updated_at' => now()
-            ]
-        ]);
+        foreach ($dataArray['vouchers'] as $data) {
+            Voucher::create($data);
+        }
 
-        DB::table('vouchers')->insert([
-            [
-                'code' => 'SALE50',
-                'description' => 'Giảm 50k cho đơn từ 500k',
-                'discount_type' => 'fixed',
-                'discount_value' => 50000,
-                'max_discount' => 50000,
-                'min_order_value' => 500000,
-                'usage_limit' => 100,
-                'used_count' => 0,
-                'valid_from' => Carbon::now(),
-                'valid_to' => Carbon::now()->addMonth(),
-                'created_at' => now(),
-                'updated_at' => now()
-            ]
-        ]);
+        foreach ($dataArray['blog_categories'] as $data) {
+            BlogCategory::create($data);
+        }
 
-        // Blog Category
-        DB::table('blog_categories')->insert([
-            [
-                'id' => 1,
-                'name' => 'Tin tức thời trang',
-                'slug' => 'tin-tuc-thoi-trang'
-            ]
-        ]);
+        foreach ($dataArray['blog_tags'] as $data) {
+            BlogTag::create($data);
+        }
 
-        // Blog Tags
-        DB::table('blog_tags')->insert([
-            [
-                'id' => 1,
-                'name' => 'Giày thể thao',
-                'slug' => 'giay-the-thao'
-            ],
-            [
-                'id' => 2,
-                'name' => 'Phong cách',
-                'slug' => 'phong-cach'
-            ]
-        ]);
+        foreach ($dataArray['blog_posts'] as $data) {
+            BlogPost::create($data);
+        }
 
-        // Blog Post
-        DB::table('blog_posts')->insert([
-            [
-                'id' => 1,
-                'title' => 'Top 5 mẫu giày hot 2025',
-                'slug' => 'top-5-mau-giay-hot-2025',
-                'thumbnail' => 'https://example.com/thumb.jpg',
-                'content' => '<p>Chi tiết bài viết...</p>',
-                'status' => true,
-                'published_at' => now(),
-                'blog_category_id' => 1
-            ]
-        ]);
-
-        // Blog Post - Tag (pivot table)
-        DB::table('blog_post_tags')->insert([
-            ['blog_post_id' => 1, 'blog_tag_id' => 1],
-            ['blog_post_id' => 1, 'blog_tag_id' => 2],
-        ]);
-
-        // Order seed
-        $this->call(OrderSeeder::class);
+        foreach ($dataArray['blog_post_tags'] as $data) {
+            DB::table('blog_post_tags')->insert($data);
+        }
+        foreach ($dataArray['brands'] as $data) {
+            Brand::create($data);
+        }
     }
 }

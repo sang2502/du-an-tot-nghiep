@@ -54,22 +54,21 @@ class FeedbackController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    // public function edit(string $id)
-    // {
-    //     $feedback = Feedback::find($id);
-    //     return view('admin.feedback.update', compact('feedback'));
-    // }
+    public function edit(string $id){
+        $feedback = Feedback::find($id);
+        return view('admin.feedback.update', compact('feedback'));
+    }
 
     /**
      * Update the specified resource in storage.
      */
-    // public function update(Feedback $feedback, Request $request, string $id)
-    // {
-    //     Feedback::find($id)->update([
-    //        'status' => $request->status,
-    //     ]);
-    //     return redirect()->route('feedback.index')->with('success', 'Cập nhật thành công');
-    // }
+    public function update(Feedback $feedback, Request $request, string $id)
+    {
+        Feedback::find($id)->update([
+           'status' => $request->status,
+        ]);
+        return redirect()->route('feedback.index')->with('success', 'Cập nhật thành công');
+    }
 
     /**
      * Remove the specified resource from storage.

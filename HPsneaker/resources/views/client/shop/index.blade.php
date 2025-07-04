@@ -1,12 +1,11 @@
 @extends('client.layout.master')
 @section('main')
-
-    <section class="breadcrumb-section set-bg" data-setbg="{{ asset('img/breadcrumb.jpg') }}">
+    <section class="breadcrumb-section set-bg" data-setbg="{{ asset('img/br2.jpg') }}">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12 text-center">
                     <div class="breadcrumb__text">
-                        <h2>Shop Giày Sneaker</h2>
+                        <h2>Cửa hàng</h2>
                         <div class="breadcrumb__option">
                             <a href="{{ url('/') }}">Trang chủ</a>
                             <span>Cửa hàng</span>
@@ -28,7 +27,7 @@
                         <div class="sidebar__item">
                             <h4>Danh mục giày</h4>
                             <ul>
-                                @foreach($categories as $category)
+                                @foreach ($categories as $category)
                                     <li><a href="#">{{ $category->name }}</a></li>
                                 @endforeach
                             </ul>
@@ -52,64 +51,38 @@
                         </div>
                         <div class="sidebar__item sidebar__item__color--option">
                             <h4>Màu sắc</h4>
-                            <div class="sidebar__item__color sidebar__item__color--white">
-                                <label for="white">
-                                    Trắng
-                                    <input type="radio" id="white">
-                                </label>
-                            </div>
-                            <div class="sidebar__item__color sidebar__item__color--black">
-                                <label for="black">
-                                    Đen
-                                    <input type="radio" id="black">
-                                </label>
-                            </div>
-                            <div class="sidebar__item__color sidebar__item__color--red">
-                                <label for="red">
-                                    Đỏ
-                                    <input type="radio" id="red">
-                                </label>
-                            </div>
-                            <div class="sidebar__item__color sidebar__item__color--blue">
-                                <label for="blue">
-                                    Xanh
-                                    <input type="radio" id="blue">
-                                </label>
+                            <div class="sidebar__item__color">
+                                @foreach ($colors as $color)
+                                    <label for="color-{{ $color->id }}"
+                                        style="background-color: {{ $color->hex_code }};
+                  width: 30px; height: 30px; display: inline-block;
+                  border-radius: 4px; margin-right: 5px;
+                  cursor: pointer; position: relative;">
+                                        <input type="radio" id="color-{{ $color->id }}"
+                                            style="opacity: 0; position: absolute; inset: 0; margin: 0;">
+                                    </label>
+                                @endforeach
+
+
                             </div>
                         </div>
                         <div class="sidebar__item">
                             <h4>Kích cỡ phổ biến</h4>
-                            <div class="sidebar__item__size">
-                                <label for="size-40">
-                                    40
-                                    <input type="radio" id="size-40">
-                                </label>
-                            </div>
-                            <div class="sidebar__item__size">
-                                <label for="size-41">
-                                    41
-                                    <input type="radio" id="size-41">
-                                </label>
-                            </div>
-                            <div class="sidebar__item__size">
-                                <label for="size-42">
-                                    42
-                                    <input type="radio" id="size-42">
-                                </label>
-                            </div>
-                            <div class="sidebar__item__size">
-                                <label for="size-43">
-                                    43
-                                    <input type="radio" id="size-43">
-                                </label>
-                            </div>
+                            @foreach ($sizes as $size)
+                                <div class="sidebar__item__size">
+                                    <label for="size-{{ $size->id }}">
+                                        {{ $size->value }}
+                                        <input type="checkbox" id="size-{{ $size->id }}">
+                                    </label>
+                                </div>
+                            @endforeach
                         </div>
                         {{-- <div class="sidebar__item">
                             <div class="latest-product__text">
                                 <h4>Giày mới nhất</h4>
                                 <div class="latest-product__slider owl-carousel">
                                     <div class="latest-prdouct__slider__item">
-                                        @foreach($products->sortByDesc('created_at')->take(3) as $product)
+                                        @foreach ($products->sortByDesc('created_at')->take(3) as $product)
                                             <a href="#" class="latest-product__item">
                                                 <div class="latest-product__item__pic">
                                                     <img src="{{ $product->thumbnail }}" alt="">
@@ -176,7 +149,10 @@
                         @endforelse
                     </div>
                     {{-- Phân trang nếu có --}}
-                    {{-- {!! $products->links() !!} --}}
+                    <div class="d-flex justify-content-center mt-4">
+                        {{ $products->links('pagination::bootstrap-5') }}
+                    </div>
+
                 </div>
             </div>
         </div>

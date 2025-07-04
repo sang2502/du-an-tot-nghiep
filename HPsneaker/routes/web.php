@@ -27,6 +27,7 @@ use App\Http\Controllers\client\ForgotPasswordController;
 use App\Http\Controllers\client\CartController;
 use App\Http\Controllers\client\FeedbackClientController;
 use App\Http\Controllers\Client\ProductReviewController;
+use App\Http\Controllers\admin\BrandController;
 
 
 // Route cho Admin
@@ -78,6 +79,12 @@ Route::prefix('admin')->group(function () {
                 Route::get('delete/{id}', [SizeController::class, 'destroy'])->name('product.size.delete');
             });
 
+        });
+        // Quản lý thương hiệu
+        Route::prefix('brand')->group(function () {
+            Route::get('', [BrandController::class, 'index'])->name('brand.index');
+            Route::post('store', [BrandController::class, 'store'])->name('brand.store');
+            Route::get('delete/{id}', [BrandController::class, 'destroy'])->name('brand.delete');
         });
 
 
@@ -153,6 +160,8 @@ Route::prefix('admin')->group(function () {
             Route::get('', [FeedbackController::class, 'index'])->name('feedback.index');
             Route::get('delete/{id}', [FeedbackController::class, 'delete'])->name('feedback.delete');
             Route::get('show/{id}', [FeedbackController::class, 'show'])->name('feedback.show');
+            Route::get('edit/{id}', [FeedbackController::class, 'edit'])->name('feedback.edit');
+            Route::get('update/{id}', [FeedbackController::class, 'update'])->name('feedback.update');
         });
     });
 });
@@ -176,6 +185,7 @@ Route::prefix('/')->group(function () {
     Route::prefix('cart')->group(function () {
             Route::get('', [ShopCartController::class, 'index'])->name('shop.cart.index');
             Route::get('remove/{id}', [ShopCartController::class, 'removeCart'])->name('cart.remove');
+            Route::post('/cart/update-quantity', [ShopCartController::class, 'updateQuantity'])->name('cart.updateQuantity');
     });
 
         //route contact ở phía client
@@ -219,8 +229,17 @@ Route::get('logout', [UserAuthController::class, 'logout'])->name('user.logout')
 Route::get('profile', [UserAuthController::class, 'showProfile'])->name('user.profile.show');
 Route::get('edit', [UserAuthController::class, 'editProfile'])->name('user.profile.edit');
 Route::post('update', [UserAuthController::class, 'updateProfile'])->name('user.profile.update');
+// Route cho đăng ký tài khoản
+Route::get('register', [UserAuthController::class, 'showRegisterForm'])->name('user.register');
+Route::post('register', [UserAuthController::class, 'register'])->name('user.register.submit');
 
-//Route cho quên mật khẩu
-Route::get('/forgot-password', [ForgotPasswordController::class, 'showForm'])->name('forgot-password.form');
-Route::post('/forgot-password', [ForgotPasswordController::class, 'handleForm'])->name('forgot-password.send');
+
+// Route cho quên mật khẩu
+Route::get('/forgot-password', [ForgotPasswordController::class, 'showForm'])->name('client.account.forgot-password.form');
+Route::post('/forgot-password', [ForgotPasswordController::class, 'handleForm'])->name('client.account.forgot-password.send');
+// Route cho xác minh OTP và đặt lại mật khẩu
+Route::get('/verify-otp', [ForgotPasswordController::class, 'showOtpForm'])->name('client.account.verify-otp-form');
+Route::post('/verify-otp', [ForgotPasswordController::class, 'verifyOtp'])->name('client.account.verify-otp');
+Route::get('/reset-password', [ForgotPasswordController::class, 'showResetPasswordForm'])->name('client.account.reset-password-form');
+Route::post('/reset-password', [ForgotPasswordController::class, 'resetPassword'])->name('client.account.reset-password');
 

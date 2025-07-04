@@ -109,12 +109,12 @@
                                 Ghi nhớ đăng nhập
                             </label>
                         </div>
-                        <a class="text-link" href="{{ route('forgot-password.form') }}">Quên mật khẩu?</a>
+                        <a class="text-link" href="{{ route('client.account.forgot-password.form') }}">Quên mật khẩu?</a>
                     </div>
                     <button class="btn btn-gradient w-100 btn-lg mb-3" type="submit">Đăng nhập</button>
                 </form>
                 <div class="text-center mt-3">
-                    <span>Chưa có tài khoản? <a href="auth-register.html" class="text-link">Đăng ký</a></span>
+                    <span>Chưa có tài khoản? <a href="{{ route('user.register') }}" class="text-link">Đăng ký</a></span>
                 </div>
         </div>
     </div>

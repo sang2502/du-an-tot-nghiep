@@ -10,15 +10,20 @@
     use App\Models\CartItem;
     use App\Models\Comment;
     use App\Models\Review;
+    use App\Models\Size;
+    use App\Models\Color;
+    
 
 
     class ShopController extends Controller
     {
         public function index()
         {
-            $products = Product::where('status', 1)->get();
+            $products = Product::where('status', 1)->paginate(9);
             $categories = Category::all();
-            return view('client.shop.index', compact('products', 'categories'));
+            $sizes = Size::all(); // Lấy tất cả kích cỡ
+            $colors = Color::all(); // Lấy tất cả màu sắc
+            return view('client.shop.index', compact('products', 'categories', 'sizes', 'colors'));
         }
 
         public function search(Request $request)

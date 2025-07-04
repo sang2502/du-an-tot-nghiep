@@ -88,7 +88,7 @@
                 </div>
                 <h1 class="auth-title text-center mb-2">Quên mật khẩu</h1>
                 <p class="auth-subtitle text-center mb-4">Nhập email của bạn để nhận mật khẩu mới.</p>
-                <form method="POST" action="{{ route('forgot-password.send') }}">
+                <form method="POST" action="{{ route('client.account.forgot-password.send') }}">
                     @csrf
                     <div class="form-group mb-3">
                         <span class="form-control-icon"><i class="bi bi-envelope"></i></span>
@@ -97,7 +97,7 @@
                             <p class="text-danger small mt-1">{{ $message }}</p>
                         @enderror
                     </div>
-                    <button class="btn btn-gradient w-100 btn-lg mb-3" type="submit">Gửi mật khẩu mới</button>
+                    <button class="btn btn-gradient w-100 btn-lg mb-3" type="submit">Gửi mã OTP</button>
                 </form>
                 <div class="text-center mt-3">
                     <a href="{{ route('user.login') }}" class="text-link">Quay lại đăng nhập</a>
