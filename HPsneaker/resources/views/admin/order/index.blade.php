@@ -47,15 +47,16 @@
                                     <td>{{ $item->voucher_id ?? 'Không áp dụng' }}</td>
                                     <td>{{ number_format($item->discount_applied, 0, ',', '.') }}₫</td>
                                     <td>
-                                        @if($item->status == 'completed')
-                                            <span class="badge bg-secondary rounded-pill px-3 py-2">Hoàn tất</span>
-                                        @elseif($item->status == 'processing')
-                                            <span class="badge bg-warning text-dark rounded-pill px-3 py-2">Đang xử lý</span>
-                                        @elseif($item->status == 'cancelled')
-                                            <span class="badge bg-danger rounded-pill px-3 py-2">Đã hủy</span>
-                                        @else
-                                            <span class="badge bg-info rounded-pill px-3 py-2">{{ $item->status }}</span>
-                                        @endif
+                                        <form action="{{ route('order.updateStatus', $item->id) }}" method="POST" style="display:inline;">
+                                            @csrf
+                                            @method('PUT')
+                                            <select name="status" class="form-select form-select-sm" onchange="this.form.submit()">
+                                                <option value="processing" {{ $item->status == 'processing' ? 'selected' : '' }}>Đang xử lý</option>
+                                                <option value="completed" {{ $item->status == 'completed' ? 'selected' : '' }}>Hoàn tất</option>
+                                                <option value="cancelled" {{ $item->status == 'cancelled' ? 'selected' : '' }}>Đã hủy</option>
+                                                <option value="paid" {{ $item->status == 'paid' ? 'selected' : '' }}>Đã thanh toán</option>
+                                            </select>
+                                        </form>
                                     </td>
                                     <td>{{ ucfirst($item->payment_method) }}</td>
                                     <td>{{ $item->shipping_address }}</td>
@@ -76,7 +77,6 @@
                             </tbody>
                         </table>
                     </div>
-
                 </div>
             </div>
         </div>
