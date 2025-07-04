@@ -46,6 +46,40 @@
             "updated_at": "2025-07-01 14:13:47"
         }
     ],
+    "brand": [
+        {
+            "id": 1,
+            "name": "Nike",
+            "slug": "nike",
+            "logo": "uploads\/brands\/nike.png",
+            "created_at": "2025-07-01 14:13:47",
+            "updated_at": "2025-07-01 14:13:47"
+        },
+        {
+            "id": 2,
+            "name": "Adidas",
+            "slug": "adidas",
+            "logo": "uploads\/brands\/adidas.jpg",
+            "created_at": "2025-07-01 14:13:47",
+            "updated_at": "2025-07-01 14:13:47"
+        },
+        {
+            "id": 3,
+            "name": "Puma",
+            "slug": "puma",
+            "logo": "uploads\/brands\/puma.jpg",
+            "created_at": "2025-07-01 14:13:47",
+            "updated_at": "2025-07-01 14:13:47"
+        },
+        {
+            "id": 4,
+            "name": "Jordan",
+            "slug": "jordan",
+            "logo": "uploads\/brands\/logo1.jpg",
+            "created_at": "2025-07-03 10:10:11",
+            "updated_at": "2025-07-03 10:10:11"
+        }
+    ],
     "products": [
         {
             "id": 1,
