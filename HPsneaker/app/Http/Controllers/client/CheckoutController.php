@@ -33,11 +33,11 @@ class CheckoutController extends Controller
         $cartTotal = $cartItems->sum(fn($item) => ($item->variant->price ?? 0) * $item->quantity);
 
         // Lấy thông tin voucher từ session (nếu có)
-        $voucher = session('voucher');
+        $voucher = (object) session('voucher');
         $voucherId = $voucher->id ?? null;
         $voucherCode = $voucher->code ?? null;
         $voucherDiscount = 0;
-        if ($voucher) {
+        if ($voucherId) {
             if ($voucher->discount_type == 'percent') {
                 $voucherDiscount = round($cartTotal * $voucher->discount_value / 100);
                 if ($voucher->max_discount && $voucherDiscount > $voucher->max_discount) {
@@ -79,11 +79,11 @@ class CheckoutController extends Controller
         if ($cartItems->isEmpty()) return back()->with('error', 'Giỏ hàng rỗng!');
 
         // Lấy lại voucher từ session để tính chính xác
-        $voucher = session('voucher');
+        $voucher = (object) session('voucher');
         $voucherId = $voucher->id ?? null;
         $voucherDiscount = 0;
         $cartTotal = $cartItems->sum(fn($i) => ($i->variant->price ?? 0) * $i->quantity);
-        if ($voucher) {
+        if ($voucherId) {
             if ($voucher->discount_type == 'percent') {
                 $voucherDiscount = round($cartTotal * $voucher->discount_value / 100);
                 if ($voucher->max_discount && $voucherDiscount > $voucher->max_discount) {
@@ -145,10 +145,10 @@ class CheckoutController extends Controller
         if ($cartItems->isEmpty()) return response()->json(['redirect' => route('shop.cart.index')]);
 
         // Lấy lại voucher từ session
-        $voucher = session('voucher');
+        $voucher = (object) session('voucher');
         $voucherId = $voucher->id ?? null;
         $voucherDiscount = 0;
-        if ($voucher) {
+        if ($voucherId) {
             if ($voucher->discount_type == 'percent') {
                 $voucherDiscount = round($cartTotal * $voucher->discount_value / 100);
                 if ($voucher->max_discount && $voucherDiscount > $voucher->max_discount) {
