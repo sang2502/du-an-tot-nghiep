@@ -171,6 +171,7 @@ Route::prefix('/')->group(function () {
         Route::post('{id}/comment', [ShopController::class, 'submitComment'])->name('product.comment');
         Route::post('/product/{id}/review', [ShopController::class, 'submitReview'])->name('product.review.store');
         Route::post('/review/{id}', [ProductReviewController::class, 'store'])->name('shop.submitReview');
+        Route::get('/review/{product}/user', [ProductReviewController::class, 'getUserReview']);
 
 
 
