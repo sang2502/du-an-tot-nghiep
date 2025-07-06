@@ -243,6 +243,28 @@
             /* viền nổi bật */
             color: #000;
         }
+
+        .featured__item {
+            box-sizing: border-box;
+            border: 1px solid transparent;
+            transition: border-color 0.3s ease;
+
+        }
+
+        .featured__item:hover {
+            border-color: black;
+        }
+
+        .product__item {
+            box-sizing: border-box;
+            border: 1px solid transparent;
+            transition: border-color 0.3s ease;
+
+        }
+
+        .product__item:hover {
+            border-color: black;
+        }
     </style>
 
 </head>
@@ -330,7 +352,7 @@
                         </ul>
                     </nav>
                 </div>
-             {{-- Giỏ hàng --}}
+                {{-- Giỏ hàng --}}
                 <div class="col-lg-1 col-md-6">
                     <div class="header__cart">
                         <ul>
@@ -376,10 +398,8 @@
                 <div class="col-lg-3 col-md-6 col-sm-6">
                     <div class="footer__about">
                         <div class="footer__about__logo">
-                            <a href="{{ url('/') }}"><img src="{{ asset('img/logo3.png') }}"
-                                    alt="Logo"></a>
-                            <a href="{{ url('/') }}"><img src="{{ asset('img/logo.png') }}"
-                                    alt="Logo"></a>
+                            <a href="{{ url('/') }}"><img src="{{ asset('img/logo3.png') }}" alt="Logo"></a>
+                            <a href="{{ url('/') }}"><img src="{{ asset('img/logo.png') }}" alt="Logo"></a>
                         </div>
                         <ul>
                             <li>Địa chỉ: 60-49 Road 11378 New York</li>
@@ -459,11 +479,11 @@
     <script src="{{ asset('js/owl.carousel.min.js') }}"></script>
     <script src="{{ asset('js/main.js') }}"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            document.querySelectorAll('.product__details__option .optionimage').forEach(function(btn) {
-                btn.addEventListener('click', function() {
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('.product__details__option .optionimage').forEach(function (btn) {
+                btn.addEventListener('click', function () {
                     document.querySelectorAll('.product__details__option .optionimage').forEach(
-                        function(b) {
+                        function (b) {
                             b.classList.remove('active');
                         });
                     this.classList.add('active');
@@ -473,10 +493,10 @@
     </script>
     {{-- Category toggle --}}
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const catAll = document.querySelector('.hero__categories__all');
             const heroCat = document.querySelector('.hero__categories');
-            catAll.addEventListener('click', function() {
+            catAll.addEventListener('click', function () {
                 heroCat.classList.toggle('active');
             });
         });
@@ -484,7 +504,7 @@
     {{-- Menu --}}
     <script>
         let lastScroll = 0;
-        window.addEventListener('scroll', function() {
+        window.addEventListener('scroll', function () {
             const topBar = document.getElementById('topBar');
             if (!topBar) return;
             if (window.scrollY > 30) {
