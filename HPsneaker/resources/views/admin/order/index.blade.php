@@ -47,15 +47,16 @@
                                     <td>{{ $item->voucher_id ?? 'Không áp dụng' }}</td>
                                     <td>{{ number_format($item->discount_applied, 0, ',', '.') }}₫</td>
                                     <td>
-                                        <form action="{{ route('order.updateStatus', $item->id) }}" method="POST" style="display:inline;">
+                                        <form action="{{ route('order.updateStatus', $item->id) }}" method="POST" class="update-status-form" style="display:inline;">
                                             @csrf
                                             @method('PUT')
-                                            <select name="status" class="form-select form-select-sm" onchange="this.form.submit()">
+                                            <select name="status" class="form-select form-select-sm order-status-dropdown" data-order-id="{{ $item->id }}">
                                                 <option value="processing" {{ $item->status == 'processing' ? 'selected' : '' }}>Đang xử lý</option>
                                                 <option value="completed" {{ $item->status == 'completed' ? 'selected' : '' }}>Hoàn tất</option>
                                                 <option value="cancelled" {{ $item->status == 'cancelled' ? 'selected' : '' }}>Đã hủy</option>
                                                 <option value="paid" {{ $item->status == 'paid' ? 'selected' : '' }}>Đã thanh toán</option>
                                             </select>
+                                            <input type="hidden" name="cancel_reason" class="cancel-reason-input">
                                         </form>
                                     </td>
                                     <td>{{ ucfirst($item->payment_method) }}</td>
@@ -77,6 +78,67 @@
                             </tbody>
                         </table>
                     </div>
+
+                    <!-- Modal lý do hủy -->
+                    <div class="modal fade" id="cancelReasonModal" tabindex="-1" aria-labelledby="cancelReasonLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <form id="cancelReasonForm">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="cancelReasonLabel">Nhập lý do hủy đơn</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <textarea class="form-control" name="cancel_reason" id="cancelReasonInput" rows="3" placeholder="Nhập lý do hủy..." required></textarea>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                                        <button type="submit" class="btn btn-danger">Xác nhận hủy</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- Script cho modal và xử lý submit --}}
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            let currentForm = null;
+                            let oldStatus = null;
+
+                            document.querySelectorAll('.order-status-dropdown').forEach(function(dropdown) {
+                                dropdown.addEventListener('focus', function() {
+                                    oldStatus = this.value;
+                                });
+                                dropdown.addEventListener('change', function(e) {
+                                    if (this.value === 'cancelled') {
+                                        currentForm = this.closest('form');
+                                        var cancelModal = new bootstrap.Modal(document.getElementById('cancelReasonModal'));
+                                        cancelModal.show();
+                                    } else {
+                                        this.closest('form').submit();
+                                    }
+                                });
+                            });
+
+                            document.getElementById('cancelReasonForm').addEventListener('submit', function(e) {
+                                e.preventDefault();
+                                let reason = document.getElementById('cancelReasonInput').value;
+                                if(currentForm) {
+                                    currentForm.querySelector('.cancel-reason-input').value = reason;
+                                    currentForm.submit();
+                                }
+                                bootstrap.Modal.getInstance(document.getElementById('cancelReasonModal')).hide();
+                                document.getElementById('cancelReasonInput').value = '';
+                            });
+
+                            document.getElementById('cancelReasonModal').addEventListener('hidden.bs.modal', function () {
+                                if(currentForm && currentForm.querySelector('.order-status-dropdown').value === 'cancelled' && !currentForm.querySelector('.cancel-reason-input').value) {
+                                    currentForm.querySelector('.order-status-dropdown').value = oldStatus;
+                                }
+                            });
+                        });
+                    </script>
                 </div>
             </div>
         </div>

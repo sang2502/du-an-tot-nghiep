@@ -43,6 +43,12 @@
                                     @endif
                                 </td>
                             </tr>
+                            @if($order->status == 'cancelled')
+                                <tr>
+                                    <td><b>Lý do hủy:</b></td>
+                                    <td>{{ $order->cancel_reason ?? 'Không có lý do' }}</td>
+                                </tr>
+                            @endif
                             <tr>
                                 <td><b>Thanh toán:</b></td>
                                 <td>{{ ucfirst($order->payment_method) }}</td>

@@ -48,7 +48,6 @@
         }
     </style>
 </head>
-
 <body>
     <div id="app">
         <div id="sidebar" class="active">
