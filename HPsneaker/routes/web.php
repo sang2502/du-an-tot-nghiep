@@ -154,6 +154,8 @@ Route::prefix('admin')->group(function () {
             Route::get('', [FeedbackController::class, 'index'])->name('feedback.index');
             Route::get('delete/{id}', [FeedbackController::class, 'delete'])->name('feedback.delete');
             Route::get('show/{id}', [FeedbackController::class, 'show'])->name('feedback.show');
+            Route::get('edit/{id}', [FeedbackController::class, 'edit'])->name('feedback.edit');
+            Route::get('update/{id}', [FeedbackController::class, 'update'])->name('feedback.update');
         });
     });
 });
@@ -170,6 +172,7 @@ Route::prefix('/')->group(function () {
         Route::post('{id}/comment', [ShopController::class, 'submitComment'])->name('product.comment');
         Route::post('/product/{id}/review', [ShopController::class, 'submitReview'])->name('product.review.store');
         Route::post('/review/{id}', [ProductReviewController::class, 'store'])->name('shop.submitReview');
+        Route::get('/review/{product}/user', [ProductReviewController::class, 'getUserReview']);
 
 
 
