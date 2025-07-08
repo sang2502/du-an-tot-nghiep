@@ -1,4 +1,3 @@
-{{-- filepath: c:\wamp64\www\du-an-tot-nghiep\HPsneaker\resources\views\client\shop\product-detail.blade.php --}}
 @extends('client.layout.master')
 @section('main')
 
@@ -66,14 +65,21 @@
                         </div>
                         @if ($product->variants && $product->variants->count())
                             <div class="product__details__option mb-3">
-                                <span>Chọn size:</span>
-                                <div class="d-flex flex-wrap mt-2">
-                                    @foreach ($product->variants as $variant)
-                                        <label class="optionimage btn btn-outline-white me-2 mb-2"
-                                            rel="{{ $variant->id }}">
-                                            <span class="option-value">{{ $variant->size->value }}</span>
+                                <span>Chọn màu:</span>
+                                <div class="d-flex flex-wrap mt-2 mb-2" id="colorOptions">
+                                    @php
+                                        $colors = $product->variants->pluck('color')->unique('id');
+                                    @endphp
+                                    @foreach ($colors as $color)
+                                        <label class="optioncolor btn btn-outline-dark me-2 mb-2"
+                                            data-color="{{ $color->id }}">
+                                            <span class="option-value">{{ $color->name }}</span>
                                         </label>
                                     @endforeach
+                                </div>
+                                <span>Chọn size:</span>
+                                <div class="d-flex flex-wrap mt-2" id="sizeOptions">
+                                    {{-- Size sẽ được render bằng JS --}}
                                 </div>
                             </div>
                             <form action="{{ route('shop.product.addToCart', ['id' => $product->id]) }}" method="POST"
@@ -90,7 +96,13 @@
                         @endif
                         <ul class="mt-3 list-unstyled" style="color: black">
                             <li><b>Tình trạng:</b>
-                                <span>{{ $product->in_stock ?? true ? 'Còn hàng' : 'Hết hàng' }}</span>
+                                <span>
+                                    @if (($product->stock ?? 0) > 0)
+                                        Còn hàng
+                                    @else
+                                        Hết hàng
+                                    @endif
+                                </span>
                             </li>
                             <li><b>Vận chuyển:</b> <span>Giao nhanh 1-2 ngày. <samp>Miễn phí vận chuyển</samp></span></li>
                             <li><b>Trọng lượng:</b> <span>{{ $product->weight ?? '1 kg' }}</span></li>
@@ -148,19 +160,23 @@
                                     <div class="row">
                                         <div class="col-md-12">
                                             {{-- Đánh giá sao --}}
-                                            <form method="POST" action="{{ route('shop.submitReview', $product->id) }}" id="starRatingForm">
+                                            <form method="POST" action="{{ route('shop.submitReview', $product->id) }}"
+                                                id="starRatingForm">
                                                 @csrf
                                                 <div class="form-group mb-2">
                                                     <div id="interactiveRating" style="font-size: 24px;">
                                                         @for ($i = 1; $i <= 5; $i++)
-                                                            <i class="fa fa-star-o star" data-value="{{ $i }}"></i>
+                                                            <i class="fa fa-star-o star"
+                                                                data-value="{{ $i }}"></i>
                                                         @endfor
                                                     </div>
                                                 </div>
-                                                <input type="hidden" name="rating" id="ratingInput" value="{{ $existingRating ?? '' }}">
+                                                <input type="hidden" name="rating" id="ratingInput"
+                                                    value="{{ $existingRating ?? '' }}">
                                             </form>
                                             {{-- Bình luận --}}
-                                            <form action="{{ route('product.comment.store', $product->id) }}" method="POST" class="mb-4">
+                                            <form action="{{ route('product.comment.store', $product->id) }}"
+                                                method="POST" class="mb-4">
                                                 @csrf
                                                 <div class="form-group">
                                                     <label for="cmt">Bình luận</label>
@@ -171,7 +187,8 @@
                                         </div>
                                     </div>
                                 @else
-                                    <p>Vui lòng <a href="{{ route('user.login') }}">đăng nhập</a> để bình luận hoặc đánh giá.</p>
+                                    <p>Vui lòng <a href="{{ route('user.login') }}">đăng nhập</a> để bình luận hoặc đánh
+                                        giá.</p>
                                 @endif
 
                                 {{-- Hiển thị danh sách bình luận --}}
@@ -192,7 +209,8 @@
                                                     </span>
                                                 @endif
                                             </strong>
-                                            <span class="text-muted">({{ $comment->created_at->format('d/m/Y H:i') }})</span>
+                                            <span
+                                                class="text-muted">({{ $comment->created_at->format('d/m/Y H:i') }})</span>
                                             <p class="mb-0">{{ $comment->cmt }}</p>
                                         </div>
                                     @endforeach
@@ -222,7 +240,8 @@
                     @foreach ($relatedProducts as $item)
                         <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
                             <div class="product__item h-100 d-flex flex-column">
-                                <a href="{{ route('shop.product.show', ['name' => Str::slug($item->name), 'id' => $item->id]) }}">
+                                <a
+                                    href="{{ route('shop.product.show', ['name' => Str::slug($item->name), 'id' => $item->id]) }}">
                                     <div class="product__item__pic mb-2">
                                         <img src="{{ asset($item->thumbnail) }}" alt="{{ $item->name }}"
                                             class="img-fluid rounded" style="height:180px;object-fit:cover;width:100%;">
@@ -230,7 +249,8 @@
                                 </a>
                                 <div class="product__item__text flex-grow-1 d-flex flex-column justify-content-between">
                                     <h6 class="mb-2">
-                                        <a href="{{ route('shop.product.show', ['name' => Str::slug($item->name), 'id' => $item->id]) }}">
+                                        <a
+                                            href="{{ route('shop.product.show', ['name' => Str::slug($item->name), 'id' => $item->id]) }}">
                                             {{ $item->name }}
                                         </a>
                                     </h6>
@@ -246,37 +266,96 @@
     <!-- Product Details Section End -->
 
     <script>
-        document.querySelectorAll('.optionimage').forEach(function(btn) {
+        // Dữ liệu biến thể từ backend
+        const variants = @json($variants);
+
+        let selectedColor = null;
+        let selectedSize = null;
+
+        // Khi chọn màu
+        document.querySelectorAll('.optioncolor').forEach(function(btn) {
             btn.addEventListener('click', function() {
-                document.getElementById('product_variant_id').value = this.getAttribute('rel');
-                document.querySelectorAll('.optionimage').forEach(function(el) {
-                    el.classList.remove('selected');
+                // Bỏ active ở tất cả nút màu
+                document.querySelectorAll('.optioncolor').forEach(el => {
+                    el.classList.remove('active', 'btn-success');
+                    el.classList.add('btn-outline-dark');
                 });
-                this.classList.add('selected');
+                // Thêm active và đổi màu cho nút được chọn
+                this.classList.add('active', 'btn-success');
+                this.classList.remove('btn-outline-dark');
+
+                selectedColor = this.getAttribute('data-color');
+                renderSizes();
+                selectedSize = null;
+                document.getElementById('product_variant_id').value = '';
+                document.getElementById('addToCartBtn').disabled = true;
             });
         });
 
-        // Khi chọn size thì enable nút Thêm vào giỏ hàng
-        document.querySelectorAll('.optionimage').forEach(function(btn) {
-            btn.addEventListener('click', function() {
-                document.getElementById('product_variant_id').value = this.getAttribute('rel');
-                document.getElementById('addToCartBtn').disabled = false;
-                // Đổi màu active cho nút size
-                document.querySelectorAll('.optionimage').forEach(b => b.classList.remove('active'));
-                this.classList.add('active');
+        // Render size theo màu đã chọn
+        function renderSizes() {
+            const sizeOptions = document.getElementById('sizeOptions');
+            sizeOptions.innerHTML = '';
+            const sizes = variants.filter(v => v.color_id == selectedColor)
+                .map(v => ({
+                    id: v.size_id,
+                    value: v.size_value,
+                    variant_id: v.id
+                }));
+            // Loại bỏ size trùng
+            const uniqueSizes = [];
+            sizes.forEach(s => {
+                if (!uniqueSizes.find(u => u.id === s.id)) uniqueSizes.push(s);
             });
-        });
+            // Sắp xếp size từ bé đến lớn (nếu value là số)
+            uniqueSizes.sort((a, b) => {
+                // Nếu value là số, so sánh số; nếu là chuỗi, so sánh chuỗi
+                let va = isNaN(a.value) ? a.value : Number(a.value);
+                let vb = isNaN(b.value) ? b.value : Number(b.value);
+                if (va < vb) return -1;
+                if (va > vb) return 1;
+                return 0;
+            });
+            uniqueSizes.forEach(s => {
+                const label = document.createElement('label');
+                label.className = 'optionsize btn btn-outline-secondary me-2 mb-2';
+                label.setAttribute('data-variant', s.variant_id);
+                label.innerHTML = `<span class="option-value">${s.value}</span>`;
+                label.addEventListener('click', function() {
+                    // Bỏ active ở tất cả nút size
+                    document.querySelectorAll('.optionsize').forEach(el => {
+                        el.classList.remove('active', 'btn-success');
+                        el.classList.add('btn-outline-secondary');
+                    });
+                    // Thêm active và đổi màu cho nút được chọn
+                    this.classList.add('active', 'btn-success');
+                    this.classList.remove('btn-outline-secondary');
 
-        // Khi load trang, luôn disable nếu chưa chọn size
+                    document.getElementById('product_variant_id').value = this.getAttribute('data-variant');
+                    document.getElementById('addToCartBtn').disabled = false;
+                });
+                sizeOptions.appendChild(label);
+            });
+        }
+
+        // Khi load trang, disable nút Thêm vào giỏ hàng
         document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('addToCartBtn').disabled = true;
         });
 
-        // Ngăn submit nếu chưa chọn size (phòng trường hợp hack html)
+        // Ngăn submit nếu chưa chọn màu và size
         document.getElementById('addToCartForm').addEventListener('submit', function(e) {
+            const maxStock = {{ $product->stock ?? 0 }};
+            const quantity = parseInt(document.querySelector('input[name="quantity"]').value) || 1;
             if (!document.getElementById('product_variant_id').value) {
                 e.preventDefault();
-                alert('Vui lòng chọn size trước khi thêm vào giỏ hàng!');
+                alert('Vui lòng chọn màu và size trước khi thêm vào giỏ hàng!');
+                return;
+            }
+            if (quantity > maxStock) {
+                e.preventDefault();
+                alert('Số lượng bạn chọn vượt quá số lượng còn lại trong kho hoặc đã hết hàng!');
+                return;
             }
         });
     </script>
