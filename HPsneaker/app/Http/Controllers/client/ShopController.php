@@ -63,11 +63,11 @@
             $averageRating = $reviews->avg('rating') ?? 0;
             $existingRating = null;
             if (session('user')) {
+            $userId = session('user')['id'];
             $existingRating = Review::where('product_id', $product->id)
-            ->where('user_id', session('user.id'))
+            ->where('user_id', $userId)
             ->value('rating');
             }
-
             return view('client.shop.product-detail', compact('product', 'relatedProducts', 'variant', 'comments', 'commentCount', 'averageRating', 'reviews', 'existingRating'));
         }
 

@@ -9,25 +9,38 @@ use App\Models\Review;
 class ProductReviewController extends Controller
 {
     public function store(Request $request, $id)
-    {
-        $user = session('user');
+{
+    $user = session('user');
 
-        if (!$user) {
-            return redirect()->route('user.login')->with('error', 'Vui lòng đăng nhập để đánh giá.');
-        }
+    if (!$user) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Vui lòng đăng nhập để đánh giá.'
+        ], 401);
+    }
 
-        $request->validate([
-            'rating' => 'required|integer|min:1|max:5',
-            'comment' => 'nullable|string|max:1000',
-        ]);
-        Review::updateOrCreate(
+    $validated = $request->validate([
+        'rating' => 'required|integer|min:1|max:5',
+        'comment' => 'nullable|string|max:1000',
+    ]);
+
+    Review::updateOrCreate(
         ['product_id' => $id, 'user_id' => $user['id']],
         [
-            'rating' => $request->rating,
-            'comment' => $request->comment,
+            'rating' => $validated['rating'],
+            'cmt' => $validated['comment'] ?? null,
         ]
     );
 
-        return back()->with('success', 'Đánh giá của bạn đã được lưu.');
-    }
+    // Tính lại rating trung bình và lượt đánh giá
+    $average = Review::where('product_id', $id)->avg('rating');
+    $count = Review::where('product_id', $id)->count();
+
+    return response()->json([
+        'success' => true,
+        'message' => 'Đánh giá của bạn đã được lưu.',
+        'average_rating' => round($average, 1),
+        'review_count' => $count
+    ]);
+}
 }
