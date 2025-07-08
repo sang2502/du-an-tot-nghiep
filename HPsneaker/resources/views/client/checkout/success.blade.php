@@ -91,7 +91,7 @@
                         </table>
                         <div class="text-center mt-4">
                             <a href="/" class="btn btn-primary">Quay về trang chủ</a>
-                            <a href="/orders/history" class="btn btn-outline-success ms-2">Xem lịch sử đơn hàng</a>
+                            <a href="{{ route('profile.orders') }}" class="btn btn-outline-success ms-2">Xem lịch sử đơn hàng</a>
                         </div>
                     </div>
                 </div>

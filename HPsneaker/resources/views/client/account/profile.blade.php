@@ -58,6 +58,7 @@
                         <a href="{{ route('user.profile.edit', $user['id']) }}" class="btn btn-primary px-4">
                             <i class="fa fa-edit me-1"></i> Chỉnh sửa thông tin
                         </a>
+                        <a href="{{ route('profile.orders') }}" class="btn btn-primary" > <i class="fa fa-history me-1"></i> Lịch sử mua hàng</a>
                     </div>
                 </div>
             </div>
