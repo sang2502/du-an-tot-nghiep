@@ -154,6 +154,7 @@ Route::prefix('admin')->group(function () {
             Route::get('', [OrderController::class, 'index'])->name('order.index');
             Route::get('show/{id}', [OrderController::class, 'show'])->name('order.show');
             Route::get('delete/{id}', [OrderController::class, 'delete'])->name('order.delete');
+            Route::put('{id}/status', [OrderController::class, 'updateStatus'])->name('order.updateStatus');
         });
         // Quản lý feedback
         Route::prefix('feedback')->group(function () {
@@ -217,11 +218,6 @@ Route::prefix('/')->group(function () {
     });
 
 });
-        Route::prefix('checkout')->group(function () {
-            Route::get('', [CheckoutController::class, 'index'])->name('checkout.index');
-            Route::post('', [CheckoutController::class, 'submit'])->name('checkout.submit');
-            Route::get('/checkout/success/{orderId}', [CheckoutController::class, 'success'])->name('checkout.success');
-        });
 // Route cho Login của người dùng
 Route::get('login', [UserAuthController::class, 'showLoginForm'])->name('user.login');
 Route::post('login', [UserAuthController::class, 'login'])->name('user.login.submit');

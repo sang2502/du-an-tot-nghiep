@@ -39,19 +39,25 @@
                                 <th>Trạng thái:</th>
                                 <td>{{ ucfirst($order->status) }}</td>
                             </tr>
-                            @if(isset($order->voucher))
+                            @if($order->voucher)
                                 <tr>
                                     <th>Mã giảm giá:</th>
                                     <td>{{ $order->voucher->code }}</td>
                                 </tr>
                             @endif
-                            <tr>
-                                <th>Giảm giá áp dụng:</th>
-                                <td>{{ number_format($order->discount_applied, 0, ',', '.') }} đ</td>
-                            </tr>
+                            @if($order->discount_applied > 0)
+                                <tr>
+                                    <th>Giảm giá áp dụng:</th>
+                                    <td style="color:green;">-{{ number_format($order->discount_applied, 0, ',', '.') }} đ</td>
+                                </tr>
+                            @endif
                             <tr>
                                 <th>Tổng cộng:</th>
-                                <td><b>{{ number_format($order->total_amount, 0, ',', '.') }} đ</b></td>
+                                <td>
+                                    <b style="color:#d9232d; font-size:1.2em">
+                                        {{ number_format($order->total_amount, 0, ',', '.') }} đ
+                                    </b>
+                                </td>
                             </tr>
                         </table>
                         <h4 class="mt-4 mb-3">Chi tiết sản phẩm</h4>
@@ -81,7 +87,6 @@
                                     <td>{{ number_format($item->quantity * $item->price, 0, ',', '.') }} đ</td>
                                 </tr>
                             @endforeach
-
                             </tbody>
                         </table>
                         <div class="text-center mt-4">

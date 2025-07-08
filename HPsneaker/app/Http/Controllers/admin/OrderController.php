@@ -76,9 +76,26 @@ class OrderController extends Controller
      */
     public function delete($id)
     {
-        Order::destroy($id);
+        $order = Order::findOrFail($id);
+
+        // Xóa các order_items liên quan trước
+        $order->orderItems()->delete();
+
+        // Sau đó mới xóa đơn hàng
+        $order->delete();
+
         return redirect()->route('order.index')->with('success', 'Đã xoá đơn hàng thành công.');
     }
 
+    public function updateStatus(Request $request, $id)
+    {
+        $order = Order::findOrFail($id);
+        $order->status = $request->input('status');
+        if($order->status == 'cancelled') {
+            $order->cancel_reason = $request->input('cancel_reason'); // lưu lý do hủy
+        }
+        $order->save();
+        return back()->with('success', 'Cập nhật trạng thái thành công!');
+    }
 }
 
