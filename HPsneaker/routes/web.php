@@ -29,7 +29,6 @@ use App\Http\Controllers\client\FeedbackClientController;
 use App\Http\Controllers\Client\ProductReviewController;
 use App\Http\Controllers\admin\BrandController;
 
-
 // Route cho Admin
 Route::prefix('admin')->group(function () {
     // Form login và xử lý login KHÔNG cần middleware
@@ -239,3 +238,5 @@ Route::post('/verify-otp', [ForgotPasswordController::class, 'verifyOtp'])->name
 Route::get('/reset-password', [ForgotPasswordController::class, 'showResetPasswordForm'])->name('client.account.reset-password-form');
 Route::post('/reset-password', [ForgotPasswordController::class, 'resetPassword'])->name('client.account.reset-password');
 
+// Route cho lịch sử mua hàng
+Route::get('/profile/orders', [OrderController::class, 'history'])->name('profile.orders');
