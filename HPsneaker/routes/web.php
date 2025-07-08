@@ -30,7 +30,6 @@ use App\Http\Controllers\Client\ProductReviewController;
 use App\Http\Controllers\admin\BrandController;
 
 
-
 // Route cho Admin
 Route::prefix('admin')->group(function () {
     // Form login và xử lý login KHÔNG cần middleware
@@ -155,6 +154,7 @@ Route::prefix('admin')->group(function () {
             Route::get('', [OrderController::class, 'index'])->name('order.index');
             Route::get('show/{id}', [OrderController::class, 'show'])->name('order.show');
             Route::get('delete/{id}', [OrderController::class, 'delete'])->name('order.delete');
+            Route::put('{id}/status', [OrderController::class, 'updateStatus'])->name('order.updateStatus');
         });
         // Quản lý feedback
         Route::prefix('feedback')->group(function () {
@@ -186,6 +186,7 @@ Route::prefix('/')->group(function () {
     Route::prefix('cart')->group(function () {
             Route::get('', [ShopCartController::class, 'index'])->name('shop.cart.index');
             Route::get('remove/{id}', [ShopCartController::class, 'removeCart'])->name('cart.remove');
+            Route::post('/cart/update-quantity', [ShopCartController::class, 'updateQuantity'])->name('cart.updateQuantity');
     });
 
         //route contact ở phía client

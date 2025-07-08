@@ -29,7 +29,7 @@
             font-size: 16px;
             color: #111827;
             background: #ffffff;
-            padding-top: 100px;
+            padding-top: 120px;
         }
 
         /* Nút (Buttons) */
@@ -190,7 +190,8 @@
             height: 700px;
             display: block;
             margin: 0 auto;
-            padding-top: 20px;
+            padding-top: 5px;
+            padding-bottom: 10px;
         }
 
         .input-group {
@@ -242,6 +243,28 @@
             /* viền nổi bật */
             color: #000;
         }
+
+        .featured__item {
+            box-sizing: border-box;
+            border: 1px solid transparent;
+            transition: border-color 0.3s ease;
+
+        }
+
+        .featured__item:hover {
+            border-color: black;
+        }
+
+        .product__item {
+            box-sizing: border-box;
+            border: 1px solid transparent;
+            transition: border-color 0.3s ease;
+
+        }
+
+        .product__item:hover {
+            border-color: black;
+        }
     </style>
 
 </head>
@@ -265,15 +288,6 @@
             </ul>
         </div>
         <div class="humberger__menu__widget">
-            <div class="header__top__right__language">
-                <img src="{{ asset('img/language.png') }}" alt="">
-                <div>Tiếng Việt</div>
-                <span class="arrow_carrot-down"></span>
-                <ul>
-                    <li><a href="#">English</a></li>
-                    <li><a href="#">Tiếng Việt</a></li>
-                </ul>
-            </div>
             <div class="header__top__right__auth">
                 <a href="#"><i class="fa fa-user"></i> Đăng nhập</a>
             </div>
@@ -282,32 +296,32 @@
             <ul>
                 <li class="active"><a href="{{ url('/') }}">Trang chủ</a></li>
                 <li><a href="{{ url('/shop') }}">Cửa hàng</a></li>
-                <li><a href="#">Trang</a>
+                {{-- <li><a href="#">Trang</a>
                     <ul class="header__menu__dropdown">
                         <li><a href="{{ url('/shop-details') }}">Chi tiết sản phẩm</a></li>
                         <li><a href="{{ url('/shopping-cart') }}">Giỏ hàng</a></li>
                         <li><a href="{{ url('/checkout') }}">Thanh toán</a></li>
                         <li><a href="{{ url('/blog-details') }}">Chi tiết tin tức</a></li>
                     </ul>
-                </li>
+                </li> --}}
                 <li><a href="{{ url('/blog') }}">Tin tức</a></li>
                 <li><a href="{{ route('shop.contact.index') }}">Liên hệ</a></li>
             </ul>
         </nav>
         <div id=" mobile-menu-wrap">
-    </div>
-    <div class="header__top__right__social">
-        <a href="#"><i class="fa fa-facebook"></i></a>
-        <a href="#"><i class="fa fa-twitter"></i></a>
-        <a href="#"><i class="fa fa-linkedin"></i></a>
-        <a href="#"><i class="fa fa-pinterest-p"></i></a>
-    </div>
-    <div class="humberger__menu__contact">
-        <ul>
-            <li><i class="fa fa-envelope"></i> hello@colorlib.com</li>
-            <li>Miễn phí vận chuyển cho đơn từ 99$</li>
-        </ul>
-    </div>
+        </div>
+        <div class="header__top__right__social">
+            <a href="#"><i class="fa fa-facebook"></i></a>
+            <a href="#"><i class="fa fa-twitter"></i></a>
+            <a href="#"><i class="fa fa-linkedin"></i></a>
+            <a href="#"><i class="fa fa-pinterest-p"></i></a>
+        </div>
+        <div class="humberger__menu__contact">
+            <ul>
+                <li><i class="fa fa-envelope"></i> hello@colorlib.com</li>
+                <li>Miễn phí vận chuyển cho đơn từ 99$</li>
+            </ul>
+        </div>
     </div>
     <!-- End Mobile Menu -->
 
@@ -320,7 +334,7 @@
                         <a href="{{ url('/') }}"><img src="{{ asset('img/logo3.png') }}" alt="Logo"></a>
                     </div>
                 </div>
-                <div class="col-lg-6 col-md-6">
+                <div class="col-lg-7 col-md-6">
                     <nav class="header__menu">
                         <ul>
                             <li><a href="{{ url('/') }}">Trang chủ</a></li>
@@ -338,27 +352,13 @@
                         </ul>
                     </nav>
                 </div>
-                {{-- Tìm kiếm --}}
-                <div class="col-lg-2 col-md-6">
-                    <form class="input-group" action="{{ route('product.search') }}" method="GET">
-                        <button type="submit" class="input-group-text"><i class="fa fa-search"
-                                style="color: #222"></i></button>
-                        <input type="text" name="keyword" class="form-control" placeholder="Tìm kiếm...">
-                <div class="col-lg-2 col-md-6 d-flex align-items-center mb-4">
-                    <form class="input-group w-100" action="{{ route('product.search') }}" method="GET">
-                        <input type="text" class="form-control" placeholder="Tìm kiếm..." name="keyword">
-                        <button type="submit" class="btn btn-outline-secondary">
-                            <i class="fa fa-search" style="color: #222"></i>
-                        </button>
-                    </form>
-                </div>
-
+                {{-- Giỏ hàng --}}
                 <div class="col-lg-1 col-md-6">
                     <div class="header__cart">
                         <ul>
                             <li><a href="{{ url('/shop/cart') }}"><i class="fa fa-shopping-bag"
                                         style="font-size: 20px;"></i>
-                                    <span>3</span></a>
+                                    <span></span></a>
                             </li>
                         </ul>
                     </div>
@@ -398,8 +398,7 @@
                 <div class="col-lg-3 col-md-6 col-sm-6">
                     <div class="footer__about">
                         <div class="footer__about__logo">
-                            <a href="{{ url('/') }}"><img src="{{ asset('img/logo3.png') }}"
-                                    alt="Logo"></a>
+                            <a href="{{ url('/') }}"><img src="{{ asset('img/logo3.png') }}" alt="Logo"></a>
                             <a href="{{ url('/') }}"><img src="{{ asset('img/logo.png') }}" alt="Logo"></a>
                         </div>
                         <ul>

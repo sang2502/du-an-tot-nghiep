@@ -30,6 +30,7 @@ class ExportProductsJson extends Command
         'roles' => DB::table('roles')->get(),
         'users' => DB::table('users')->get(),
         'categories' => DB::table('categories')->get(),
+        'brands'=>DB::table('brands')->get(),
         'products' => DB::table('products')->get(),
         'sizes' => DB::table('sizes')->get(),
         'colors' => DB::table('colors')->get(),
@@ -39,6 +40,7 @@ class ExportProductsJson extends Command
         'blog_tags' => DB::table('blog_tags')->get(),
         'blog_posts' => DB::table('blog_posts')->get(),
         'blog_post_tags' => DB::table('blog_post_tags')->get()
+
     ];
 
     $path = database_path('seeders/data.json');
