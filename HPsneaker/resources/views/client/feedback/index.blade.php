@@ -76,6 +76,11 @@
     <!-- feedback Form Begin -->
     <div class="contact-form spad">
         <div class="container">
+            @if(session('message'))
+    <div class="alert alert-{{ session('alert-type') }}">
+        {{ session('message') }}
+    </div>
+@endif
             <div class="row">
                 <div class="col-lg-12">
                     <div class="contact__form__title">

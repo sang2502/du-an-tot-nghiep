@@ -42,7 +42,7 @@
                                         <td>{{ $comment->cmt }}</td>
                                         <td>
                                             @if($comment->status == 1)
-                                                <span class="badge bg-success rounded-pill px-3 py-2">Đã xử lý</span>
+                                                <span class="badge bg-success rounded-pill px-3 py-2">Duyệt</span>
                                             @else
                                                 <span class="badge bg-danger rounded-pill px-3 py-2">Không hợp lệ</span>
                                             @endif

@@ -10,15 +10,7 @@
             <div class="card-body">
                 <form action="{{ route('feedback.update', $feedback->id) }}" method="PUT">
                     @csrf
-                    @method('POST') {{-- hoặc PUT nếu dùng Route::put --}}
-                    {{-- <div class="mb-3">
-                        <label class="form-label">Tên người liên hệ</label>
-                        <input type="text" class="form-control" name="name" value="{{ $feedback->name }}" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Email</label>
-                        <input type="text" class="form-control" name="email" value="{{ $feedback->email }}">
-                    </div> --}}
+                    @method('POST')
                     <div class="mb-3">
                         <label class="form-label">Trạng thái</label>
                         <select class="form-select" name="status">
