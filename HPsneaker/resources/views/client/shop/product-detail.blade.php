@@ -46,42 +46,25 @@
                     <div class="product__details__text">
                         <h3 class="mb-2">{{ $product->name ?? 'Tên sản phẩm' }}</h3>
                         <div class="product__details__rating mb-2">
+                        {{-- rating avg --}}
+                        <div class="average-rating mb-2" style="font-size: 20px;">
                             @php
-                                $stars = round($averageRating ?? ($product->rating ?? 0));
+                                $average = $averageRating ?? 0;
                             @endphp
                             @for ($i = 1; $i <= 5; $i++)
-                                @if ($i <= $stars)
+                                @if ($average >= $i)
                                     <i class="fa fa-star text-warning"></i>
+                                @elseif ($average >= $i - 0.5)
+                                    <i class="fa fa-star-half-o text-warning"></i>
                                 @else
                                     <i class="fa fa-star-o text-warning"></i>
                                 @endif
                             @endfor
-                            <span class="ml-2 text-muted">({{ $reviews->count() ?? 0 }} đánh giá)</span>
-                         {{-- rating --}}
-                        @if(session('user'))
-                <form method="POST" action="{{ route('shop.submitReview', $product->id) }}" id="starRatingForm">
-                    @csrf
-                    <div class="form-group mb-2">
-                        <label for="rating">Đánh giá sản phẩm: <span>({{ $reviews->count() }})</span></label>
-
-                        <div id="interactiveRating" style="font-size: 24px;">
-                            @for ($i = 1; $i <= 5; $i++)
-                                <i class="fa fa-star-o star" data-value="{{ $i }}"></i>
-                            @endfor
+                            <span class="ml-2 text-muted">({{ number_format($average, 1) }} trên {{ $reviews->count() }} lượt đánh giá)</span>
                         </div>
-                    </div>
-                    <input type="hidden" name="rating" id="ratingInput" value="{{ $existingRating ?? '' }}">
-                </form>
-
-
-
-                        @else
-                        <p>Vui lòng <a href="{{ route('user.login') }}">đăng nhập</a> để đánh giá.</p>
-                        @endif
                         <div class="product__details__price mb-3 h4 text-danger">
                             {{ number_format($product->price ?? 0, 0, ',', '.') }} đ
                         </div>
-
                         @if ($product->variants && $product->variants->count())
                             <div class="product__details__option mb-3">
                                 <span>Chọn size:</span>
@@ -167,11 +150,37 @@
                                 </div>
                                 <div class="tab-pane" id="tabs-3" role="tabpanel">
                                     <div class="product__details__tab__desc">
-                                        <h6>Nhận xét của bạn</h6>
+                                        <h5>Nhận xét của bạn</h5>
                                         @if(session('user'))
                                             <div class="row">
                                                 {{-- bình luận --}}
-                                                <div class="col-md-6">
+                                                <div class="col-md-12">
+                                                    @if(session('user'))
+                                                    <form id="starRatingForm" method="POST">
+                                                    @csrf
+                                                    <div class="form-group mb-2">
+                                                        <div id="interactiveRating" style="font-size: 24px;">
+                                                            @for ($i = 1; $i <= 5; $i++)
+                                                                <i class="fa fa-star-o star" data-value="{{ $i }}"></i>
+                                                            @endfor
+                                                        </div>
+                                                    </div>
+                                                    <input type="hidden" name="rating" id="ratingInput" value="{{ $existingRating ?? '' }}">
+                                                </form>
+
+                                        @else
+                                        <p>Vui lòng <a href="{{ route('user.login') }}">đăng nhập</a> để đánh giá.</p>
+                                        @endif
+                                        @if(session('success'))
+                                        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                                            {{ session('success') }}
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Đóng">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                    @endif
+
+
                                                     <form action="{{ route('product.comment.store', $product->id) }}" method="POST" class="mb-4">
                                                         @csrf
                                                         <div class="form-group">
@@ -223,6 +232,7 @@
 
     <!-- Related Product Section Begin -->
     <div class="related-product mt-5">
+        <div class="container">
         <div class="row">
             <div class="col-lg-12">
                 <div class="section-title related__product__title ">
@@ -255,6 +265,7 @@
                     </div>
                 </div>
             @endforeach
+        </div>
         </div>
     </div>
     <!-- Product Details Section End -->
@@ -294,18 +305,80 @@
 document.addEventListener('DOMContentLoaded', function () {
     const stars = document.querySelectorAll('#interactiveRating .star');
     const ratingInput = document.getElementById('ratingInput');
-    const form = document.getElementById('starRatingForm');
 
-    // ⭐ Hiển thị số sao đã chọn khi load trang
     highlightStars(parseInt(ratingInput.value));
 
-    // Gửi đánh giá khi click
     stars.forEach(star => {
         star.addEventListener('click', function () {
             const rating = parseInt(this.dataset.value);
             ratingInput.value = rating;
             highlightStars(rating);
-            form.submit();
+
+            // Gửi AJAX
+            fetch(`{{ route('shop.submitReview', $product->id) }}`, {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+    },
+    body: JSON.stringify({
+        rating: rating
+    })
+})
+.then(response => response.json())
+.then(data => {
+    if (data.success) {
+        alert('Đánh giá của bạn đã được lưu!');
+        fetch(`/review/{{ $product->id }}/user`)
+    .then(res => res.json())
+    .then(data => {
+        if (data.rating) {
+            const commentBlock = document.querySelector('.your-comment-block');
+            if (commentBlock) {
+                let starsHtml = '';
+                for (let i = 1; i <= 5; i++) {
+                    if (i <= data.rating) {
+                        starsHtml += '<i class="fa fa-star text-warning"></i>';
+                    } else {
+                        starsHtml += '<i class="fa fa-star-o text-warning"></i>';
+                    }
+                }
+                const starSpan = commentBlock.querySelector('.rating-stars');
+                if (starSpan) {
+                    starSpan.innerHTML = starsHtml;
+                }
+            }
+        }
+    });
+
+        // cập nhật giao diện số sao trung bình và lượt đánh giá
+        const avgContainer = document.querySelector('.average-rating');
+        if (avgContainer) {
+            const average = data.average_rating;
+            const count = data.review_count;
+
+            // Tạo lại HTML sao
+            let starsHtml = '';
+            for (let i = 1; i <= 5; i++) {
+                if (average >= i) {
+                    starsHtml += '<i class="fa fa-star text-warning"></i>';
+                } else if (average >= i - 0.5) {
+                    starsHtml += '<i class="fa fa-star-half-o text-warning"></i>';
+                } else {
+                    starsHtml += '<i class="fa fa-star-o text-warning"></i>';
+                }
+            }
+            avgContainer.innerHTML = starsHtml + `<span class="ml-2 text-muted">(${average} trên ${count} lượt đánh giá)</span>`;
+        }
+
+    } else {
+        alert('Lỗi: ' + (data.message || 'Không thể gửi đánh giá.'));
+    }
+})
+.catch(error => {
+    console.error('Error:', error);
+    alert('Có lỗi xảy ra, vui lòng thử lại.');
+});
         });
     });
 
@@ -322,4 +395,89 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 });
 </script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const stars = document.querySelectorAll('#interactiveRating .fa');
+    const ratingInput = document.getElementById('ratingInput');
+    const productId = {{ $product->id }};
+    const csrfToken = '{{ csrf_token() }}';
+
+    highlightStars(parseInt(ratingInput.value || 0));
+
+    stars.forEach(star => {
+        star.addEventListener('click', function () {
+            const rating = parseInt(this.dataset.value);
+            ratingInput.value = rating;
+            highlightStars(rating);
+
+            // Gửi AJAX đánh giá
+            fetch(`/review/${productId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken
+                },
+                body: JSON.stringify({ rating })
+            })
+            .then(response => response.json())
+        });
+    });
+
+    function highlightStars(rating) {
+        stars.forEach(star => {
+            if (parseInt(star.dataset.value) <= rating) {
+                star.classList.remove('fa-star-o');
+                star.classList.add('fa-star', 'text-warning');
+            } else {
+                star.classList.remove('fa-star', 'text-warning');
+                star.classList.add('fa-star-o');
+            }
+        });
+    }
+});
+</script>
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const commentForm = document.getElementById('commentForm');
+    const commentMessage = document.getElementById('comment-message');
+    const commentsContainer = document.querySelector('.tab-pane#tabs-3 .product__details__tab__desc');
+
+    commentForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+        const formData = new FormData(commentForm);
+
+        fetch("{{ route('product.comment.store', $product->id) }}", {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
+            body: formData
+        })
+        .then(res => res.json())
+        .then(data => {
+            commentMessage.innerHTML = `<div class="alert alert-${data.status ? 'success' : 'warning'}">${data.message}</div>`;
+
+            if (data.status && data.comment) {
+                // Tạo HTML mới cho comment
+                const commentHtml = `
+                <div class="mb-3 p-3 border rounded bg-white">
+                    <strong>${data.comment.name}</strong>
+                    <span class="text-muted">(vừa xong)</span>
+                    <p class="mb-0">${data.comment.cmt}</p>
+                </div>`;
+                commentsContainer.insertAdjacentHTML('beforeend', commentHtml);
+                commentForm.reset();
+            }
+        })
+        .catch(err => {
+            commentMessage.innerHTML = `<div class="alert alert-danger">Lỗi gửi bình luận</div>`;
+            console.error(err);
+        });
+    });
+});
+</script>
+{{-- cái này nhé --}}
 @endsection
