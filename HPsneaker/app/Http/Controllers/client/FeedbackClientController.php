@@ -17,7 +17,8 @@ class FeedbackClientController extends Controller
      */
     public function index()
     {
-        $feedbacks = Feedback::latest()->get();
+        // cái này
+        $feedbacks = Feedback::where('status', 1)->latest()->get();
         return view('client.feedback.index', compact('feedbacks'));
     }
 
@@ -45,6 +46,17 @@ class FeedbackClientController extends Controller
             'img'  => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
+        $forbiddenWords = ['dm', 'đm', 'vcl', 'cc'];
+        $messageText = strtolower($request->mess);
+        $isViolated = false;
+
+        foreach ($forbiddenWords as $word) {
+        if (str_contains($messageText, $word)) {
+            $isViolated = true;
+            break;
+            }
+        }
+
         $imagePath = null;
         if ($request->hasFile('img')) {
             $imagePath = 'feedback_images/' . $request->file('img')->hashName();
@@ -56,9 +68,15 @@ class FeedbackClientController extends Controller
             'name'    => $user['name'],
             'mess'    => $request->mess,
             'img'     => $imagePath,
+            'status'  => !$isViolated,
         ]);
 
-        return back()->with('success', 'Cảm ơn bạn đã phản hồi!');
+        return redirect()->back()->with([
+        'message' => $isViolated
+        ? 'Phản hồi của bạn chứa từ ngữ không phù hợp và đang chờ kiểm duyệt.'
+        : 'Phản hồi đã được gửi thành công!',
+        'alert-type' => $isViolated ? 'danger' : 'success',
+        ]);
     }
 
     /**
