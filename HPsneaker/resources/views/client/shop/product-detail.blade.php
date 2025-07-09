@@ -126,11 +126,6 @@
                             <a class="nav-link active" data-toggle="tab" href="#tabs-1" role="tab"
                                 aria-selected="true">Mô tả</a>
                         </li>
-                        {{-- <li class="nav-item">
-                            <a class="nav-link" data-toggle="tab" href="#tabs-2" role="tab" aria-selected="false">
-                                Thông tin
-                            </a>
-                        </li> --}}
                         <li class="nav-item">
                             <a class="nav-link" data-toggle="tab" href="#tabs-3" role="tab" aria-selected="false">
                                 Bình luận <span>({{ $comments->count() }})</span>
@@ -144,15 +139,6 @@
                                 <p>{{ $product->description ?? 'Mô tả sản phẩm sẽ hiển thị ở đây.' }}</p>
                             </div>
                         </div>
-                        {{-- <div class="tab-pane" id="tabs-2" role="tabpanel">
-                            <div class="product__details__tab__desc">
-                                <h6>Thông tin chi tiết</h6>
-                                <p>Thương hiệu: {{ $product->brand ?? 'Sneaker Shop' }}</p>
-                                <p>Chất liệu: {{ $product->material ?? 'Da tổng hợp' }}</p>
-                                <p>Kích cỡ: {{ $product->size ?? '40-44' }}</p>
-                                <p>Màu sắc: {{ $product->color ?? 'Trắng/Đen' }}</p>
-                            </div>
-                        </div> --}}
                         <div class="tab-pane" id="tabs-3" role="tabpanel">
                             <div class="product__details__tab__desc">
                                 <h6>Nhận xét của bạn</h6>
@@ -271,6 +257,7 @@
 
         let selectedColor = null;
         let selectedSize = null;
+        let currentVariantStock = 0; // Biến lưu số lượng tồn kho của biến thể đang chọn
 
         // Khi chọn màu
         document.querySelectorAll('.optioncolor').forEach(function(btn) {
@@ -300,7 +287,8 @@
                 .map(v => ({
                     id: v.size_id,
                     value: v.size_value,
-                    variant_id: v.id
+                    variant_id: v.id,
+                    stock: v.stock // lấy stock từng biến thể
                 }));
             // Loại bỏ size trùng
             const uniqueSizes = [];
@@ -309,7 +297,6 @@
             });
             // Sắp xếp size từ bé đến lớn (nếu value là số)
             uniqueSizes.sort((a, b) => {
-                // Nếu value là số, so sánh số; nếu là chuỗi, so sánh chuỗi
                 let va = isNaN(a.value) ? a.value : Number(a.value);
                 let vb = isNaN(b.value) ? b.value : Number(b.value);
                 if (va < vb) return -1;
@@ -320,6 +307,7 @@
                 const label = document.createElement('label');
                 label.className = 'optionsize btn btn-outline-secondary me-2 mb-2';
                 label.setAttribute('data-variant', s.variant_id);
+                label.setAttribute('data-stock', s.stock);
                 label.innerHTML = `<span class="option-value">${s.value}</span>`;
                 label.addEventListener('click', function() {
                     // Bỏ active ở tất cả nút size
@@ -333,6 +321,8 @@
 
                     document.getElementById('product_variant_id').value = this.getAttribute('data-variant');
                     document.getElementById('addToCartBtn').disabled = false;
+                    currentVariantStock = parseInt(this.getAttribute('data-stock')) ||
+                    0; // Lưu lại số lượng tồn kho của biến thể
                 });
                 sizeOptions.appendChild(label);
             });
@@ -343,18 +333,17 @@
             document.getElementById('addToCartBtn').disabled = true;
         });
 
-        // Ngăn submit nếu chưa chọn màu và size
+        // Ngăn submit nếu chưa chọn màu và size hoặc vượt quá tồn kho biến thể
         document.getElementById('addToCartForm').addEventListener('submit', function(e) {
-            const maxStock = {{ $product->stock ?? 0 }};
             const quantity = parseInt(document.querySelector('input[name="quantity"]').value) || 1;
             if (!document.getElementById('product_variant_id').value) {
                 e.preventDefault();
                 alert('Vui lòng chọn màu và size trước khi thêm vào giỏ hàng!');
                 return;
             }
-            if (quantity > maxStock) {
+            if (quantity > currentVariantStock) {
                 e.preventDefault();
-                alert('Số lượng bạn chọn vượt quá số lượng còn lại trong kho hoặc đã hết hàng!');
+                alert('Số lượng bạn chọn vượt quá số lượng còn lại của biến thể này!');
                 return;
             }
         });
