@@ -17,6 +17,7 @@ class FeedbackClientController extends Controller
      */
     public function index()
     {
+        // cái này
         $feedbacks = Feedback::where('status', 1)->latest()->get();
         return view('client.feedback.index', compact('feedbacks'));
     }

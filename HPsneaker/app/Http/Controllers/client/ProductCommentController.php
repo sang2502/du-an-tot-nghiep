@@ -36,6 +36,7 @@ class ProductCommentController extends Controller
             break;
         }
     }
+    // cái này
 
     $comment = Comment::create([
         'product_id' => $id,
