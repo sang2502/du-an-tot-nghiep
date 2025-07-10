@@ -51,10 +51,10 @@
                                             @csrf
                                             @method('PUT')
                                             <select name="status" class="form-select form-select-sm order-status-dropdown" data-order-id="{{ $item->id }}">
-                                                <option value="processing" {{ $item->status == 'processing' ? 'selected' : '' }}>Đang xử lý</option>
-                                                <option value="completed" {{ $item->status == 'completed' ? 'selected' : '' }}>Hoàn tất</option>
-                                                <option value="cancelled" {{ $item->status == 'cancelled' ? 'selected' : '' }}>Đã hủy</option>
-                                                <option value="paid" {{ $item->status == 'paid' ? 'selected' : '' }}>Đã thanh toán</option>
+                                                <option value="processing" {{ $item->status == 'Đang xử lý' ? 'selected' : '' }}>Đang xử lý</option>
+                                                <option value="completed" {{ $item->status == 'Hoàn tất' ? 'selected' : '' }}>Hoàn tất</option>
+                                                <option value="cancelled" {{ $item->status == 'Đã hủy' ? 'selected' : '' }}>Đã hủy</option>
+                                                <option value="paid" {{ $item->status == 'Đã thanh toán' ? 'selected' : '' }}>Đã thanh toán</option>
                                             </select>
                                             <input type="hidden" name="cancel_reason" class="cancel-reason-input">
                                         </form>

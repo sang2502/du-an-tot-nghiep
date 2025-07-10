@@ -106,7 +106,7 @@ class CheckoutController extends Controller
                 'total_amount'     => $cartFinalTotal,
                 'voucher_id'       => $voucherId,
                 'discount_applied' => $voucherDiscount,
-                'status'           => 'processing',
+                'status'           => 'Đang xử lý',
                 'payment_method'   => $data['payment'],
                 'shipping_address' => $data['address'],
             ]);
