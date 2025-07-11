@@ -409,8 +409,6 @@
                         <div class="footer__about__logo">
                             <a href="{{ url('/') }}"><img src="{{ asset('img/logo3.png') }}"
                                     alt="Logo"></a>
-                            <a href="{{ url('/') }}"><img src="{{ asset('img/logo.png') }}"
-                                    alt="Logo"></a>
                         </div>
                         <ul>
                             <li>Địa chỉ: 60-49 Road 11378 New York</li>
