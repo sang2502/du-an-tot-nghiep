@@ -76,6 +76,11 @@
     <!-- feedback Form Begin -->
     <div class="contact-form spad">
         <div class="container">
+            @if(session('message'))
+    <div class="alert alert-{{ session('alert-type') }}">
+        {{ session('message') }}
+    </div>
+@endif
             <div class="row">
                 <div class="col-lg-12">
                     <div class="contact__form__title">
@@ -104,7 +109,7 @@
     </div>
 
             <!-- Hiển thị danh sách phản hồi -->
-
+{{-- cái này nhé --}}
 <div class="row mt-5 justify-content-center">
     <div class="col-lg-10">
         <h3 class="text-center mb-4">Phản hồi gần đây</h3>
