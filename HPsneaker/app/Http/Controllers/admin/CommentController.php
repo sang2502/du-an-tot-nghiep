@@ -43,6 +43,7 @@ class CommentController extends Controller
      */
     public function show(comment $comment, string $id)
     {
+        // cái này
         $comment = Comment::find($id);
         return view('admin.comment.detail', compact('comment'));
     }

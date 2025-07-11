@@ -35,11 +35,6 @@ class FeedbackController extends Controller
      */
     // public function search(Request $request)
     // {
-    //     $keyword = $request->input('keyword');
-
-    //     $feedback = Feedback::where('name', 'like', '%' . $keyword . '%')->get();
-
-    //     return view('admin.feedback.search', compact('feedbacks', 'keyword'));
     // }
 
     /**
