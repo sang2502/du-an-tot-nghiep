@@ -29,6 +29,7 @@ use App\Http\Controllers\client\FeedbackClientController;
 use App\Http\Controllers\Client\ProductReviewController;
 use App\Http\Controllers\admin\BrandController;
 use App\Http\Controllers\client\OrderHistoryController;
+use App\Http\Controllers\Admin\StasticController;
 
 // Route cho Admin
 Route::prefix('admin')->group(function () {
@@ -241,3 +242,5 @@ Route::post('/reset-password', [ForgotPasswordController::class, 'resetPassword'
 
 // Route cho lịch sử mua hàng
 Route::get('/profile/orders', [OrderHistoryController::class, 'history'])->name('profile.orders');
+// Route cho thống kê
+Route::get('/admin/stastic', [StasticController::class, 'index']);
