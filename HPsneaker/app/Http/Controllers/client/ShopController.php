@@ -71,17 +71,18 @@ class ShopController extends Controller
 
         // Gắn rating vào từng comment nếu user_id khớp
         $comments = $commentsRaw->map(function ($comment) use ($reviews) {
-            $comment->rating = optional($reviews->firstWhere('user_id', $comment->user_id))->rating;
-            return $comment;
+        $comment->rating = optional($reviews->firstWhere('user_id', $comment->user_id))->rating;
+        return $comment;
         });
         $commentCount = $comments->count();
         $reviews = Review::where('product_id', $product->id)->get();
         $averageRating = $reviews->avg('rating') ?? 0;
         $existingRating = null;
         if (session('user')) {
-            $existingRating = Review::where('product_id', $product->id)
-                ->where('user_id', session('user.id'))
-                ->value('rating');
+        $userId = session('user')['id'];
+        $existingRating = Review::where('product_id', $product->id)
+        ->where('user_id', $userId)
+        ->value('rating');
         }
 
         return view('client.shop.product-detail', compact('product', 'relatedProducts', 'variants', 'comments', 'commentCount', 'averageRating', 'reviews', 'existingRating'));
