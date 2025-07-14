@@ -76,7 +76,7 @@
                 <div class="sidebar-menu">
                     <ul class="menu">
                         <li class="sidebar-item">
-                            <a href="{{ url('admin/statistics') }}" class='sidebar-link'>
+                            <a href="{{ url('admin/stastic') }}" class='sidebar-link'>
                                 <i class="bi bi-bar-chart-fill"></i>
                                 <span>Thống kê</span>
                             </a>
