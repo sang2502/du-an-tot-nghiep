@@ -243,6 +243,7 @@ Route::post('/reset-password', [ForgotPasswordController::class, 'resetPassword'
 // Route cho lịch sử mua hàng
 Route::get('/profile/orders', [OrderHistoryController::class, 'history'])->name('profile.orders');
 Route::get('/profile/orders/{id}', [OrderHistoryController::class, 'show'])->name('profile.orders.show');
+Route::post('/profile/orders/{id}/cancel', [OrderHistoryController::class, 'cancel'])->name('profile.orders.cancel');
 // Route cho thống kê
 Route::get('/admin/stastic', [StasticController::class, 'index']);
 
