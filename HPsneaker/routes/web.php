@@ -28,6 +28,7 @@ use App\Http\Controllers\client\CartController;
 use App\Http\Controllers\client\FeedbackClientController;
 use App\Http\Controllers\Client\ProductReviewController;
 use App\Http\Controllers\admin\BrandController;
+use App\Http\Controllers\client\OrderHistoryController;
 
 // Route cho Admin
 Route::prefix('admin')->group(function () {
@@ -239,4 +240,4 @@ Route::get('/reset-password', [ForgotPasswordController::class, 'showResetPasswo
 Route::post('/reset-password', [ForgotPasswordController::class, 'resetPassword'])->name('client.account.reset-password');
 
 // Route cho lịch sử mua hàng
-Route::get('/profile/orders', [OrderController::class, 'history'])->name('profile.orders');
+Route::get('/profile/orders', [OrderHistoryController::class, 'history'])->name('profile.orders');

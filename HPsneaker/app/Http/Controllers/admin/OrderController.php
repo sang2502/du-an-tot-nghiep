@@ -28,13 +28,6 @@ class OrderController extends Controller
 
         return view('admin.order.index', compact('orders'));
     }
-    public function history()
-    {
-        $orders = Order::where('user_id', session('user.id'))
-            ->orderByDesc('created_at')
-            ->get();
-        return view('client.orders.order-history', compact('orders'));
-    }
 
 
     /**
