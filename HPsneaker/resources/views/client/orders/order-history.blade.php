@@ -38,7 +38,7 @@
                         @endswitch
                     </td>
                     <td class="text-center">
-                        <a href=""
+                        <a href="{{ route('profile.orders.show', $order->id) }}"
                             class="btn btn-sm btn-info rounded-pill px-3 py-1 d-inline-flex align-items-center me-1">
                             <i class="bi bi-eye me-1"></i> Chi tiết
                         </a>
