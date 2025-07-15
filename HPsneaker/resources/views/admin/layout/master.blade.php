@@ -48,6 +48,7 @@
         }
     </style>
 </head>
+
 <body>
     <div id="app">
         <div id="sidebar" class="active">
@@ -55,8 +56,8 @@
                 <div class="sidebar-header">
                     <div class="d-flex justify-content-between align-items-center">
                         <div class="logo">
-                            <a href="{{ url('admin') }}">
-                                <img src="{{ asset('assets/images/logo/logo.png') }}" alt="Logo" style="height: 40px;">
+                            <a href="{{ url('') }}">
+                                <img src="{{ asset('img/logo3.png') }}" alt="Logo" style="height: 100px;">
                             </a>
                         </div>
                         <div class="toggler">
@@ -65,7 +66,7 @@
                             </a>
                         </div>
                     </div>
-                    @if(session('admin'))
+                    @if (session('admin'))
                         <div class="account-info">
                             <i class="bi bi-person-circle me-1"
                                 style="font-size: 1.5rem; color: #435EBE; vertical-align: sub; position: relative; top: 2px;"></i>
@@ -94,7 +95,8 @@
                             </a>
                         </li>
                         <!-- Quản lý sản phẩm submenu -->
-                        <li class="sidebar-item has-sub
+                        <li
+                            class="sidebar-item has-sub
     {{ request()->is('admin/category*') || request()->is('admin/product*') ? 'menu-open' : '' }}">
                             <a href="#" class='sidebar-link'>
                                 <i class="bi bi-grid-fill"></i>
@@ -126,7 +128,7 @@
                             </a>
                         </li>
                         <li class="sidebar-item">
-                            <a href="{{ url('admin/shipping') }}" class='sidebar-link'>
+                            <a href="{{ url('admin/delivery') }}" class='sidebar-link'>
                                 <i class="bi bi-truck"></i>
                                 <span>Quản lý giao hàng</span>
                             </a>

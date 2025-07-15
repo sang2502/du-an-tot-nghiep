@@ -65,16 +65,16 @@
                                         <td class="text-center">
                                             <a href="{{ route('user.show', $user->id) }}"
                                                 class="btn btn-sm btn-info rounded-pill px-3 py-1 d-inline-flex align-items-center me-1">
-                                                <i class="bi bi-eye me-1"></i> Chi tiết
+                                                <i class="bi bi-eye me-1"></i>
                                             </a>
                                             <a href="{{ route('user.edit', $user->id) }}"
                                                 class="btn btn-sm btn-warning rounded-pill px-3 py-1 d-inline-flex align-items-center me-1">
-                                                <i class="bi bi-pencil-square me-1"></i> Sửa
+                                                <i class="bi bi-pencil-square me-1"></i>
                                             </a>
                                             <a href="{{ route('user.delete', $user->id) }}"
                                                 onclick="return confirm('Bạn có chắc muốn xoá không?')"
                                                 class="btn btn-sm btn-danger rounded-pill px-3 py-1 d-inline-flex align-items-center">
-                                                <i class="bi bi-trash me-1"></i> Xóa
+                                                <i class="bi bi-trash me-1"></i>
                                             </a>
                                         </td>
                                     </tr>
