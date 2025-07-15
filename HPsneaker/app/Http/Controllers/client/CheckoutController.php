@@ -8,6 +8,7 @@ use App\Models\Cart;
 use App\Models\CartItem;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Models\Delivery;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -110,7 +111,10 @@ class CheckoutController extends Controller
                 'payment_method'   => $data['payment'],
                 'shipping_address' => $data['address'],
             ]);
-
+            // Tạo bản ghi giao hàng
+            Delivery::create([
+                'order_id' => $order->id,
+            ]);
             foreach ($cartItems as $item) {
                 OrderItem::create([
                     'order_id'           => $order->id,
@@ -175,6 +179,10 @@ class CheckoutController extends Controller
                 'status'           => 'pending',
                 'payment_method'   => 'VNPAY',
                 'shipping_address' => $data['address'] ?? '',
+            ]);
+            // Tạo bản ghi giao hàng
+            Delivery::create([
+                'order_id' => $order->id,
             ]);
             foreach ($cartItems as $item) {
                 OrderItem::create([

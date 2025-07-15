@@ -85,6 +85,6 @@ class DatabaseSeeder extends Seeder
         foreach ($dataArray['blog_post_tags'] as $data) {
             DB::table('blog_post_tags')->insert($data);
         }
-
+        
     }
 }

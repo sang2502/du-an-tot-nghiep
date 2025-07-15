@@ -27,7 +27,6 @@
                             <thead class="table-white">
                             <tr>
                                 <th>ID</th>
-                                <th>User ID</th>
                                 <th>Tổng tiền</th>
                                 <th>Voucher</th>
                                 <th>Giảm giá</th>
@@ -42,7 +41,6 @@
                             @foreach($orders as $item)
                                 <tr>
                                     <td>{{ $item->id }}</td>
-                                    <td>{{ $item->user_id }}</td>
                                     <td>{{ number_format($item->total_amount, 0, ',', '.') }}₫</td>
                                     <td>{{ $item->voucher_id ?? 'Không áp dụng' }}</td>
                                     <td>{{ number_format($item->discount_applied, 0, ',', '.') }}₫</td>
@@ -52,6 +50,7 @@
                                             @method('PUT')
                                             <select name="status" class="form-select form-select-sm order-status-dropdown" data-order-id="{{ $item->id }}">
                                                 <option value="processing" {{ $item->status == 'Đang xử lý' ? 'selected' : '' }}>Đang xử lý</option>
+                                                <option value="delivering" {{ $item->status == 'Đang giao hàng' ? 'selected' : '' }}>Đang giao hàng</option>
                                                 <option value="completed" {{ $item->status == 'Hoàn tất' ? 'selected' : '' }}>Hoàn tất</option>
                                                 <option value="cancelled" {{ $item->status == 'Đã hủy' ? 'selected' : '' }}>Đã hủy</option>
                                                 <option value="paid" {{ $item->status == 'Đã thanh toán' ? 'selected' : '' }}>Đã thanh toán</option>
@@ -65,12 +64,12 @@
                                     <td class="text-center">
                                         <a href="{{ route('order.show', $item->id) }}"
                                            class="btn btn-sm btn-info rounded-pill px-3 py-1">
-                                            <i class="bi bi-eye me-1"></i> Chi tiết
+                                            <i class="bi bi-eye me-1"></i>
                                         </a>
                                         <a href="{{ route('order.delete', $item->id) }}"
                                            onclick="return confirm('Bạn có chắc muốn xoá đơn hàng này?')"
                                            class="btn btn-sm btn-danger rounded-pill px-3 py-1">
-                                            <i class="bi bi-trash me-1"></i> Xoá
+                                            <i class="bi bi-trash me-1"></i>
                                         </a>
                                     </td>
                                 </tr>
