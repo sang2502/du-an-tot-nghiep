@@ -43,9 +43,60 @@ class StasticController extends Controller
             $revenueData[$item->month - 1] = $item->revenue;
         }
 
+        // Số sản phẩm đang bán
+        $activeProducts = DB::table('products')->where('status', 1)->count();
+
+        // Số sản phẩm hết hàng
+        $outOfStockProducts = DB::table('product_variants')->where('stock', 0)->count();
+
+        // Số đơn hàng đang xử lý
+        $pendingOrders = DB::table('orders')->where('status', 'pending')->count();
+
+        // Số đơn hàng bị huỷ
+        $cancelledOrders = DB::table('orders')->where('status', 'cancelled')->count();
+
+        // Danh sách 5 sản phẩm bán chạy nhất
+        $bestSellers = DB::table('order_items')
+            ->select('product_variant_id', DB::raw('SUM(quantity) as total_sold'))
+            ->groupBy('product_variant_id')
+            ->orderByDesc('total_sold')
+            ->limit(5)
+            ->get();
+
+        $bestSellerNames = [];
+        foreach ($bestSellers as $item) {
+            $productVariant = DB::table('product_variants')->where('id', $item->product_variant_id)->first();
+            if ($productVariant) {
+                $product = DB::table('products')->where('id', $productVariant->product_id)->first();
+                if ($product) {
+                    $bestSellerNames[] = [
+                        'name' => $product->name . ' (' . $item->total_sold . ')',
+                        'id' => $product->id
+                    ];
+                }
+            }
+        }
+        if (empty($bestSellerNames)) {
+            $bestSellerNames[] = ['name' => 'Không có', 'id' => null];
+        }
+
+        // Lấy danh sách đơn hàng chứa sản phẩm hết hàng
+        $outOfStockVariantIds = DB::table('product_variants')->where('stock', 0)->pluck('id')->toArray();
+
+        $outOfStockOrders = DB::table('order_items')
+            ->whereIn('product_variant_id', $outOfStockVariantIds)
+            ->join('orders', 'order_items.order_id', '=', 'orders.id')
+            ->select('orders.id', 'orders.name', 'orders.email', 'orders.phone', 'orders.status', 'orders.created_at')
+            ->distinct()
+            ->get();
+
         return view('admin.stastic.stastic', compact(
             'revenue', 'Orders', 'voucherUsed','customers',
-            'months', 'revenueData'
+            'months', 'revenueData',
+            'activeProducts', 'outOfStockProducts',
+            'pendingOrders', 'cancelledOrders',
+            'bestSellerNames',
+            'outOfStockOrders'
         ));
         
     }
