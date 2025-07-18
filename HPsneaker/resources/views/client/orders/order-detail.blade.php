@@ -13,6 +13,9 @@
                     <p>
                         <b>Trạng thái:</b>
                         @switch($order->status)
+                            @case('delivering')
+                                <span class="badge bg-warning text-dark">Đang giao hàng</span>
+                                @break
                             @case('processing')
                                 <span class="badge bg-warning text-dark">Đang xử lý</span>
                                 @break
@@ -44,7 +47,7 @@
                             <th>Tên sản phẩm</th>
                             <th>Màu & Size</th>
                             <th>Số lượng</th>
-                            <th>Giá()</th>
+                            <th>Giá</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -64,117 +67,129 @@
                         @endforeach
                     </tbody>
                 </table>
-                <button onclick="showCancelWarning('{{ route('profile.orders.cancel', $order->id) }}')" class="btn-cancel">Huỷ đơn hàng</button>
 
-                <div id="cancelWarningModal" class="modal-overlay" style="display: none;">
-                    <div class="modal-content">
-                        <h2>Xác nhận huỷ đơn hàng</h2>
-                        <p>Vui lòng nhập lý do bạn muốn huỷ đơn hàng:</p>
-                        <form method="POST" id="cancelForm">
-                            @csrf
-                            <textarea name="cancel_reason" placeholder="Ví dụ: Đã thay đổi ý định, không cần hàng nữa..." required></textarea>
-                            <div class="modal-buttons">
-                            <button type="submit" class="btn-confirm">Xác nhận huỷ</button>
-                            <button type="button" onclick="hideCancelWarning()" class="btn-close">Đóng</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
+                {{-- Nút huỷ đơn hàng --}}
+                @if($order->status !== 'cancelled')
+            <button id="btnCancelOrder" class="btn-cancel">Huỷ đơn hàng</button>
+            @endif
             </div>
         </div>
     </div>
 </div>
+
+{{-- Modal huỷ đơn hàng --}}
+<div id="cancelWarningModal" class="modal-overlay" style="display: none;">
+    <div class="modal-content">
+        <h2>Xác nhận huỷ đơn hàng</h2>
+        <p>Vui lòng nhập lý do bạn muốn huỷ đơn hàng:</p>
+        <form method="POST" id="cancelForm" action="{{ route('profile.orders.cancel', $order->id) }}">
+            @csrf
+            <textarea name="cancel_reason" placeholder="Ví dụ: Đã thay đổi ý định, không cần hàng nữa..." required></textarea>
+            <div class="modal-buttons">
+                <button type="submit" class="btn-confirm">Xác nhận huỷ</button>
+                <button type="button" id="btnCloseModal" class="btn-close">Đóng</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+{{-- JavaScript --}}
 <script>
-function showCancelWarning(actionUrl) {
-    document.getElementById('cancelForm').setAttribute('action', actionUrl);
-    document.getElementById('cancelWarningModal').style.display = 'flex';
-}
-function hideCancelWarning() {
-    document.getElementById('cancelWarningModal').style.display = 'none';
-}
+document.addEventListener('DOMContentLoaded', function () {
+    const btnCancel = document.getElementById('btnCancelOrder');
+    const modal = document.getElementById('cancelWarningModal');
+    const btnClose = document.getElementById('btnCloseModal');
+
+    // Gán sự kiện cho nút huỷ nếu tồn tại
+    if (btnCancel && modal) {
+        btnCancel.addEventListener('click', function () {
+            modal.style.display = 'flex';
+        });
+    }
+
+    // Gán sự kiện cho nút đóng nếu tồn tại
+    if (btnClose && modal) {
+        btnClose.addEventListener('click', function () {
+            modal.style.display = 'none';
+        });
+    }
+});
 </script>
+
+
+
+
+{{-- CSS --}}
 <style>
-    .modal-overlay {
-        position: fixed;
-        top: 0; left: 0;
-        width: 100%; height: 100%;
-        background: rgba(0,0,0,0.5);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        z-index: 9999;
-    }
-
-    .modal-content {
-        background: #fff;
-        border-radius: 10px;
-        padding: 25px 30px;
-        width: 400px;
-        max-width: 90%;
-        box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-        font-family: "Segoe UI", sans-serif;
-        text-align: center;
-    }
-
-    .modal-content h2 {
-        font-size: 20px;
-        margin-bottom: 10px;
-    }
-
-    .modal-content p {
-        font-size: 14px;
-        color: #333;
-        margin-bottom: 15px;
-    }
-
-    .modal-content textarea {
-        width: 100%;
-        height: 100px;
-        padding: 10px;
-        border-radius: 6px;
-        border: 1px solid #ccc;
-        resize: none;
-        font-size: 14px;
-    }
-
-    .modal-buttons {
-        display: flex;
-        justify-content: space-between;
-        gap: 10px;
-    }
-
-    .btn-confirm, .btn-close, .btn-cancel {
-        padding: 10px 16px;
-        border: none;
-        border-radius: 6px;
-        cursor: pointer;
-        font-weight: bold;
-    }
-
-    .btn-confirm {
-        background-color: #dc3545;
-        color: white;
-    }
-
-    .btn-close {
-        background-color: #6c757d;
-        color: white;
-    }
-
-    .btn-cancel {
-        background-color: #fff;
-        border: 2px solid #dc3545;
-        color: #dc3545;
-        transition: background-color 0.3s;
-        margin-top: 15px;
-    }
-
-    .btn-cancel:hover {
-        background-color: #dc3545;
-        color: white;
-    }
+.modal-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+.modal-content {
+    background: #fff;
+    border-radius: 10px;
+    padding: 25px 30px;
+    width: 400px;
+    max-width: 90%;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    font-family: "Segoe UI", sans-serif;
+    text-align: center;
+}
+.modal-content h2 {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+.modal-content p {
+    font-size: 14px;
+    color: #333;
+    margin-bottom: 15px;
+}
+.modal-content textarea {
+    width: 100%;
+    height: 100px;
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    resize: none;
+    font-size: 14px;
+}
+.modal-buttons {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: 15px;
+}
+.btn-confirm, .btn-close, .btn-cancel {
+    padding: 10px 16px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+}
+.btn-confirm {
+    background-color: #dc3545;
+    color: white;
+}
+.btn-close {
+    background-color: #6c757d;
+    color: white;
+}
+.btn-cancel {
+    background-color: #fff;
+    border: 2px solid #dc3545;
+    color: #dc3545;
+    transition: background-color 0.3s;
+    margin-top: 15px;
+}
+.btn-cancel:hover {
+    background-color: #dc3545;
+    color: white;
+}
 </style>
-
-
-
 @endsection
