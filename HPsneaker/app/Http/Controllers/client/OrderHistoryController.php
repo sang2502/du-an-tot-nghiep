@@ -23,17 +23,17 @@ class OrderHistoryController extends Controller
         ->findOrFail($id);
     return view('client.orders.order-detail', compact('order'));
 }
-    public function cancel(Request $request, $id)
-{
-    $order = Order::where('user_id', session('user.id'))->findOrFail($id);
-    if ($order->status != 'processing') {
-        return redirect()->back()->with('error', 'Đơn hàng không thể hủy.');
+        public function cancel(Request $request, $id)
+    {
+        $order = Order::where('user_id', session('user.id'))->findOrFail($id);
+        if ($order->status != 'processing') {
+            return redirect()->back()->with('error', 'Đơn hàng không thể hủy.');
+        }
+        $order->status = 'cancelled';
+        $order->cancel_reason = $request->input('cancel_reason');
+        $order->save();
+        return redirect()->route('profile.orders')->with('success', 'Đã hủy đơn hàng!');
     }
-    $order->status = 'cancelled';
-    $order->cancel_reason = $request->input('cancel_reason');
-    $order->save();
-    return redirect()->route('profile.orders.show', $order->id)->with('success', 'Đã hủy đơn hàng!');
-}
 
 }
 

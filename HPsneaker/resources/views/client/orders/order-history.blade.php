@@ -24,6 +24,9 @@
                             @case('processing')
                                 Đang xử lý
                                 @break
+                            @case('delivering')
+                                Đang giao hàng
+                                @break
                             @case('completed')
                                 Hoàn thành
                                 @break
@@ -42,10 +45,6 @@
                             class="btn btn-sm btn-info rounded-pill px-3 py-1 d-inline-flex align-items-center me-1">
                             <i class="bi bi-eye me-1"></i> Chi tiết
                         </a>
-                        <a href=""
-                            class="btn btn-sm btn-danger rounded-pill px-3 py-1">
-                             <i class="bi bi-trash me-1"></i> Huỷ đơn
-                         </a>
                     </td>
                 </tr>
                 @endforeach
