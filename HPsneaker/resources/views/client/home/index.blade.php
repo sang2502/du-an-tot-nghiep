@@ -31,14 +31,14 @@
                         </div>
                     </div>
                     <div class="hero__search__phone">
-                            <div class="hero__search__phone__icon">
-                                <i class="fa fa-phone"></i>
-                            </div>
-                            <div class="hero__search__phone__text">
-                                <h5>8888.888</h5>
-                                <span>Hỗ trợ 24/7</span>
-                            </div>
+                        <div class="hero__search__phone__icon">
+                            <i class="fa fa-phone"></i>
                         </div>
+                        <div class="hero__search__phone__text">
+                            <h5>8888.888</h5>
+                            <span>Hỗ trợ 24/7</span>
+                        </div>
+                    </div>
                 </div>
             </div>
     </section>
@@ -76,21 +76,12 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="section-title">
-                        <h2>Sản phẩm nổi bật</h2>
+                        <h2>Sản phẩm bán chạy nhất</h2>
                     </div>
-                    {{-- <div class="featured__controls">
-                        <ul>
-                            <li class="active" data-filter="*">Tất cả</li>
-                            <li data-filter=".giay-the-thao">Giày thể thao</li>
-                            <li data-filter=".giay-chay-bo">Giày chạy bộ</li>
-                            <li data-filter=".phu-kien">Phụ kiện</li>
-                        </ul>
-                    </div> --}}
                 </div>
             </div>
             <div class="row featured__filter">
-                {{-- Product --}}
-                @foreach ($products as $i => $product)
+                @foreach ($bestSellers as $product)
                     <div class="col-lg-3 col-md-4 col-sm-6 mix giay-the-thao">
                         <div class="featured__item">
                             <a
@@ -100,15 +91,17 @@
                                 </div>
                             </a>
                             <div class="featured__item__text">
-                                <h6><a
-                                        href="{{ route('shop.product.show', ['name' => Str::slug($product->name), 'id' => $product->id]) }}}}">
-                                        {{ $product->name }}</a></h6>
+                                <h6>
+                                    <a
+                                        href="{{ route('shop.product.show', ['name' => Str::slug($product->name), 'id' => $product->id]) }}">
+                                        {{ $product->name }}
+                                    </a>
+                                </h6>
                                 <h5>{{ number_format($product->price, 0, ',', '.') }} đ</h5>
                             </div>
                         </div>
                     </div>
                 @endforeach
-                {{-- @endforeach --}}
             </div>
         </div>
     </section>
@@ -168,16 +161,20 @@
                         <div class="latest-product__slider owl-carousel">
                             <div class="latest-prdouct__slider__item">
 
-                                <a href="#" class="latest-product__item">
-                                    <div class="latest-product__item__pic">
-                                        <img src="{{ $product->thumbnail }}" alt="">
-                                    </div>
-                                    <div class="latest-product__item__text">
-                                        <h6 style="font-weight: 500;">{{ $product->name }}</h6>
-                                        <span style="font-weight: 300;">{{ number_format($product->price, 0, ',', '.') }}
-                                            đ</span>
-                                    </div>
-                                </a>
+                                @foreach ($bestSellers->take(3) as $product)
+                                    <a href="{{ route('shop.product.show', ['name' => Str::slug($product->name), 'id' => $product->id]) }}}}"
+                                        class="latest-product__item">
+                                        <div class="latest-product__item__pic">
+                                            <img src="{{ $product->thumbnail }}" alt="">
+                                        </div>
+                                        <div class="latest-product__item__text">
+                                            <h6 style="font-weight: 500;">{{ $product->name }}</h6>
+                                            <span
+                                                style="font-weight: 300;">{{ number_format($product->price, 0, ',', '.') }}
+                                                đ</span>
+                                        </div>
+                                    </a>
+                                @endforeach
 
                             </div>
                         </div>
