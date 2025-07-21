@@ -43,7 +43,7 @@ class FeedbackClientController extends Controller
 
         $request->validate([
             'mess' => 'required|string|max:1000',
-            'img'  => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'img'  => 'nullable|file|mimes:jpeg,png,jpg,gif,mp4,webm,ogg|max:100240',
         ]);
 
         $forbiddenWords = ['dm', 'đm', 'vcl', 'cc'];
@@ -57,17 +57,18 @@ class FeedbackClientController extends Controller
             }
         }
 
-        $imagePath = null;
+        $mediaPath = null;
         if ($request->hasFile('img')) {
-            $imagePath = 'feedback_images/' . $request->file('img')->hashName();
-            $request->file('img')->storeAs('public/feedback_images', $request->file('img')->hashName());
-        }
+        $media = $request->file('img');
+        $mediaPath = 'feedback_media/' . $media->hashName();
+        $media->storeAs('public/feedback_media', $media->hashName());
+    }
 
         Feedback::create([
             'user_id' => $user['id'],
             'name'    => $user['name'],
             'mess'    => $request->mess,
-            'img'     => $imagePath,
+            'img'     => $mediaPath,
             'status'  => !$isViolated,
         ]);
 

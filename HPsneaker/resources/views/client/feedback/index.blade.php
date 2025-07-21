@@ -1,15 +1,15 @@
 @extends('client.layout.master')
 @section('main')
 <!-- Breadcrumb Section Begin -->
-    <section class="breadcrumb-section set-bg" data-setbg="img/breadcrumb.jpg">
+    <section class="breadcrumb-section set-bg" data-setbg="{{ asset('img/br2.jpg') }}">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12 text-center">
                     <div class="breadcrumb__text">
-                        <h2>Phản hồi của khách hàng</h2>
+                        <h2>{{ $product->name ?? 'Chi tiết sản phẩm' }}</h2>
                         <div class="breadcrumb__option">
                             <a href="{{ url('/') }}">Trang chủ</a>
-                            <span>Phản hồi của khách hàng</span>
+                            <span>{{ $product->name ?? '' }}</span>
                         </div>
                     </div>
                 </div>
@@ -26,7 +26,7 @@
                     <div class="contact__widget">
                         <span class="icon_phone"></span>
                         <h4>Số điện thoại</h4>
-                        <p>+01-3-8888-6868</p>
+                        <p>+0705811079</p>
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-3 col-sm-6 text-center">
@@ -65,7 +65,7 @@
             <div class="inside-widget">
                 <h4>Hải Phòng</h4>
                 <ul>
-                    <li>Số điện thoại: +12-345-6789</li>
+                    <li>Số điện thoại: +0705811079</li>
                     <li>Địa chỉ: Lê Thánh Tông, Hải Phòng</li>
                 </ul>
             </div>
@@ -127,7 +127,14 @@
                                 </div>
                                 <h5 class="mb-2">{{ $feedback->mess }}</h5  >
                                 @if ($feedback->img)
-                                    <a href="{{ asset('storage/' . $feedback->img) }}" data-bs-toggle="modal" data-bs-toggle="modal" data-bs-target="#imageModal{{ $feedback->id }}">
+                                @php
+                                    $ext = pathinfo($feedback->img, PATHINFO_EXTENSION);
+                                    $isImage = in_array(strtolower($ext), ['jpg', 'jpeg', 'png', 'gif', 'webp']);
+                                    $isVideo = in_array(strtolower($ext), ['mp4', 'webm', 'ogg']);
+                                @endphp
+
+                                @if ($isImage)
+                                    <a href="{{ asset('storage/' . $feedback->img) }}" data-bs-toggle="modal" data-bs-target="#imageModal{{ $feedback->id }}">
                                         <img src="{{ asset('storage/' . $feedback->img) }}" class="img-fluid rounded" alt="feedback image" style="max-height: 180px; object-fit: cover;">
                                     </a>
 
@@ -144,6 +151,12 @@
                                             </div>
                                         </div>
                                     </div>
+                                @elseif ($isVideo)
+                                    <video controls class="w-100 rounded" style="max-height: 300px; object-fit: cover;">
+                                        <source src="{{ asset('storage/' . $feedback->img) }}" type="video/{{ $ext }}">
+                                        Trình duyệt của bạn không hỗ trợ video.
+                                    </video>
+                                @endif
                                 @endif
                             </div>
                         </div>

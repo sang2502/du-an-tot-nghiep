@@ -48,10 +48,22 @@
                                         </td>
                                         <td>
                                             @if ($feedback->img)
-                                                <img src="{{ $feedback->img ? asset('storage/' . $feedback->img) : asset('img/default-feedback.png') }}"
-                                                alt="Ảnh sản phẩm" style="max-width: 100px;">
+                                                @php
+                                                    $ext = strtolower(pathinfo($feedback->img, PATHINFO_EXTENSION));
+                                                @endphp
+
+                                                @if (in_array($ext, ['jpg', 'jpeg', 'png', 'gif', 'webp']))
+                                                    <img src="{{ asset('storage/' . $feedback->img) }}" alt="Ảnh" style="max-width: 100px;">
+                                                @elseif (in_array($ext, ['mp4', 'mov', 'avi', 'webm']))
+                                                    <video controls style="max-width: 150px; max-height: 100px;">
+                                                        <source src="{{ asset('storage/' . $feedback->img) }}" type="video/{{ $ext }}">
+                                                        Trình duyệt không hỗ trợ video.
+                                                    </video>
+                                                @else
+                                                    <a href="{{ asset('storage/' . $feedback->img) }}" target="_blank">Xem file</a>
+                                                @endif
                                             @else
-                                                Không có ảnh
+                                                Không có file
                                             @endif
                                         </td>
                                         <td>{{ $feedback->created_at }}</td>
