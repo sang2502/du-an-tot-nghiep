@@ -15,19 +15,28 @@ class OrderController extends Controller
     {
         $query = Order::query();
 
-        // Tìm kiếm theo user_id (nếu có nhập keyword)
-        if ($request->has('keyword') && $request->keyword != '') {
-            $query->where('user_id', 'like', '%' . $request->keyword . '%');
+        // Tìm kiếm theo ID (nếu nhập số)
+        if ($request->filled('keyword')) {
+            if (is_numeric($request->keyword)) {
+                $query->where('id', $request->keyword);
+            } else {
+                // Nếu muốn tìm kiếm theo tên hoặc email:
+                $query->whereHas('user', function($q) use ($request) {
+                    $q->where('name', 'like', '%'.$request->keyword.'%')
+                        ->orWhere('email', 'like', '%'.$request->keyword.'%');
+                });
+            }
         }
+
         // Lọc theo trạng thái
-        if ($request->has('status') && $request->status != '') {
+        if ($request->filled('status')) {
             $query->where('status', $request->status);
         }
-        // Sắp xếp mới nhất trước và phân trang 10 đơn mỗi trang
-        $orders = $query->orderBy('created_at', 'desc')->paginate(10);
 
+        $orders = $query->latest()->paginate(20);
         return view('admin.order.index', compact('orders'));
     }
+
 
 
     /**

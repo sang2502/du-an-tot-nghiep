@@ -11,14 +11,33 @@
                     {{-- Tìm kiếm --}}
                     <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap">
                         <form method="GET" action="{{ route('order.index') }}" class="d-flex" style="gap: 8px;">
-                            <input type="text" name="keyword" placeholder="Tìm theo User ID..." value="{{ request('keyword') }}">
-                            <select name="status" onchange="this.form.submit()">
+                            <input
+                                type="text"
+                                name="keyword"
+                                placeholder="Nhập ID hóa đơn..."
+                                value="{{ request('keyword') }}"
+                                class="form-control"
+                                style="max-width: 180px; border-radius: 8px; border: 1px solid #e1e7f0; background: #f8faff;"
+                            >
+                            <select
+                                name="status"
+                                class="form-select"
+                                style="min-width: 140px; border-radius: 8px; border: 1px solid #e1e7f0; background: #f8faff;"
+                            >
                                 <option value="">-- Tất cả trạng thái --</option>
                                 <option value="completed" {{ request('status') == 'completed' ? 'selected' : '' }}>Hoàn tất</option>
                                 <option value="processing" {{ request('status') == 'processing' ? 'selected' : '' }}>Đang xử lý</option>
+                                <option value="delivering" {{ request('status') == 'delivering' ? 'selected' : '' }}>Đang giao</option>
+                                <option value="paid" {{ request('status') == 'paid' ? 'selected' : '' }}>Đã thanh toán</option>
                                 <option value="cancelled" {{ request('status') == 'cancelled' ? 'selected' : '' }}>Đã hủy</option>
                             </select>
-                            <button type="submit">Tìm</button>
+                            <button
+                                type="submit"
+                                class="btn"
+                                style="border: 1px solid #4663b2; color: #4663b2; background: #fff; border-radius: 6px; font-weight: 500; min-width: 90px;"
+                            >
+                                Tìm kiếm
+                            </button>
                         </form>
                     </div>
 
@@ -45,18 +64,25 @@
                                     <td>{{ $item->voucher_id ?? 'Không áp dụng' }}</td>
                                     <td>{{ number_format($item->discount_applied, 0, ',', '.') }}₫</td>
                                     <td>
-                                        <form action="{{ route('order.updateStatus', $item->id) }}" method="POST" class="update-status-form" style="display:inline;">
-                                            @csrf
-                                            @method('PUT')
-                                            <select name="status" class="form-select form-select-sm order-status-dropdown" data-order-id="{{ $item->id }}">
-                                                <option value="processing" {{ $item->status == 'Đang xử lý' ? 'selected' : '' }}>Đang xử lý</option>
-                                                <option value="delivering" {{ $item->status == 'Đang giao hàng' ? 'selected' : '' }}>Đang giao hàng</option>
-                                                <option value="completed" {{ $item->status == 'Hoàn tất' ? 'selected' : '' }}>Hoàn tất</option>
-                                                <option value="cancelled" {{ $item->status == 'Đã hủy' ? 'selected' : '' }}>Đã hủy</option>
-                                                <option value="paid" {{ $item->status == 'Đã thanh toán' ? 'selected' : '' }}>Đã thanh toán</option>
-                                            </select>
-                                            <input type="hidden" name="cancel_reason" class="cancel-reason-input">
-                                        </form>
+                                        @php
+                                            $badgeClass = match($item->status) {
+                                                'processing'  => 'badge bg-warning text-dark rounded-pill px-3 py-2',
+                                                'delivering'  => 'badge bg-info rounded-pill px-3 py-2',
+                                                'completed'   => 'badge bg-success rounded-pill px-3 py-2',
+                                                'cancelled'   => 'badge bg-danger rounded-pill px-3 py-2',
+                                                'paid'        => 'badge bg-primary rounded-pill px-3 py-2',
+                                                default       => 'badge bg-secondary rounded-pill px-3 py-2',
+                                            };
+                                            $statusText = match($item->status) {
+                                                'processing'  => 'Đang xử lý',
+                                                'delivering'  => 'Đang giao',
+                                                'completed'   => 'Hoàn tất',
+                                                'cancelled'   => 'Đã hủy',
+                                                'paid'        => 'Đã thanh toán',
+                                                default       => $item->status,
+                                            };
+                                        @endphp
+                                        <span class="{{ $badgeClass }}">{{ $statusText }}</span>
                                     </td>
                                     <td>{{ ucfirst($item->payment_method) }}</td>
                                     <td>{{ $item->shipping_address }}</td>

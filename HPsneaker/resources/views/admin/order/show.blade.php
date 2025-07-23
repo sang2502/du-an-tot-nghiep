@@ -29,21 +29,21 @@
                             <tr>
                                 <td><b>Trạng thái:</b></td>
                                 <td>
-                                    @if ($order->status == 'completed')
-                                        <span class="badge bg-secondary rounded-pill px-3 py-2">Hoàn tất</span>
-                                    @elseif($order->status == 'processing')
-                                        <span class="badge bg-warning text-dark rounded-pill px-3 py-2">Đang xử lý</span>
-                                    @elseif($order->status == 'delivering')
-                                        <span class="badge bg-info rounded-pill px-3 py-2">Đang giao</span>
-                                    @elseif($order->status == 'cancelled')
-                                        <span class="badge bg-danger rounded-pill px-3 py-2">Đã hủy</span>
-                                    @else
-                                        <span class="badge bg-info rounded-pill px-3 py-2">{{ $order->status }}</span>
-                                    @endif
-
+                                    <form action="{{ route('order.updateStatus', $order->id) }}" method="POST" class="d-inline-block">
+                                        @csrf
+                                        @method('PUT')
+                                        <select name="status" class="form-select form-select-sm" style="min-width:140px; display: inline-block;" onchange="this.form.submit()">
+                                            <option value="processing" {{ $order->status == 'processing' ? 'selected' : '' }}>Đang xử lý</option>
+                                            <option value="delivering" {{ $order->status == 'delivering' ? 'selected' : '' }}>Đang giao</option>
+                                            <option value="completed" {{ $order->status == 'completed' ? 'selected' : '' }}>Hoàn tất</option>
+                                            <option value="cancelled" {{ $order->status == 'cancelled' ? 'selected' : '' }}>Đã hủy</option>
+                                            <option value="paid" {{ $order->status == 'paid' ? 'selected' : '' }}>Đã thanh toán</option>
+                                        </select>
+                                        <input type="hidden" name="cancel_reason" class="cancel-reason-input">
+                                    </form>
                                 </td>
                             </tr>
-                            @if ($order->status == 'cancelled')
+                        @if ($order->status == 'cancelled')
                                 <tr>
                                     <td><b>Lý do hủy:</b></td>
                                     <td>{{ $order->cancel_reason ?? 'Không có lý do' }}</td>
