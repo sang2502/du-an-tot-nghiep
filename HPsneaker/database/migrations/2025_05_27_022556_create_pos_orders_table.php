@@ -19,6 +19,7 @@ return new class extends Migration
             $table->decimal('discount_applied', 10, 2)->default(0);
             $table->decimal('total_amount', 10, 2);
             $table->string('payment_method');
+            $table->string('status')->default('pending');
             $table->text('note')->nullable();
             $table->timestamps();
         });
