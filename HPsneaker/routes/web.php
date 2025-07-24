@@ -253,3 +253,6 @@ Route::post('/profile/orders/{id}/cancel', [OrderHistoryController::class, 'canc
 // Route cho thống kê
 Route::get('/admin/stastic', [StasticController::class, 'index']);
 
+Route::get('/giaodien', function () {
+    return view('giaodien');
+})->name('admin.giaodien');
