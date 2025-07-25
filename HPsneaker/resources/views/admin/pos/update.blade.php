@@ -8,22 +8,19 @@
                 <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#filterProductModal">
                     Thêm sản phẩm
                 </button>
-
-
-
-
                 <!-- Danh sách sản phẩm -->
                 <div class="card shadow-sm mt-4">
                     <div class="card-header bg-white border-bottom">
                         <h4 class="mb-0 text-primary">🛒Sản Phẩm</h4>
                     </div>
                     <div class="card-body">
-                        <table class="table table-hover align-middle mb-0">
+                        <table class="table table-hover align-middle mb-0" id="orderItemTable">
                             <thead>
                                 <tr>
                                     <th>STT</th>
                                     <th>Tên SP</th>
                                     <th>Số lượng</th>
+                                    <th>Thành tiền</th>
                                     <th>Thao Tác</th>
                                 </tr>
                             </thead>
@@ -33,6 +30,9 @@
                                         <td>{{ $pi->id }}</td>
                                         <td>{{ $pi->productVariant->product->name }}</td>
                                         <td>{{ $pi->quantity }}</td>
+                                        <td class="item-price" data-price="{{ $pi->productVariant->price * $pi->quantity }}">
+                                            {{ number_format($pi->productVariant->price * $pi->quantity, 0, ',', '.') }} VNĐ
+                                        </td>
                                         <td>
                                             <form action="{{ route('pos.deleteItem', $pi->id) }}" method="GET" style="display:inline;">
                                                 @csrf
@@ -45,7 +45,6 @@
                         </table>
                     </div>
                 </div>
-
             </div>
             <!-- Bên phải: Thông tin hoá đơn -->
             <div class="col-lg-4">
@@ -54,37 +53,43 @@
                         <h4 class="mb-0 text-primary">📄 Thông Tin Hoá Đơn</h4>
                     </div>
                     <div class="card-body">
-                        <form>
+                        <form method="POST" action="{{ route('pos.update', $posOrder->id) }}">
+                            @csrf
+                            @method('PUT')
                             <div class="mb-3">
                                 <label class="form-label">Ngày:</label>
-                                <input type="date" class="form-control">
+                                <input type="date" class="form-control" value="{{ date('Y-m-d') }}">
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">Tổng Tiền:</label>
-                                <input type="number" class="form-control" readonly>
+                                <input type="number" class="form-control" id="totalAmount" name="total_amount" readonly>
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">Khuyến Mại:</label>
-                                <input type="text" class="form-control" placeholder="Mã giảm giá...">
+                                <input type="text" class="form-control" id="discountCode" name="discount_code" placeholder="Mã giảm giá...">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Giá trị giảm:</label>
+                                <input type="number" class="form-control" id="discountApplied" name="discount_applied" readonly>
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">Tổng Thanh Toán:</label>
-                                <input type="number" class="form-control" readonly>
+                                 <input type="number" class="form-control" id="finalAmount" name="final_amount" readonly>
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">Phương Thức TT:</label>
-                                <select class="form-select">
-                                    <option>Tiền mặt</option>
-                                    <option>Chuyển khoản</option>
+                                <select class="form-select" name="payment_method">
+                                    <option value="Tiền mặt">Tiền mặt</option>
+                                    <option value="Chuyển khoản">Chuyển khoản</option>
                                 </select>
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">Tiền Khách Đưa:</label>
-                                <input type="number" class="form-control">
+                                <input type="number" class="form-control" id="customerPaid">
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">Tiền Trả Lại:</label>
-                                <input type="number" class="form-control" readonly>
+                                <input type="number" class="form-control" id="changeAmount" readonly>
                             </div>
                             <div class="d-flex gap-2 mt-3">
                                 <button type="reset" class="btn btn-outline-danger flex-fill"><i class="bi bi-trash"></i>
@@ -143,9 +148,9 @@
                                     </td>
                                 </tr>
                             @endforeach
-                            <!-- Thêm các sản phẩm khác tại đây -->
                         </tbody>
                     </table>
+
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
@@ -153,14 +158,43 @@
             </div>
         </div>
     </div>
-    <!-- JS lọc -->
+    <!-- JS lọc & cập nhật tổng tiền -->
     <script>
+        // Lọc sản phẩm theo tên
         document.getElementById('productSearch').addEventListener('keyup', function() {
             const keyword = this.value.toLowerCase();
             document.querySelectorAll('#productTable tbody tr').forEach(row => {
-                const name = row.querySelector('td').textContent.toLowerCase();
+                const name = row.querySelectorAll('td')[1].textContent.toLowerCase();
                 row.style.display = name.includes(keyword) ? '' : 'none';
             });
         });
+
+        // Tính tổng tiền và cập nhật các trường liên quan
+        function updateTotal() {
+            let total = 0;
+            document.querySelectorAll('.item-price').forEach(item => {
+                total += parseFloat(item.getAttribute('data-price'));
+            });
+            document.getElementById('totalAmount').value = total;
+
+            // Khuyến mãi
+            let discount = 0;
+            let discountCode = document.getElementById('discountCode').value;
+            if (discountCode.trim().toUpperCase() === 'hp10') {
+                discount = 50000;
+            }
+            document.getElementById('discountApplied').value = discount;
+            let finalAmount = total - discount;
+            document.getElementById('finalAmount').value = finalAmount;
+
+            // Tiền khách đưa & tiền trả lại
+            let customerPaid = parseFloat(document.getElementById('customerPaid').value) || 0;
+            let changeAmount = customerPaid - finalAmount;
+            document.getElementById('changeAmount').value = changeAmount >= 0 ? changeAmount : 0;
+        }
+
+        document.addEventListener('DOMContentLoaded', updateTotal);
+        document.getElementById('discountCode').addEventListener('input', updateTotal);
+        document.getElementById('customerPaid').addEventListener('input', updateTotal);
     </script>
 @endsection

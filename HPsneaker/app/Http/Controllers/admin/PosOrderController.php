@@ -9,6 +9,7 @@ use App\Models\Order;
 use App\Models\Product;
 use App\Models\PosOrderItem;
 use App\Models\ProductVariant;
+use App\Models\Voucher;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -28,6 +29,7 @@ class PosOrderController extends Controller
     public function edit(Request $request)
     {
         //
+        $vouchers = Voucher::all();
         $productVariant = ProductVariant::all();
         $posOrderItem = PosOrderItem::where('pos_order_id', $request->id)->get();
         $posOrder = PosOrder::findOrFail($request->id);
@@ -38,7 +40,7 @@ class PosOrderController extends Controller
         }
 
         $products = $query->get();
-        return view('admin.pos.update', compact('productVariant', 'posOrderItem', 'posOrder'));
+        return view('admin.pos.update', compact('productVariant', 'posOrderItem', 'posOrder', 'vouchers'));
     }
     public function store(Request $request)
     {
@@ -52,6 +54,7 @@ class PosOrderController extends Controller
         $order->payment_method = 'Tiền mặt';
         $order->created_at = now();
         $order->status = 'Đang chờ';
+        $order->updated_at = now();
         $order->save();
         return redirect()->route('pos.index');
     }
@@ -77,6 +80,24 @@ class PosOrderController extends Controller
         }
         return redirect()->back();
     }
+    public function update(Request $request, $id)
+{
+        $order = PosOrder::findOrFail($id);
+        $order->total_amount = $request->total_amount;
+        $order->discount_applied = $request->discount_applied;
+        $order->payment_method = $request->payment_method;
+        $order->status = 'Đã thanh toán';
+        $order->updated_at = now();
+        $order->save();
+    return redirect()->route('pos.bill', $order->id);
+}
+    public function bill($id)
+{
+        $order = PosOrder::findOrFail($id);
+        $items = PosOrderItem::where('pos_order_id', $id)->get();
+    return view('admin.pos.bill', compact('order', 'items'));
+}
+
     public function deleteItem($id)
     {
         $item = PosOrderItem::findOrFail($id);
