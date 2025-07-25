@@ -29,7 +29,8 @@ class PosOrderController extends Controller
     {
         //
         $productVariant = ProductVariant::all();
-        $posOrderItem = PosOrderItem::where('pos_order_id', $request->id)->get();
+        $posOrderItem = PosOrderItem::where('pos_order_id',$request->id)->get();
+        $posOrder = PosOrder::findOrFail($request->id);
         $query = Product::query();
 
         if ($request->filled('product_id')) {
@@ -37,7 +38,7 @@ class PosOrderController extends Controller
         }
 
         $products = $query->get();
-        return view('admin.pos.update', compact('productVariant', 'posOrderItem'));
+        return view('admin.pos.update', compact('productVariant', 'posOrderItem', 'posOrder'));
     }
     public function store(Request $request)
     {
@@ -52,21 +53,17 @@ class PosOrderController extends Controller
         $order->created_at = now();
         $order->status = 'Đang chờ';
         $order->save();
-        $orderItems = OrderItem::where('order_id', 0)->get();
-        foreach ($orderItems as $item) {
-            $item->order_id = $order->id;
-            $item->save();
-        }
         return redirect()->route('pos.index');
     }
     public function addItem(Request $request, $id)
     {
+        $posOrder = PosOrder::findOrFail($request->input('pos_order'));
         PosOrderItem::create([
-            'pos_order_id' =>$request->id,
+            'pos_order_id' =>$posOrder->id,
             'product_variant_id' => $id,
             'quantity' => 1,
             'price' => ProductVariant::find($id)->price,
     ]);
-        return redirect()->back()->with('success', 'Sản phẩm đã được thêm vào giỏ hàng.');
+        return redirect()->back();
     }
 }
