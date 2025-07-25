@@ -13,4 +13,12 @@ class PosOrder extends Model
         'staff_id', 'customer_id', 'voucher_id', 'discount_applied',
         'total_amount', 'payment_method', 'note'
     ];
+    public function items()
+    {
+        return $this->hasMany(PosOrderItem::class, 'pos_order_id');
+    }
+    public function staff()
+    {
+        return $this->belongsTo(User::class, 'staff_id');
+    }
 }
