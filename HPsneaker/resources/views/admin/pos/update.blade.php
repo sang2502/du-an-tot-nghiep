@@ -23,6 +23,7 @@
                                 <tr>
                                     <th>STT</th>
                                     <th>Tên SP</th>
+                                    <th>Số lượng</th>
                                     <th>Thao Tác</th>
                                 </tr>
                             </thead>
@@ -31,8 +32,12 @@
                                     <tr>
                                         <td>{{ $pi->id }}</td>
                                         <td>{{ $pi->productVariant->product->name }}</td>
+                                        <td>{{ $pi->quantity }}</td>
                                         <td>
-                                            <button class="btn btn-primary btn-sm">-</button>
+                                            <form action="{{ route('pos.deleteItem', $pi->id) }}" method="GET" style="display:inline;">
+                                                @csrf
+                                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Bạn có chắc muốn xoá không?')">-</button>
+                                            </form>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -55,20 +60,12 @@
                                 <input type="date" class="form-control">
                             </div>
                             <div class="mb-3">
-                                <label class="form-label">Số Lượng SP:</label>
-                                <input type="number" class="form-control" min="1">
-                            </div>
-                            <div class="mb-3">
                                 <label class="form-label">Tổng Tiền:</label>
                                 <input type="number" class="form-control" readonly>
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">Khuyến Mại:</label>
                                 <input type="text" class="form-control" placeholder="Mã giảm giá...">
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Tiền Được Giảm:</label>
-                                <input type="number" class="form-control" readonly>
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">Tổng Thanh Toán:</label>
@@ -139,9 +136,9 @@
                                         <form action="{{ route('pos.add', $pv->id) }}" method="POST"
                                             style="display:inline;">
                                             @csrf
-                                            <input type="hidden" name="pos_order" value="{{ $posOrder->id }}">
+                                            <input type="hidden" name="pos_order_id" value="{{ $posOrder->id }}">
                                             <input type="hidden" name="product_variant_id" value="{{ $pv->id }}">
-                                            <button type="submit" class="btn btn-primary btn-sm">Chọn</button>
+                                            <button type="submit" class="btn btn-primary btn-sm">+</button>
                                         </form>
                                     </td>
                                 </tr>
