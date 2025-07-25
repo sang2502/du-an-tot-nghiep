@@ -10,4 +10,16 @@ class PosOrderItem extends Model
     use HasFactory;
     protected $table = 'pos_order_items';
     protected $fillable = ['pos_order_id', 'product_variant_id', 'quantity', 'price'];
+    public function posOrder()
+    {
+        return $this->belongsTo(PosOrder::class, 'pos_order_id');
+    }
+    public function productVariant()
+    {
+        return $this->belongsTo(ProductVariant::class, 'product_variant_id');
+    }
+    public function product()
+    {
+        return $this->hasOneThrough(Product::class, ProductVariant::class, 'id', 'id', 'product_variant_id', 'product_id');
+    }
 }

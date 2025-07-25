@@ -31,6 +31,8 @@ use App\Http\Controllers\admin\BrandController;
 use App\Http\Controllers\client\OrderHistoryController;
 use App\Http\Controllers\Admin\StasticController;
 use App\Http\Controllers\admin\DeliveryController;
+use App\Http\Controllers\admin\PosOrderController;
+use App\Http\Controllers\admin\PosController;
 
 // Route cho Admin
 Route::prefix('admin')->group(function () {
@@ -253,6 +255,11 @@ Route::post('/profile/orders/{id}/cancel', [OrderHistoryController::class, 'canc
 // Route cho thống kê
 Route::get('/admin/stastic', [StasticController::class, 'index']);
 
-Route::get('/giaodien', function () {
-    return view('giaodien');
-})->name('admin.giaodien');
+// Bán hàng tại quầy
+Route::prefix('pos')->group(function () {
+    Route::get('', [PosOrderController::class, 'index'])->name('pos.index');
+    Route::post('/store', [PosOrderController::class, 'store'])->name('pos.store');
+    Route::get('/edit/{id}', [PosOrderController::class, 'edit'])->name('pos.edit');
+    Route::post('/add/{id}', [PosOrderController::class, 'addItem'])->name('pos.add');
+    Route::post('/update/{id}', [PosOrderController::class, 'update'])->name('pos.update');
+});
