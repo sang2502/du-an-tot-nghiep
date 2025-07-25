@@ -25,11 +25,11 @@ class PosOrderController extends Controller
         $posOrder = PosOrder::all();
         return view('admin.pos.list', compact('posOrder'));
     }
-    public function edit(Request $request )
+    public function edit(Request $request)
     {
         //
         $productVariant = ProductVariant::all();
-        $posOrderItem = PosOrderItem::where('pos_order_id',$request->id)->get();
+        $posOrderItem = PosOrderItem::where('pos_order_id', $request->id)->get();
         $posOrder = PosOrder::findOrFail($request->id);
         $query = Product::query();
 
@@ -57,13 +57,30 @@ class PosOrderController extends Controller
     }
     public function addItem(Request $request, $id)
     {
-        $posOrder = PosOrder::findOrFail($request->input('pos_order'));
-        PosOrderItem::create([
-            'pos_order_id' =>$posOrder->id,
-            'product_variant_id' => $id,
-            'quantity' => 1,
-            'price' => ProductVariant::find($id)->price,
-    ]);
+        $posOrderId = $request->input('pos_order_id');
+        $productVariantId = $request->input('product_variant_id'); // hoặc từ URL nếu đang dùng route
+
+        $existingItem = PosOrderItem::where('pos_order_id', $posOrderId)
+            ->where('product_variant_id', $productVariantId)
+            ->first();
+
+        if ($existingItem) {
+            $existingItem->quantity += 1;
+            $existingItem->save();
+        } else {
+            PosOrderItem::create([
+                'pos_order_id' => $posOrderId,
+                'product_variant_id' => $productVariantId,
+                'quantity' => 1,
+                'price' => ProductVariant::find($productVariantId)->price,
+            ]);
+        }
+        return redirect()->back();
+    }
+    public function deleteItem($id)
+    {
+        $item = PosOrderItem::findOrFail($id);
+        $item->delete();
         return redirect()->back();
     }
 }
