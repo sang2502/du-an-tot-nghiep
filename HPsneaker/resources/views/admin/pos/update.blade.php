@@ -21,7 +21,7 @@
                         <table class="table table-hover align-middle mb-0">
                             <thead>
                                 <tr>
-                                    <th>Mã SP</th>
+                                    <th>STT</th>
                                     <th>Tên SP</th>
                                     <th>Thao Tác</th>
                                 </tr>
@@ -29,7 +29,7 @@
                             <tbody>
                                 @foreach ($posOrderItem as $pi)
                                     <tr>
-                                        <td>{{ $pi->productVariant->id }}</td>
+                                        <td>{{ $pi->id }}</td>
                                         <td>{{ $pi->productVariant->product->name }}</td>
                                         <td>
                                             <button class="btn btn-primary btn-sm">-</button>
@@ -139,6 +139,8 @@
                                         <form action="{{ route('pos.add', $pv->id) }}" method="POST"
                                             style="display:inline;">
                                             @csrf
+                                            <input type="hidden" name="pos_order" value="{{ $posOrder->id }}">
+                                            <input type="hidden" name="product_variant_id" value="{{ $pv->id }}">
                                             <button type="submit" class="btn btn-primary btn-sm">Chọn</button>
                                         </form>
                                     </td>
