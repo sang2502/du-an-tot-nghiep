@@ -33,6 +33,8 @@ use App\Http\Controllers\Admin\StasticController;
 use App\Http\Controllers\admin\DeliveryController;
 use App\Http\Controllers\admin\PosOrderController;
 use App\Http\Controllers\admin\PosController;
+use App\Http\Controllers\client\BlogController;
+
 
 // Route cho Admin
 Route::prefix('admin')->group(function () {
@@ -197,7 +199,6 @@ Route::prefix('/')->group(function () {
             Route::get('remove/{id}', [ShopCartController::class, 'removeCart'])->name('cart.remove');
             Route::post('/cart/update-quantity', [ShopCartController::class, 'updateQuantity'])->name('cart.updateQuantity');
     });
-
         //route contact ở phía client
     Route::prefix('contact')->group(function () {
             Route::get('', [ContactClientController::class, 'index'])->name('shop.contact.index');
@@ -225,7 +226,10 @@ Route::prefix('/')->group(function () {
         Route::get('vnpay-return', [CheckoutController::class, 'vnpayReturn'])->name('checkout.vnpay_return');
         Route::match(['get', 'post'], 'vnpay-ipn', [CheckoutController::class, 'vnpayIpn'])->name('checkout.vnpay_ipn');
     });
-
+    // Route cho blog
+    Route::prefix('blog')->group(function () {
+        Route::get('', [BlogController::class, 'index'])->name('blog.index');
+    });
 });
 // Route cho Login của người dùng
 Route::get('login', [UserAuthController::class, 'showLoginForm'])->name('user.login');
