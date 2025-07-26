@@ -23,6 +23,7 @@
     <link rel="stylesheet" href="{{ asset('css/owl.carousel.min.css') }}" type="text/css">
     <link rel="stylesheet" href="{{ asset('css/slicknav.min.css') }}" type="text/css">
     <link rel="stylesheet" href="{{ asset('css/style.css') }}" type="text/css">
+
     <style>
         body {
             font-family: 'Roboto', 'Montserrat', Arial, sans-serif;
@@ -487,6 +488,8 @@
     <script src="{{ asset('js/mixitup.min.js') }}"></script>
     <script src="{{ asset('js/owl.carousel.min.js') }}"></script>
     <script src="{{ asset('js/main.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             document.querySelectorAll('.product__details__option .optionimage').forEach(function(btn) {

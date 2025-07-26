@@ -10,8 +10,13 @@ class PosOrder extends Model
     use HasFactory;
     protected $table = 'pos_orders';
     protected $fillable = [
-        'staff_id', 'customer_id', 'voucher_id', 'discount_applied',
-        'total_amount', 'payment_method', 'note'
+        'staff_id',
+        'customer_id',
+        'voucher_id',
+        'discount_applied',
+        'total_amount',
+        'payment_method',
+        'note'
     ];
     public function items()
     {
@@ -19,6 +24,6 @@ class PosOrder extends Model
     }
     public function staff()
     {
-        return $this->belongsTo(User::class, 'staff_id');
+        return $this->belongsTo(User::class, 'staff_id')->where('role_id', 3);
     }
 }

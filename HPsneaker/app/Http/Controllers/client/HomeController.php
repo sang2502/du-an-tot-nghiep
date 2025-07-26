@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Brand;
 use Illuminate\Http\Request;
 use App\Models\Product;
+use Illuminate\Support\Facades\DB;
 use App\Models\Category;
 
 
@@ -21,12 +22,19 @@ class HomeController extends Controller
             ->orderByDesc('total_quantity')
             ->take(8)
             ->get();
-
+            // Rating
+        $topRatedProducts = DB::table('products')
+            ->join('reviews', 'products.id', '=', 'reviews.product_id')
+            ->select('products.*', DB::raw('AVG(reviews.rating) as avg_rating'))
+            ->groupBy('products.id')
+            ->orderByDesc('avg_rating')
+            ->take(3)
+            ->get();
         $categories = Category::all();
         $newProducts = Product::orderBy('created_at', 'desc')->take(3)->get();
         $brands = Brand::all();
 
-        return view('client.home.index', compact('bestSellers', 'categories', 'newProducts', 'brands'));
+        return view('client.home.index', compact('bestSellers', 'categories', 'newProducts', 'brands', 'topRatedProducts'));
     }
 
     public function search(Request $request)

@@ -23,7 +23,9 @@ class PosOrderController extends Controller
     public function index()
     {
         //
-        $posOrder = PosOrder::all();
+        $posOrder = PosOrder::where('status', 'Đang chờ')
+            ->get();
+
         return view('admin.pos.list', compact('posOrder'));
     }
     public function edit(Request $request)
@@ -47,7 +49,7 @@ class PosOrderController extends Controller
         //
         $order = new PosOrder();
         $order->id;
-        $order->staff_id = 1;
+        $order->staff_id = 3;
         $order->customer_id = 1;
         $order->total_amount = 0;
         $order->note = 'Hoá đơn tạm';
@@ -81,7 +83,7 @@ class PosOrderController extends Controller
         return redirect()->back();
     }
     public function update(Request $request, $id)
-{
+    {
         $order = PosOrder::findOrFail($id);
         $order->total_amount = $request->total_amount;
         $order->discount_applied = $request->discount_applied;
@@ -89,19 +91,38 @@ class PosOrderController extends Controller
         $order->status = 'Đã thanh toán';
         $order->updated_at = now();
         $order->save();
-    return redirect()->route('pos.bill', $order->id);
-}
-    public function bill($id)
-{
-        $order = PosOrder::findOrFail($id);
+        return redirect()->route('pos.bill', $order->id);
+    }
+    public function bill(Request $request, $id)
+    {
+        $order = PosOrder::with('items.productVariant.product')->findOrFail($id);
         $items = PosOrderItem::where('pos_order_id', $id)->get();
-    return view('admin.pos.bill', compact('order', 'items'));
-}
+        return view('admin.pos.bill', compact('order', 'items'));
+    }
 
     public function deleteItem($id)
     {
         $item = PosOrderItem::findOrFail($id);
         $item->delete();
         return redirect()->back();
+    }
+    public function history(Request $request)
+    {
+        $posOrder = PosOrder::where('status', 'Đã thanh toán')->get();
+
+        $order = null;
+        $items = collect();
+
+        if ($request->filled('id')) {
+            $order = PosOrder::with('items.productVariant.product')->find($request->id);
+
+            if (!$order) {
+                return back()->with('error', 'Không tìm thấy đơn hàng.');
+            }
+
+            $items = PosOrderItem::where('pos_order_id', $order->id)->get();
+        }
+
+        return view('admin.pos.history', compact('posOrder', 'order', 'items'));
     }
 }

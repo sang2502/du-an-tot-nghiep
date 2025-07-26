@@ -76,7 +76,7 @@
                         <a class="nav-link active" href="{{route('pos.index')}}">🛒 Bán Hàng</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{route('pos.index')}}">🧾 Hoá Đơn</a>
+                        <a class="nav-link" href="{{route('pos.history')}}">🧾 Hoá Đơn</a>
                     </li>
                     {{-- <li class="nav-item"><a class="nav-link" href="#">📂 Danh Mục</a></li>
                     <li class="nav-item"><a class="nav-link" href="#">👕 Sản Phẩm</a></li>
@@ -84,9 +84,9 @@
                     <li class="nav-item"><a class="nav-link" href="#">📊 Thống Kê</a></li>
                     <li class="nav-item"><a class="nav-link" href="#">👤 Nhân Viên</a></li>
                     <li class="nav-item"><a class="nav-link" href="#">🔒 Đổi Mật Khẩu</a></li> --}}
-                    <li class="nav-item">
+                    {{-- <li class="nav-item">
                         <a class="nav-link" href="#">🚪 Đăng Xuất</a>
-                    </li>
+                    </li> --}}
                 </ul>
                 <form method="POST" action="{{ route('pos.store') }}">
                     @csrf

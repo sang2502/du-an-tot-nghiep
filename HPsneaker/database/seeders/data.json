@@ -7,6 +7,10 @@
         {
             "id": 2,
             "name": "Customer"
+        },
+        {
+            "id": 3,
+            "name": "Staff"
         }
     ],
     "users": [
@@ -992,6 +996,296 @@
             "blog_tag_id": 2,
             "created_at": null,
             "updated_at": null
+        }
+    ],
+    "pos_orders": [
+        {
+            "id": 1,
+            "staff_id": 3,
+            "customer_id": 1,
+            "voucher_id": null,
+            "discount_applied": "0.00",
+            "total_amount": "1200000.00",
+            "payment_method": "Tiền mặt",
+            "status": "Đã thanh toán",
+            "note": "Hoá đơn tạm",
+            "created_at": "2025-07-26 02:21:10",
+            "updated_at": "2025-07-26 02:21:18"
+        },
+        {
+            "id": 2,
+            "staff_id": 3,
+            "customer_id": 1,
+            "voucher_id": null,
+            "discount_applied": "0.00",
+            "total_amount": "0.00",
+            "payment_method": "Tiền mặt",
+            "status": "Đang chờ",
+            "note": "Hoá đơn tạm",
+            "created_at": "2025-07-26 02:21:11",
+            "updated_at": "2025-07-26 02:21:11"
+        },
+        {
+            "id": 3,
+            "staff_id": 3,
+            "customer_id": 1,
+            "voucher_id": null,
+            "discount_applied": "0.00",
+            "total_amount": "0.00",
+            "payment_method": "Tiền mặt",
+            "status": "Đang chờ",
+            "note": "Hoá đơn tạm",
+            "created_at": "2025-07-26 02:21:12",
+            "updated_at": "2025-07-26 02:21:12"
+        },
+        {
+            "id": 4,
+            "staff_id": 3,
+            "customer_id": 1,
+            "voucher_id": null,
+            "discount_applied": "0.00",
+            "total_amount": "4000000.00",
+            "payment_method": "Tiền mặt",
+            "status": "Đã thanh toán",
+            "note": "Hoá đơn tạm",
+            "created_at": "2025-07-26 02:21:21",
+            "updated_at": "2025-07-26 02:21:30"
+        },
+        {
+            "id": 5,
+            "staff_id": 3,
+            "customer_id": 1,
+            "voucher_id": null,
+            "discount_applied": "0.00",
+            "total_amount": "0.00",
+            "payment_method": "Tiền mặt",
+            "status": "Đang chờ",
+            "note": "Hoá đơn tạm",
+            "created_at": "2025-07-26 02:21:21",
+            "updated_at": "2025-07-26 02:21:21"
+        }
+    ],
+    "pos_order_items": [
+        {
+            "id": 1,
+            "pos_order_id": 1,
+            "product_variant_id": 1,
+            "quantity": 1,
+            "price": "1200000.00",
+            "created_at": "2025-07-26 02:21:16",
+            "updated_at": "2025-07-26 02:21:16"
+        },
+        {
+            "id": 2,
+            "pos_order_id": 4,
+            "product_variant_id": 3,
+            "quantity": 1,
+            "price": "2000000.00",
+            "created_at": "2025-07-26 02:21:26",
+            "updated_at": "2025-07-26 02:21:26"
+        },
+        {
+            "id": 3,
+            "pos_order_id": 4,
+            "product_variant_id": 5,
+            "quantity": 1,
+            "price": "2000000.00",
+            "created_at": "2025-07-26 02:21:28",
+            "updated_at": "2025-07-26 02:21:28"
+        }
+    ],
+    "orders": [
+        {
+            "id": 1,
+            "user_id": 1,
+            "name": "Hiếu Nguyễn",
+            "email": "123@gmail.com",
+            "phone": "0393306700",
+            "total_amount": "2400000.00",
+            "voucher_id": null,
+            "discount_applied": "0.00",
+            "status": "processing",
+            "payment_method": "COD",
+            "shipping_address": "Bến Bính - Thủy Nguyên",
+            "created_at": "2025-07-26 09:22:33",
+            "updated_at": "2025-07-26 09:22:33",
+            "cancel_reason": null
+        },
+        {
+            "id": 2,
+            "user_id": 1,
+            "name": "Hiếu Nguyễn",
+            "email": "heudao20456@gmail.com",
+            "phone": "0393306700",
+            "total_amount": "15000000.00",
+            "voucher_id": null,
+            "discount_applied": "0.00",
+            "status": "processing",
+            "payment_method": "COD",
+            "shipping_address": "Bến Bính - Thủy Nguyên",
+            "created_at": "2025-07-26 09:28:50",
+            "updated_at": "2025-07-26 09:28:50",
+            "cancel_reason": null
+        },
+        {
+            "id": 3,
+            "user_id": 1,
+            "name": "Hiếu Nguyễn",
+            "email": "heudao20456@gmail.com",
+            "phone": "0393306700",
+            "total_amount": "9600000.00",
+            "voucher_id": null,
+            "discount_applied": "0.00",
+            "status": "processing",
+            "payment_method": "COD",
+            "shipping_address": "Bến Bính - Thủy Nguyên",
+            "created_at": "2025-07-26 09:30:21",
+            "updated_at": "2025-07-26 09:30:21",
+            "cancel_reason": null
+        },
+        {
+            "id": 4,
+            "user_id": 1,
+            "name": "Hiếu Nguyễn",
+            "email": "heudao20456@gmail.com",
+            "phone": "0393306700",
+            "total_amount": "7700000.00",
+            "voucher_id": null,
+            "discount_applied": "0.00",
+            "status": "processing",
+            "payment_method": "COD",
+            "shipping_address": "Bến Bính - Thủy Nguyên",
+            "created_at": "2025-07-26 09:31:28",
+            "updated_at": "2025-07-26 09:31:28",
+            "cancel_reason": null
+        }
+    ],
+    "order_items": [
+        {
+            "id": 1,
+            "order_id": 1,
+            "product_variant_id": 1,
+            "quantity": 2,
+            "price": "1200000.00",
+            "created_at": "2025-07-26 09:22:33",
+            "updated_at": "2025-07-26 09:22:33"
+        },
+        {
+            "id": 2,
+            "order_id": 2,
+            "product_variant_id": 1,
+            "quantity": 1,
+            "price": "1200000.00",
+            "created_at": "2025-07-26 09:28:50",
+            "updated_at": "2025-07-26 09:28:50"
+        },
+        {
+            "id": 3,
+            "order_id": 2,
+            "product_variant_id": 3,
+            "quantity": 2,
+            "price": "2000000.00",
+            "created_at": "2025-07-26 09:28:50",
+            "updated_at": "2025-07-26 09:28:50"
+        },
+        {
+            "id": 4,
+            "order_id": 2,
+            "product_variant_id": 17,
+            "quantity": 1,
+            "price": "4800000.00",
+            "created_at": "2025-07-26 09:28:50",
+            "updated_at": "2025-07-26 09:28:50"
+        },
+        {
+            "id": 5,
+            "order_id": 2,
+            "product_variant_id": 18,
+            "quantity": 1,
+            "price": "2500000.00",
+            "created_at": "2025-07-26 09:28:50",
+            "updated_at": "2025-07-26 09:28:50"
+        },
+        {
+            "id": 6,
+            "order_id": 2,
+            "product_variant_id": 19,
+            "quantity": 1,
+            "price": "2500000.00",
+            "created_at": "2025-07-26 09:28:50",
+            "updated_at": "2025-07-26 09:28:50"
+        },
+        {
+            "id": 7,
+            "order_id": 3,
+            "product_variant_id": 2,
+            "quantity": 1,
+            "price": "1200000.00",
+            "created_at": "2025-07-26 09:30:21",
+            "updated_at": "2025-07-26 09:30:21"
+        },
+        {
+            "id": 8,
+            "order_id": 3,
+            "product_variant_id": 12,
+            "quantity": 2,
+            "price": "1200000.00",
+            "created_at": "2025-07-26 09:30:21",
+            "updated_at": "2025-07-26 09:30:21"
+        },
+        {
+            "id": 9,
+            "order_id": 3,
+            "product_variant_id": 26,
+            "quantity": 1,
+            "price": "3000000.00",
+            "created_at": "2025-07-26 09:30:21",
+            "updated_at": "2025-07-26 09:30:21"
+        },
+        {
+            "id": 10,
+            "order_id": 3,
+            "product_variant_id": 24,
+            "quantity": 1,
+            "price": "3000000.00",
+            "created_at": "2025-07-26 09:30:21",
+            "updated_at": "2025-07-26 09:30:21"
+        },
+        {
+            "id": 11,
+            "order_id": 4,
+            "product_variant_id": 21,
+            "quantity": 1,
+            "price": "2500000.00",
+            "created_at": "2025-07-26 09:31:28",
+            "updated_at": "2025-07-26 09:31:28"
+        },
+        {
+            "id": 12,
+            "order_id": 4,
+            "product_variant_id": 11,
+            "quantity": 1,
+            "price": "1200000.00",
+            "created_at": "2025-07-26 09:31:28",
+            "updated_at": "2025-07-26 09:31:28"
+        },
+        {
+            "id": 13,
+            "order_id": 4,
+            "product_variant_id": 8,
+            "quantity": 1,
+            "price": "2000000.00",
+            "created_at": "2025-07-26 09:31:28",
+            "updated_at": "2025-07-26 09:31:28"
+        },
+        {
+            "id": 14,
+            "order_id": 4,
+            "product_variant_id": 5,
+            "quantity": 1,
+            "price": "2000000.00",
+            "created_at": "2025-07-26 09:31:28",
+            "updated_at": "2025-07-26 09:31:28"
         }
     ]
 }
