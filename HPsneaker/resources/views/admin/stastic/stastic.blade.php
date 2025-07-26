@@ -118,7 +118,7 @@
                     @foreach($bestSellerNames as $item)
                         @if(!empty($item['id']))
                             <li>
-                                <a href="{{ url('/product/' . $item['id']) }}" target="_blank" style="color:#3b82f6;text-decoration:underline;">
+                                <a href="{{ route('shop.product.show', ['name' => \Illuminate\Support\Str::slug($item['name']), 'id' => $item['id']]) }}" target="_blank" style="color:#3b82f6;text-decoration:underline;">
                                     {{ $item['name'] }}
                                 </a>
                             </li>

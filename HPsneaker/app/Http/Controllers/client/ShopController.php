@@ -19,14 +19,57 @@ use App\Models\Color;
 
 class ShopController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $products = Product::where('status', 1)->paginate(9);
         $categories = Category::all();
         $sizes = Size::all(); // Lấy tất cả kích cỡ
         $colors = Color::all(); // Lấy tất cả màu sắc
-        return view('client.shop.index', compact('products', 'categories', 'sizes', 'colors'));
-    }
+        //
+        $query = Product::query();
+
+        if ($request->filled('category')) {
+            $query->where('category_id', $request->category);
+        }
+        if ($request->filled('min_price')) {
+            $query->where('price', '>=', $request->min_price);
+        }
+        if ($request->filled('max_price')) {
+            $query->where('price', '<=', $request->max_price);
+        }
+        if ($request->filled('color')) {
+            $query->whereHas('variants', function($q) use ($request) {
+                $q->where('color_id', $request->color);
+            });
+        }
+        if ($request->filled('sizes')) {
+            $sizes = $request->sizes;
+            $query->whereHas('variants', function($q) use ($sizes) {
+                $q->whereIn('size_id', $sizes);
+            });
+        }
+        if ($request->filled('sort')) {
+            switch ($request->sort) {
+                case '1': $query->orderBy('price', 'asc'); break;
+                case '2': $query->orderBy('price', 'desc'); break;
+                case '3': $query->orderBy('created_at', 'desc'); break;
+                default: $query->orderBy('id', 'asc');
+            }
+        }
+
+        $products = $query->paginate(12);
+        return view('client.shop.index', array_merge(
+        compact('products', 'categories', 'sizes', 'colors'),
+            [
+                'categories' => Category::all(),
+                'colors' => Color::all(),
+                'sizes' => Size::all(),
+            ]
+        ));
+        }
+        
+
+
 
     public function search(Request $request)
     {
