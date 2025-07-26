@@ -5,7 +5,7 @@
             <div class="col-12">
                 <div class="card shadow-sm mt-4">
                     <div class="card-header bg-white border-bottom">
-                        <h3 class="mb-0" style="color: #a94442">Hoá Đơn Chờ</h3>
+                        <h3 class="mb-0" style="color: #a94442">Hoá Đơn Đã Thanh Toán</h3>
                     </div>
                     <div class="card-body p-0">
                         <div class="table-responsive">

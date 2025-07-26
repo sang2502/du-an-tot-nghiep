@@ -114,7 +114,12 @@
                             </tbody>
                         </table>
                     </div>
-                    <div class="mt-3">{{ $products->appends(request()->query())->links() }}</div>
+                    <div class="d-flex justify-content-center mt-4">
+                        <nav>
+                            {{ $products->appends(request()->query())->links('pagination::bootstrap-5') }}
+                        </nav>
+                    </div>
+
                 </div>
             </div>
         </div>

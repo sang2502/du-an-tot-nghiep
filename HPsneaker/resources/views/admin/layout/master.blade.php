@@ -168,12 +168,12 @@
                                 <span>Bình luận</span>
                             </a>
                         </li>
-                        <li class="sidebar-item">
+                        {{-- <li class="sidebar-item">
                             <a href="{{ url('admin/settings') }}" class='sidebar-link'>
                                 <i class="bi bi-gear-fill"></i>
                                 <span>Cài đặt</span>
                             </a>
-                        </li>
+                        </li> --}}
                         <li class="sidebar-item">
                             <a href="{{ route('admin.logout') }}"
                                 onclick="return confirm('Bạn có chắc muốn đăng xuất?')" class='sidebar-link'>
