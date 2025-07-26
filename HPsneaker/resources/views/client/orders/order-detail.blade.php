@@ -69,9 +69,11 @@
                 </table>
 
                 {{-- Nút huỷ đơn hàng --}}
-                @if($order->status !== 'cancelled')
-            <button id="btnCancelOrder" class="btn-cancel">Huỷ đơn hàng</button>
-            @endif
+                @if($order->status === 'processing')
+                    <button id="btnCancelOrder" class="btn-cancel">Huỷ đơn hàng</button>
+                @elseif($order->status !== 'cancelled')
+                    <div class="alert alert-info mt-3">Đơn hàng đang trong quá trình vận chuyển hoặc đã hoàn thành, không thể huỷ!</div>
+                @endif
             </div>
         </div>
     </div>
