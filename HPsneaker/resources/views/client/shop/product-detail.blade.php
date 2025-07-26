@@ -94,7 +94,6 @@
                                 </div>
                                 <span>Chọn size:</span>
                                 <div class="d-flex flex-wrap mt-2" id="sizeOptions">
-                                    {{-- Size sẽ được render bằng JS --}}
                                 </div>
                             </div>
                             <form action="{{ route('shop.product.addToCart', ['id' => $product->id]) }}" method="POST"
@@ -123,7 +122,6 @@
                                 </span>
                             </li>
                             <li><b>Vận chuyển:</b> <span>Giao nhanh 1-2 ngày. <samp>Miễn phí vận chuyển</samp></span></li>
-                            <li><b>Trọng lượng:</b> <span>{{ $product->weight ?? '1 kg' }}</span></li>
                             <li><b>Chia sẻ:</b>
                                 <div class="share mt-1">
                                     <a href="#"><i class="fa fa-facebook"></i></a>
