@@ -44,7 +44,7 @@ class ExportProductsJson extends Command
         'pos_order_items' => DB::table('pos_order_items')->get(),
         'orders' => DB::table('orders')->get(),
         'order_items' => DB::table('order_items')->get(),
-
+        'reviews' => DB::table('reviews')->get(),
     ];
 
     $path = database_path('seeders/data.json');

@@ -189,7 +189,8 @@
 
                                 @foreach ($topRatedProducts as $product)
                                     <div class="latest-product__item">
-                                        <a href="{{ route('shop.product.show', ['name' => Str::slug($product->name), 'id' => $product->id]) }}}}">
+                                        <a
+                                            href="{{ route('shop.product.show', ['name' => Str::slug($product->name), 'id' => $product->id]) }}}}">
                                             <div class="latest-product__item__pic">
                                                 <img src="{{ $product->thumbnail }}" alt="{{ $product->name }}">
                                             </div>
@@ -198,15 +199,10 @@
                                                 <span
                                                     style="font-weight: 300;">{{ number_format($product->price, 0, ',', '.') }}
                                                     đ</span>
-                                                <div class="product__rating mt-1">
-                                                    ⭐ {{ number_format($product->rating, 1) }}/5
-                                                </div>
                                             </div>
                                         </a>
                                     </div>
                                 @endforeach
-
-
                             </div>
                         </div>
                     </div>

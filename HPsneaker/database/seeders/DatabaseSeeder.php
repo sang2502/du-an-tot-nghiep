@@ -101,5 +101,8 @@ class DatabaseSeeder extends Seeder
         foreach ($dataArray['order_items'] as $data) {
             OrderItem::create($data);
     }
+        foreach ($dataArray['reviews'] as $data) {
+            DB::table('reviews')->insert($data);
+        }
 }
 }
