@@ -61,8 +61,7 @@
                                     @foreach ($colors as $color)
                                         <label for="color-{{ $color->id }}"
                                             class="color-label {{ request('color') == $color->id ? 'active' : '' }}"
-                                            style="background-color: {{ $color->hex_code }};"
-                                            title="{{ $color->name }}">
+                                            style="background-color: {{ $color->hex_code }};" title="{{ $color->name }}">
                                             <input type="radio" name="color" value="{{ $color->id }}"
                                                 id="color-{{ $color->id }}"
                                                 style="opacity:0;position:absolute;inset:0;margin:0;"
@@ -76,12 +75,10 @@
                                 <div class="sidebar__item__size">
                                     @foreach ($sizes as $size)
                                         <label for="size-{{ $size->id }}"
-
                                             class="size-label {{ is_array(request('sizes')) && in_array($size->id, request('sizes')) ? 'active' : '' }}">
                                             {{ $size->value }}
                                             <input type="checkbox" name="sizes[]" value="{{ $size->id }}"
-                                                id="size-{{ $size->id }}"
-                                                style="display:none"
+                                                id="size-{{ $size->id }}" style="display:none"
                                                 {{ is_array(request('sizes')) && in_array($size->id, request('sizes')) ? 'checked' : '' }}>
                                         </label>
                                     @endforeach
@@ -106,8 +103,8 @@
                                         <input type="hidden" name="min_price" value="{{ request('min_price') }}">
                                         <input type="hidden" name="max_price" value="{{ request('max_price') }}">
                                         <input type="hidden" name="color" value="{{ request('color') }}">
-                                        @if(is_array(request('sizes')))
-                                            @foreach(request('sizes') as $size)
+                                        @if (is_array(request('sizes')))
+                                            @foreach (request('sizes') as $size)
                                                 <input type="hidden" name="sizes[]" value="{{ $size }}">
                                             @endforeach
                                         @endif
@@ -174,25 +171,44 @@
 @endsection
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const minRange = document.getElementById('minRange');
-    const maxRange = document.getElementById('maxRange');
-    const minValue = document.getElementById('minValue');
-    const maxValue = document.getElementById('maxValue');
+    document.addEventListener('DOMContentLoaded', function() {
+        const minRange = document.getElementById('minRange');
+        const maxRange = document.getElementById('maxRange');
+        const minValue = document.getElementById('minValue');
+        const maxValue = document.getElementById('maxValue');
 
-    minRange.addEventListener('input', function() {
-        minValue.textContent = Number(minRange.value).toLocaleString();
-        if (Number(minRange.value) > Number(maxRange.value)) {
-            maxRange.value = minRange.value;
-            maxValue.textContent = Number(maxRange.value).toLocaleString();
-        }
-    });
-    maxRange.addEventListener('input', function() {
-        maxValue.textContent = Number(maxRange.value).toLocaleString();
-        if (Number(maxRange.value) < Number(minRange.value)) {
-            minRange.value = maxRange.value;
+        minRange.addEventListener('input', function() {
             minValue.textContent = Number(minRange.value).toLocaleString();
-        }
+            if (Number(minRange.value) > Number(maxRange.value)) {
+                maxRange.value = minRange.value;
+                maxValue.textContent = Number(maxRange.value).toLocaleString();
+            }
+        });
+        maxRange.addEventListener('input', function() {
+            maxValue.textContent = Number(maxRange.value).toLocaleString();
+            if (Number(maxRange.value) < Number(minRange.value)) {
+                minRange.value = maxRange.value;
+                minValue.textContent = Number(minRange.value).toLocaleString();
+            }
+        });
     });
-});
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Màu sắc (radio)
+        document.querySelectorAll('.color-label input[type="radio"]').forEach(input => {
+            input.addEventListener('change', function() {
+                document.querySelectorAll('.color-label').forEach(label => label.classList
+                    .remove('active'));
+                this.closest('.color-label').classList.add('active');
+            });
+        });
+
+        // Kích cỡ (checkbox)
+        document.querySelectorAll('.size-label input[type="checkbox"]').forEach(input => {
+            input.addEventListener('change', function() {
+                this.closest('.size-label').classList.toggle('active', this.checked);
+            });
+        });
+    });
 </script>

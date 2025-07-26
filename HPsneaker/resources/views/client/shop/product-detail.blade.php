@@ -308,7 +308,7 @@
 
         let selectedColor = null;
         let selectedSize = null;
-        let currentVariantStock = 0; // Biến lưu số lượng tồn kho của biến thể đang chọn
+        let currentVariantStock = 0;
 
         // Khi chọn màu
         document.querySelectorAll('.optioncolor').forEach(function(btn) {
