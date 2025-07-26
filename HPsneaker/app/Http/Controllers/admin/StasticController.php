@@ -7,16 +7,57 @@ use Illuminate\Support\Facades\DB;
 
 class StasticController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        // Tổng doanh thu từ đơn hàng hoàn tất
-        $revenue = DB::table('orders')
-            ->where('status', 'completed')
-            ->sum('total_amount');
+        // --- Bộ lọc ---
+        $orderFilter = $request->input('order_filter', 'all');
+        $revenueFilter = $request->input('revenue_filter', 'all');
+        $pendingFilter = $request->input('pending_filter', 'all');
+        $cancelledFilter = $request->input('cancelled_filter', 'all');
 
-        // Tổng số đơn
-        $Orders = DB::table('orders')
-            ->count();
+        // --- Tổng doanh thu ---
+        $revenueQuery = DB::table('orders')->where('status', 'completed');
+        if ($revenueFilter == 'week') {
+            $revenueQuery->whereBetween('created_at', [now()->startOfWeek(), now()->endOfWeek()]);
+        } elseif ($revenueFilter == 'month') {
+            $revenueQuery->whereMonth('created_at', now()->month)->whereYear('created_at', now()->year);
+        } elseif ($revenueFilter == 'year') {
+            $revenueQuery->whereYear('created_at', now()->year);
+        }
+        $revenue = $revenueQuery->sum('total_amount');
+
+        // --- Tổng số đơn ---
+        $ordersQuery = DB::table('orders');
+        if ($orderFilter == 'week') {
+            $ordersQuery->whereBetween('created_at', [now()->startOfWeek(), now()->endOfWeek()]);
+        } elseif ($orderFilter == 'month') {
+            $ordersQuery->whereMonth('created_at', now()->month)->whereYear('created_at', now()->year);
+        } elseif ($orderFilter == 'year') {
+            $ordersQuery->whereYear('created_at', now()->year);
+        }
+        $Orders = $ordersQuery->count();
+
+        // --- Đơn đang xử lý ---
+        $pendingQuery = DB::table('orders')->where('status', 'pending');
+        if ($pendingFilter == 'week') {
+            $pendingQuery->whereBetween('created_at', [now()->startOfWeek(), now()->endOfWeek()]);
+        } elseif ($pendingFilter == 'month') {
+            $pendingQuery->whereMonth('created_at', now()->month)->whereYear('created_at', now()->year);
+        } elseif ($pendingFilter == 'year') {
+            $pendingQuery->whereYear('created_at', now()->year);
+        }
+        $pendingOrders = $pendingQuery->count();
+
+        // --- Đơn bị huỷ ---
+        $cancelledQuery = DB::table('orders')->where('status', 'cancelled');
+        if ($cancelledFilter == 'week') {
+            $cancelledQuery->whereBetween('created_at', [now()->startOfWeek(), now()->endOfWeek()]);
+        } elseif ($cancelledFilter == 'month') {
+            $cancelledQuery->whereMonth('created_at', now()->month)->whereYear('created_at', now()->year);
+        } elseif ($cancelledFilter == 'year') {
+            $cancelledQuery->whereYear('created_at', now()->year);
+        }
+        $cancelledOrders = $cancelledQuery->count();
 
         // Số voucher đã dùng
         $voucherUsed = DB::table('orders')
@@ -49,13 +90,7 @@ class StasticController extends Controller
         // Số sản phẩm hết hàng
         $outOfStockProducts = DB::table('product_variants')->where('stock', 0)->count();
 
-        // Số đơn hàng đang xử lý
-        $pendingOrders = DB::table('orders')->where('status', 'pending')->count();
-
-        // Số đơn hàng bị huỷ
-        $cancelledOrders = DB::table('orders')->where('status', 'cancelled')->count();
-
-        // Danh sách 5 sản phẩm bán chạy nhất
+        // Lấy danh sách 5 sản phẩm bán chạy nhất
         $bestSellers = DB::table('order_items')
             ->select('product_variant_id', DB::raw('SUM(quantity) as total_sold'))
             ->groupBy('product_variant_id')
