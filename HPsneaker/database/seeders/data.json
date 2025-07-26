@@ -327,10 +327,10 @@
             "category_id": 1,
             "brand_id": 8,
             "price": "1490000.00",
-            "thumbnail": "uploads\/products\/1751641788_sp17.jpg",
+            "thumbnail": "uploads\/products\/s1.webp",
             "status": 1,
             "created_at": "2025-07-04 15:09:48",
-            "updated_at": "2025-07-04 15:09:59",
+            "updated_at": "2025-07-26 09:03:22",
             "deleted_at": null
         }
     ],
@@ -830,12 +830,12 @@
             "product_id": 15,
             "size_id": 1,
             "color_id": 1,
-            "stock": 10,
+            "stock": 0,
             "price": "2790000.00",
             "sku": "SP1511",
             "image": null,
             "created_at": "2025-07-04 15:04:41",
-            "updated_at": "2025-07-04 15:04:41"
+            "updated_at": "2025-07-26 08:36:43"
         },
         {
             "id": 35,
@@ -1063,6 +1063,19 @@
             "note": "Hoá đơn tạm",
             "created_at": "2025-07-26 02:21:21",
             "updated_at": "2025-07-26 02:21:21"
+        },
+        {
+            "id": 6,
+            "staff_id": 3,
+            "customer_id": 1,
+            "voucher_id": null,
+            "discount_applied": "0.00",
+            "total_amount": "0.00",
+            "payment_method": "Tiền mặt",
+            "status": "Đang chờ",
+            "note": "Hoá đơn tạm",
+            "created_at": "2025-07-26 08:31:57",
+            "updated_at": "2025-07-26 08:31:57"
         }
     ],
     "pos_order_items": [
@@ -1136,11 +1149,11 @@
             "total_amount": "9600000.00",
             "voucher_id": null,
             "discount_applied": "0.00",
-            "status": "processing",
+            "status": "cancelled",
             "payment_method": "COD",
             "shipping_address": "Bến Bính - Thủy Nguyên",
             "created_at": "2025-07-26 09:30:21",
-            "updated_at": "2025-07-26 09:30:21",
+            "updated_at": "2025-07-26 08:37:01",
             "cancel_reason": null
         },
         {
@@ -1152,11 +1165,11 @@
             "total_amount": "7700000.00",
             "voucher_id": null,
             "discount_applied": "0.00",
-            "status": "processing",
+            "status": "completed",
             "payment_method": "COD",
             "shipping_address": "Bến Bính - Thủy Nguyên",
             "created_at": "2025-07-26 09:31:28",
-            "updated_at": "2025-07-26 09:31:28",
+            "updated_at": "2025-07-26 08:34:12",
             "cancel_reason": null
         }
     ],
