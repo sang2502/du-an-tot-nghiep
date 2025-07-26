@@ -57,17 +57,27 @@
                                             {{ number_format($item->variant->price ?? 0, 0, ',', '.') }} đ
                                         </td>
                                         <td class="shoping__cart__quantity">
-                                            <div class="quantity d-inline-flex align-items-center">
-                                                <button type="button" class="btn btn-light btn-sm btn-qty"
-                                                    data-type="minus" data-id="{{ $item->id }}">-</button>
+                                            <div class="quantity d-flex align-items-center justify-content-center gap-1">
+                                                <button type="button"
+                                                    class="btn btn-outline-dark btn-sm rounded-circle px-2 py-1 btn-qty"
+                                                    data-type="minus" data-id="{{ $item->id }}">
+                                                    -
+                                                </button>
+
                                                 <input type="number" name="quantity" value="{{ $item->quantity }}"
-                                                    min="1" class="input-qty" data-id="{{ $item->id }}"
-                                                    data-stock="{{ $item->variant->stock }}"
-                                                    style="width:50px;text-align:center;">
-                                                <button type="button" class="btn btn-light btn-sm btn-qty" data-type="plus"
-                                                    data-id="{{ $item->id }}">+</button>
+                                                    min="1" max="{{ $item->variant->stock }}"
+                                                    class="form-control text-center input-qty"
+                                                    data-id="{{ $item->id }}" data-stock="{{ $item->variant->stock }}"
+                                                    style="width: 60px; height: 32px; padding: 0; font-weight: 500;">
+
+                                                <button type="button"
+                                                    class="btn btn-outline-dark btn-sm rounded-circle px-2 py-1 btn-qty"
+                                                    data-type="plus" data-id="{{ $item->id }}">
+                                                    +
+                                                </button>
                                             </div>
                                         </td>
+
                                         <td class="shoping__cart__total" data-id="{{ $item->id }}">
                                             {{ number_format(($item->variant->price ?? 0) * $item->quantity, 0, ',', '.') }}
                                             đ
@@ -75,9 +85,9 @@
                                         <td class="shoping__cart__item__close">
                                             <form action="{{ route('cart.remove', $item->id) }}" method="GET"
                                                 onsubmit="return confirm('Xóa sản phẩm này khỏi giỏ hàng?')">
-                                                @csrf
-                                                <button type="submit" class="btn btn-link text-danger p-0"><span
-                                                        class="icon_close"></span></button>
+                                                <button type="submit" class="btn btn-sm btn-outline-danger">
+                                                    <i class="fa fa-times"></i>
+                                                </button>
                                             </form>
                                         </td>
                                     </tr>
