@@ -60,7 +60,7 @@
                                         <td>{{ $user->id }}</td>
                                         <td>{{ $user->name}}</td>
                                         <td>{{ $user->email }}</td>
-                                        <td>{{ $user->role_id ? $user->role->name : ''  }}</td> 
+                                        <td>{{ $user->role_id ? $user->role->name ?? 'Chưa phân quyền' : ''  }}</td>
                                         <td>{{ $user->created_at ? $user->created_at->format('d/m/Y') : '' }}</td>
                                         <td class="text-center">
                                             <a href="{{ route('user.show', $user->id) }}"

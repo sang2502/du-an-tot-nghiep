@@ -28,8 +28,8 @@ public function index(Request $request)
     public function create()
     {
         // Hiển thị form tạo người dùng mới
-        $role = Role::all(); // Lấy danh sách vai trò nếu cần
-        return view('admin.user.create' , compact('role'));
+        $roles = Role::all();
+        return view('admin.user.create', compact('roles'));
     }
     public function store(Request $request)
     {
@@ -51,7 +51,7 @@ public function index(Request $request)
     public function edit($id)
     {
         $user = User::findOrFail($id);
-        $role = Role::all(); // Lấy danh sách vai trò nếu cần
+        $role = Role::all();
         return view('admin.user.update', compact('user', 'role'));
     }
 public function update(Request $request, string $id)
@@ -86,8 +86,7 @@ public function update(Request $request, string $id)
     }
     public function show($id)
     {
-        $role = Role::all();
         $user = User::findOrFail($id);
-        return view('admin.user.detail', compact('user' , 'role'));
+        return view('admin.user.detail', compact('user'));
     }
 }

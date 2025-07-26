@@ -58,9 +58,13 @@
             </select>
           </div>
           <div class="mb-3">
-            <label for="role_id" class="form-label">Vai trò</label>
-            <input type="number" class="form-control" id="role_id" name="role_id">
-          </div>
+                    <label class="form-label">Vai trò</label>
+                    <select class="form-select" name="role_id">
+                        <option value="1" @if($user->role_id == 1) selected @endif>Admin</option>
+                        <option value="2" @if($user->role_id == 2) selected @endif>Nhân viên</option>
+                        <option value="3" @if($user->role_id == 3) selected @endif>Người dùng</option>
+                    </select>
+                </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
