@@ -80,48 +80,116 @@
     </style>
     <div class="cards">
         <div class="card">
-            <h3><svg fill="#3b82f6" viewBox="0 0 24 24"><path d="M12 1v22M3 12h18"/></svg> Tổng doanh thu</h3>
+            <h3>
+                <!-- Doanh thu -->
+                <svg fill="#2563eb" viewBox="0 0 24 24"><path d="M12 3v18M3 12h18"/><circle cx="12" cy="12" r="10" stroke="#2563eb" stroke-width="2" fill="none"/></svg>
+                Tổng doanh thu
+            </h3>
+            <form method="GET" style="margin-bottom:8px;">
+                <select name="revenue_filter" onchange="this.form.submit()" style="padding:4px 10px;border-radius:6px;border:1px solid #e0e7ff;">
+                    <option value="all" {{ request('revenue_filter','all')=='all'?'selected':'' }}>Tất cả</option>
+                    <option value="week" {{ request('revenue_filter')=='week'?'selected':'' }}>Tuần này</option>
+                    <option value="month" {{ request('revenue_filter')=='month'?'selected':'' }}>Tháng này</option>
+                    <option value="year" {{ request('revenue_filter')=='year'?'selected':'' }}>Năm nay</option>
+                </select>
+            </form>
             <div class="value">{{ number_format($revenue) }} ₫</div>
         </div>
         <div class="card">
-            <h3><svg fill="#3b82f6" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/></svg> Tổng số đơn</h3>
+            <h3>
+                <!-- Tổng số đơn -->
+                <svg fill="#2563eb" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M8 8h8v8H8z"/></svg>
+                Tổng số đơn
+            </h3>
+            <form method="GET" style="margin-bottom:8px;">
+                <select name="order_filter" onchange="this.form.submit()" style="padding:4px 10px;border-radius:6px;border:1px solid #e0e7ff;">
+                    <option value="all" {{ request('order_filter','all')=='all'?'selected':'' }}>Tất cả</option>
+                    <option value="week" {{ request('order_filter')=='week'?'selected':'' }}>Tuần này</option>
+                    <option value="month" {{ request('order_filter')=='month'?'selected':'' }}>Tháng này</option>
+                    <option value="year" {{ request('order_filter')=='year'?'selected':'' }}>Năm nay</option>
+                </select>
+            </form>
             <div class="value">{{ number_format($Orders) }}</div>
         </div>
         <div class="card">
-            <h3><svg fill="#3b82f6" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M8 8h8v8H8z"/></svg> Voucher đã dùng</h3>
+            <h3>
+                <!-- Voucher đã dùng -->
+                <svg fill="#22c55e" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="7.5" cy="12" r="1.5"/><circle cx="16.5" cy="12" r="1.5"/><path d="M12 7v10"/></svg>
+                Voucher đã dùng
+            </h3>
             <div class="value">{{ $voucherUsed }}</div>
         </div>
         <div class="card">
-            <h3><svg fill="#3b82f6" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M6 20v-2a6 6 0 0 1 12 0v2"/></svg> Người dùng</h3>
+            <h3>
+                <!-- Người dùng -->
+                <svg fill="#2563eb" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M6 20v-2a6 6 0 0 1 12 0v2"/></svg>
+                Người dùng
+            </h3>
             <div class="value">{{ number_format($customers) }}</div>
         </div>
         <div class="card">
-            <h3><svg fill="#3b82f6" viewBox="0 0 24 24"><path d="M3 7h18M3 12h18M3 17h18"/></svg> Đang bán</h3>
+            <h3>
+                <!-- Đang bán -->
+                <svg fill="#3b82f6" viewBox="0 0 24 24"><path d="M5 12h14M12 5v14"/><circle cx="12" cy="12" r="10" stroke="#3b82f6" stroke-width="2" fill="none"/></svg>
+                Đang bán
+            </h3>
             <div class="value">{{ number_format($activeProducts) }}</div>
         </div>
         <div class="card">
-            <h3><svg fill="#dc3545" viewBox="0 0 24 24"><path d="M6 6h12v12H6z"/><path d="M9 9h6v6H9z"/></svg> Hết hàng</h3>
+            <h3>
+                <!-- Hết hàng -->
+                <svg fill="#dc3545" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="#dc3545" stroke-width="2" fill="none"/><line x1="8" y1="8" x2="16" y2="16" stroke="#dc3545" stroke-width="2"/><line x1="16" y1="8" x2="8" y2="16" stroke="#dc3545" stroke-width="2"/></svg>
+                Hết hàng
+            </h3>
             <div class="value">{{ number_format($outOfStockProducts) }}</div>
         </div>
         <div class="card">
-            <h3><svg fill="#f59e42" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg> Đơn đang xử lý</h3>
+            <h3>
+                <!-- Đơn đang xử lý -->
+                <svg fill="#f59e42" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="#f59e42" stroke-width="2" fill="none"/><path d="M12 8v4l3 3" stroke="#f59e42" stroke-width="2" fill="none"/></svg>
+                Đơn đang xử lý
+            </h3>
+            <form method="GET" style="margin-bottom:8px;">
+                <select name="pending_filter" onchange="this.form.submit()" style="padding:4px 10px;border-radius:6px;border:1px solid #e0e7ff;">
+                    <option value="all" {{ request('pending_filter','all')=='all'?'selected':'' }}>Tất cả</option>
+                    <option value="week" {{ request('pending_filter')=='week'?'selected':'' }}>Tuần này</option>
+                    <option value="month" {{ request('pending_filter')=='month'?'selected':'' }}>Tháng này</option>
+                    <option value="year" {{ request('pending_filter')=='year'?'selected':'' }}>Năm nay</option>
+                </select>
+            </form>
             <div class="value">{{ number_format($pendingOrders) }}</div>
         </div>
         <div class="card">
-            <h3><svg fill="#dc3545" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 8l8 8M16 8l-8 8"/></svg> Đơn bị huỷ</h3>
+            <h3>
+                <!-- Đơn bị huỷ -->
+                <svg fill="#dc3545" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="4" stroke="#dc3545" stroke-width="2" fill="none"/><line x1="8" y1="8" x2="16" y2="16" stroke="#dc3545" stroke-width="2"/><line x1="16" y1="8" x2="8" y2="16" stroke="#dc3545" stroke-width="2"/></svg>
+                Đơn bị huỷ
+            </h3>
+            <form method="GET" style="margin-bottom:8px;">
+                <select name="cancelled_filter" onchange="this.form.submit()" style="padding:4px 10px;border-radius:6px;border:1px solid #e0e7ff;">
+                    <option value="all" {{ request('cancelled_filter','all')=='all'?'selected':'' }}>Tất cả</option>
+                    <option value="week" {{ request('cancelled_filter')=='week'?'selected':'' }}>Tuần này</option>
+                    <option value="month" {{ request('cancelled_filter')=='month'?'selected':'' }}>Tháng này</option>
+                    <option value="year" {{ request('cancelled_filter')=='year'?'selected':'' }}>Năm nay</option>
+                </select>
+            </form>
             <div class="value">{{ number_format($cancelledOrders) }}</div>
         </div>
         <div class="card">
-            <h3><svg fill="#3b82f6" viewBox="0 0 24 24"><path d="M12 2l3 7h7l-5.5 4.5L18 21l-6-4-6 4 2.5-7.5L2 9h7z"/></svg> Top bán chạy nhất</h3>
+            <h3>
+                <!-- Top bán chạy nhất -->
+                <svg fill="#2563eb" viewBox="0 0 24 24"><path d="M12 2l3 7h7l-5.5 4.5L18 21l-6-4-6 4 2.5-7.5L2 9h7z"/></svg>
+                Top bán chạy nhất
+            </h3>
             <div class="value">
                 <ul>
                     @foreach($bestSellerNames as $item)
                         @if(!empty($item['id']))
                             <li>
-                                <a href="{{ route('shop.product.show', ['name' => \Illuminate\Support\Str::slug($item['name']), 'id' => $item['id']]) }}" target="_blank" style="color:#3b82f6;text-decoration:underline;">
+                                <a href="{{ route('shop.product.show', ['name' => \Illuminate\Support\Str::slug($item['name']), 'id' => $item['id']]) }}" target="_blank" style="color:#2563eb;text-decoration:underline;">
                                     {{ $item['name'] }}
-                                </a>
-                            </li>
+                            </a>
+                        </li>
                         @else
                             <li>{{ $item['name'] }}</li>
                         @endif
