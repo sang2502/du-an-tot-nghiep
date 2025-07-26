@@ -378,7 +378,7 @@
                         <li><a href="{{ url('/blog-details') }}">Chi tiết tin tức</a></li>
                     </ul>
                 </li> --}}
-                <li><a href="{{ url('/blog') }}">Tin tức</a></li>
+                <li><a href="{{ route('blog.index')  }}">Tin tức</a></li>
                 <li><a href="{{ route('shop.contact.index') }}">Liên hệ</a></li>
             </ul>
         </nav>
