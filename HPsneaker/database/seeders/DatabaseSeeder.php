@@ -19,6 +19,10 @@ use App\Models\BlogTag;
 use App\Models\BlogPost;
 use App\Models\BlogPostTag;
 use App\Models\Brand;
+use App\Models\Order;
+use App\Models\OrderItem;
+use App\Models\PosOrder;
+use App\Models\PosOrderItem;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -85,6 +89,17 @@ class DatabaseSeeder extends Seeder
         foreach ($dataArray['blog_post_tags'] as $data) {
             DB::table('blog_post_tags')->insert($data);
         }
-        
+        foreach ($dataArray['pos_orders'] as $data) {
+            DB::table('pos_orders')->insert($data);
+        }
+        foreach ($dataArray['pos_order_items'] as $data) {
+            DB::table('pos_order_items')->insert($data);
+        }
+        foreach ($dataArray['orders'] as $data) {
+            Order::create($data);
+        }
+        foreach ($dataArray['order_items'] as $data) {
+            OrderItem::create($data);
     }
+}
 }

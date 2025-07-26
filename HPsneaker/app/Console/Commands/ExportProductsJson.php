@@ -40,6 +40,10 @@ class ExportProductsJson extends Command
         'blog_tags' => DB::table('blog_tags')->get(),
         'blog_posts' => DB::table('blog_posts')->get(),
         'blog_post_tags' => DB::table('blog_post_tags')->get()
+        , 'pos_orders' => DB::table('pos_orders')->get(),
+        'pos_order_items' => DB::table('pos_order_items')->get(),
+        'orders' => DB::table('orders')->get(),
+        'order_items' => DB::table('order_items')->get(),
 
     ];
 

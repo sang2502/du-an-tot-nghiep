@@ -21,4 +21,10 @@ class ProductVariant extends Model
     public function color() {
         return $this->belongsTo(Color::class);
     }
+    public function orderItems() {
+        return $this->hasMany(OrderItem::class, 'product_variant_id');
+    }
+    public function posOrderItems() {
+        return $this->hasMany(PosOrderItem::class, 'product_variant_id');
+    }
 }

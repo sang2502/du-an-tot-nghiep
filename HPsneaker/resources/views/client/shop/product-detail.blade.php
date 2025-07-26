@@ -1,5 +1,16 @@
 @extends('client.layout.master')
 @section('main')
+    @if (session('success'))
+        <div class="alert alert-success alert-dismissible fade show shadow-sm rounded-pill px-4 py-3 text-center"
+            style="position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 9999; max-width: 300px;"
+            role="alert">
+            <strong><i class="bi bi-check-circle-fill me-1"></i></strong> {{ session('success') }}
+            <button type="button" class="btn btn-sm btn-light border ms-2" style="position: absolute; top: 5px; right: 10px;"
+                data-bs-dismiss="alert" aria-label="Đóng">
+                ✖
+            </button>
+        </div>
+    @endif
 
     <!-- Breadcrumb Section Begin -->
     <section class="breadcrumb-section set-bg" data-setbg="{{ asset('img/br2.jpg') }}">
@@ -150,48 +161,55 @@
                             <div class="product__details__tab__desc">
                                 <h5>Nhận xét của bạn</h5>
                                 {{-- dùng từ đây --}}
-                                        @if(session('user'))
-                                            <div class="row">
-                                                {{-- bình luận --}}
-                                                <div class="col-md-12">
-                                                    @if(session('user'))
-                                                    <form id="starRatingForm" method="POST">
+                                @if (session('user'))
+                                    <div class="row">
+                                        {{-- bình luận --}}
+                                        <div class="col-md-12">
+                                            @if (session('user'))
+                                                <form id="starRatingForm" method="POST">
                                                     @csrf
                                                     <div class="form-group mb-2">
                                                         <div id="interactiveRating" style="font-size: 24px;">
                                                             @for ($i = 1; $i <= 5; $i++)
-                                                                <i class="fa fa-star-o star" data-value="{{ $i }}"></i>
+                                                                <i class="fa fa-star-o star"
+                                                                    data-value="{{ $i }}"></i>
                                                             @endfor
                                                         </div>
                                                     </div>
-                                                    <input type="hidden" name="rating" id="ratingInput" value="{{ $existingRating ?? '' }}">
+                                                    <input type="hidden" name="rating" id="ratingInput"
+                                                        value="{{ $existingRating ?? '' }}">
                                                 </form>
-
-                                        @else
-                                        <p>Vui lòng <a href="{{ route('user.login') }}">đăng nhập</a> để đánh giá.</p>
-                                        @endif
-                                        @if(session('success'))
-                                        <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                                            {{ session('success') }}
-                                            <button type="button" class="close" data-dismiss="alert" aria-label="Đóng">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
+                                            @else
+                                                <p>Vui lòng <a href="{{ route('user.login') }}">đăng nhập</a> để đánh giá.
+                                                </p>
+                                            @endif
+                                            @if (session('success'))
+                                                <div class="alert alert-warning alert-dismissible fade show"
+                                                    role="alert">
+                                                    {{ session('success') }}
+                                                    <button type="button" class="close" data-dismiss="alert"
+                                                        aria-label="Đóng">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                            @endif
+                                            <form action="{{ route('product.comment.store', $product->id) }}"
+                                                method="POST" class="mb-4">
+                                                @csrf
+                                                <div class="form-group">
+                                                    <label for="cmt">Bình luận</label>
+                                                    <textarea class="form-control" name="cmt" rows="3" required></textarea>
+                                                </div>
+                                                <button type="submit" class="primary-btn mr-2"
+                                                    style="background-color: rgb(121, 121, 250)">Gửi bình luận</button>
+                                            </form>
                                         </div>
-                                    @endif
-                                    <form action="{{ route('product.comment.store', $product->id) }}" method="POST" class="mb-4">
-                                        @csrf
-                                        <div class="form-group">
-                                            <label for="cmt">Bình luận</label>
-                                            <textarea class="form-control" name="cmt" rows="3" required></textarea>
-                                        </div>
-                                        <button type="submit" class="primary-btn mr-2" style="background-color: rgb(121, 121, 250)">Gửi bình luận</button>
-                                    </form>
-                                </div>
-                            </div>
-                            @else
-                                <p>Vui lòng <a href="{{ route('user.login') }}">đăng nhập</a> để bình luận hoặc đánh giá.</p>
-                            @endif
-                            {{-- đến hết đây --}}
+                                    </div>
+                                @else
+                                    <p>Vui lòng <a href="{{ route('user.login') }}">đăng nhập</a> để bình luận hoặc đánh
+                                        giá.</p>
+                                @endif
+                                {{-- đến hết đây --}}
                                 {{-- Hiển thị danh sách bình luận --}}
                                 @if ($comments && $comments->count())
                                     @foreach ($comments as $comment)
@@ -243,11 +261,11 @@
                             <div class="product__item__pic mb-2">
                                 <img src="{{ asset($item->thumbnail) }}" alt="{{ $item->name }}"
                                     class="img-fluid rounded" style="height:180px;object-fit:cover;width:100%;">
-                                <ul class="product__item__pic__hover">
+                                {{-- <ul class="product__item__pic__hover">
                                     <li><a href="#"><i class="fa fa-heart"></i></a></li>
                                     <li><a href="#"><i class="fa fa-retweet"></i></a></li>
                                     <li><a href="#"><i class="fa fa-shopping-cart"></i></a></li>
-                                </ul>
+                                </ul> --}}
                             </div>
                             <div class="product__item__text flex-grow-1 d-flex flex-column justify-content-between">
                                 <h6 class="mb-2">

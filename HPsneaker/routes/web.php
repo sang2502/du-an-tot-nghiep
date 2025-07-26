@@ -264,4 +264,5 @@ Route::prefix('pos')->group(function () {
     Route::put('/update/{id}', [PosOrderController::class, 'update'])->name('pos.update');
     Route::get('/delete/{id}', [PosOrderController::class, 'deleteItem'])->name('pos.deleteItem');
     Route::get('/pos/bill/{id}', [PosOrderController::class, 'bill'])->name('pos.bill');
+    Route::get('/history', [PosOrderController::class, 'history'])->name('pos.history');
 });
