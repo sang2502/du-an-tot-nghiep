@@ -1287,5 +1287,43 @@
             "created_at": "2025-07-26 09:31:28",
             "updated_at": "2025-07-26 09:31:28"
         }
+    ],
+    "reviews": [
+        {
+            "id": 1,
+            "user_id": 1,
+            "product_id": 1,
+            "rating": 4,
+            "cmt": null,
+            "created_at": "2025-07-26 07:46:06",
+            "updated_at": "2025-07-26 07:46:06"
+        },
+        {
+            "id": 2,
+            "user_id": 1,
+            "product_id": 9,
+            "rating": 5,
+            "cmt": null,
+            "created_at": "2025-07-26 07:52:48",
+            "updated_at": "2025-07-26 07:52:48"
+        },
+        {
+            "id": 3,
+            "user_id": 1,
+            "product_id": 2,
+            "rating": 5,
+            "cmt": null,
+            "created_at": "2025-07-26 07:53:02",
+            "updated_at": "2025-07-26 07:53:02"
+        },
+        {
+            "id": 4,
+            "user_id": 1,
+            "product_id": 8,
+            "rating": 5,
+            "cmt": null,
+            "created_at": "2025-07-26 07:53:11",
+            "updated_at": "2025-07-26 07:53:11"
+        }
     ]
 }

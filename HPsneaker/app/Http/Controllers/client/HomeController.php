@@ -22,13 +22,11 @@ class HomeController extends Controller
             ->orderByDesc('total_quantity')
             ->take(8)
             ->get();
-            // Rating
-        $topRatedProducts = DB::table('products')
-            ->join('reviews', 'products.id', '=', 'reviews.product_id')
-            ->select('products.*', DB::raw('AVG(reviews.rating) as avg_rating'))
-            ->groupBy('products.id')
-            ->orderByDesc('avg_rating')
-            ->take(3)
+        // Rating
+        $topRatedProducts = Product::withCount('reviews')
+            ->withAvg('reviews', 'rating')
+            ->orderByDesc('reviews_avg_rating')
+            ->limit(3)
             ->get();
         $categories = Category::all();
         $newProducts = Product::orderBy('created_at', 'desc')->take(3)->get();
