@@ -149,9 +149,12 @@
                         @endforelse
                     </div>
                     {{-- Phân trang nếu có --}}
-                    <div class="d-flex justify-content-center mt-4">
-                        {{ $products->links('pagination::bootstrap-5') }}
+                    <div class="text-center mt-4">
+                        <nav>
+                            {{ $products->links('pagination::bootstrap-5') }}
+                        </nav>
                     </div>
+
 
                 </div>
             </div>
