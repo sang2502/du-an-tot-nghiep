@@ -25,6 +25,19 @@ class VoucherController extends Controller
 
     public function store(Request $request)
     {
+        $request->validate([
+            'code' => 'required|string|max:255|unique:vouchers,code',
+            'description' => 'nullable|string|max:255',
+            'discount_type' => 'required|in:percentage,fixed',
+            'discount_value' => 'required|numeric|min:0',
+            'max_discount' => 'nullable|numeric|min:0',
+            'min_order_value' => 'nullable|numeric|min:0',
+            'usage_limit' => 'nullable|integer|min:1',
+            'valid_from' => 'required|date',
+            'valid_to' => 'required|date|after_or_equal:valid_from',
+        ], [
+            'valid_to.after_or_equal' => 'Ngày kết thúc phải sau hoặc bằng ngày bắt đầu!',
+        ]);
         Voucher::create([
                 'code' => $request->code,
                 'description' => $request->description,
@@ -33,7 +46,7 @@ class VoucherController extends Controller
                 'max_discount' => $request->max_discount,
                 'min_order_value' => $request->min_order_value,
                 'usage_limit' => $request->usage_limit,
-                'used_count' => $request->used_count ?? 0, // Mặc định là 0 nếu không có giá trị
+                'used_count' => $request->used_count ?? 0,
                 'valid_from' => $request->valid_from,
                 'valid_to' => $request->valid_to,
             ]);

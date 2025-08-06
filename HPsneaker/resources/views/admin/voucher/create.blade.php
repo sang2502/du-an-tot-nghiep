@@ -1,6 +1,15 @@
 <!-- Modal Thêm Mã Giảm Giá -->
 <div class="modal fade" id="addVoucherModal" tabindex="-1" aria-labelledby="addVoucherModalLabel" aria-hidden="true">
   <div class="modal-dialog">
+    @if ($errors->any())
+    <div class="alert alert-danger">
+        <ul class="mb-0">
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+    @endif
     <form action="{{ route('voucher.store') }}" method="POST">
       @csrf
       <div class="modal-content">
