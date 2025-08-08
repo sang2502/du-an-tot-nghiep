@@ -28,7 +28,7 @@ class VoucherController extends Controller
         $request->validate([
             'code' => 'required|string|max:255|unique:vouchers,code',
             'description' => 'nullable|string|max:255',
-            'discount_type' => 'required|in:percentage,fixed',
+            'discount_type' => 'required|in:percent,fixed',
             'discount_value' => 'required|numeric|min:0',
             'max_discount' => 'nullable|numeric|min:0',
             'min_order_value' => 'nullable|numeric|min:0',
