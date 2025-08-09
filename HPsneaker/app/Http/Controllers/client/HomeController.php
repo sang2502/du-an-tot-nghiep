@@ -17,6 +17,7 @@ class HomeController extends Controller
         $bestSellers = Product::select('products.*')
             ->join('product_variants', 'products.id', '=', 'product_variants.product_id')
             ->join('order_items', 'product_variants.id', '=', 'order_items.product_variant_id')
+            ->where('products.status', 1)
             ->selectRaw('SUM(order_items.quantity) as total_quantity')
             ->groupBy('products.id')
             ->orderByDesc('total_quantity')
