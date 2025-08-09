@@ -29,7 +29,7 @@ class CheckoutController extends Controller
         $cart = Cart::where('user_id', $userId)->first();
         $cartItems = $cart
             ? CartItem::with(['variant.product', 'variant.size', 'variant.color'])
-                ->where('cart_id', $cart->id)->get()
+            ->where('cart_id', $cart->id)->get()
             : collect();
         $cartTotal = $cartItems->sum(fn($item) => ($item->variant->price ?? 0) * $item->quantity);
 
@@ -79,6 +79,15 @@ class CheckoutController extends Controller
         $cartItems = CartItem::with(['variant'])->where('cart_id', $cart->id)->get();
         if ($cartItems->isEmpty()) return back()->with('error', 'Giỏ hàng rỗng!');
 
+        // Kiểm tra tồn kho
+        foreach ($cartItems as $item) {
+            if (!$item->variant) {
+                return back()->with('error', 'Sản phẩm không tồn tại hoặc đã bị xóa.');
+            }
+            if ($item->variant->stock < $item->quantity) {
+                return back()->with('error', "Sản phẩm {$item->variant->name} không đủ số lượng tồn kho.");
+            }
+        }
         // Lấy lại voucher từ session để tính chính xác
         $voucher = (object) session('voucher');
         $voucherId = $voucher->id ?? null;
@@ -122,6 +131,8 @@ class CheckoutController extends Controller
                     'quantity'           => $item->quantity,
                     'price'              => $item->variant->price ?? 0,
                 ]);
+                // Cập nhật tồn kho
+                $item->variant->decrement('stock', $item->quantity);
             }
             $cartItems->each->delete();
             $cart->delete();

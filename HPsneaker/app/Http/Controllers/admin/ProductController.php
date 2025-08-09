@@ -13,6 +13,7 @@ use App\Models\Color;
 use App\Models\Size;
 use App\Models\Brand;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 class ProductController extends Controller
 {
@@ -79,16 +80,24 @@ class ProductController extends Controller
             }
 
             // Thêm mới sản phẩm
+            $slug = Str::slug($request->name);
+            $originalSlug = $slug;
+            $counter = 1;
+
+            while (Product::where('slug', $slug)->exists()) {
+                $slug = $originalSlug . '-' . $counter++;
+            }
             $product = Product::create([
-                'name' => $request->name,
+                'name'        => $request->name,
                 'category_id' => $request->category_id,
-                'brand_id' => $request->brand_id,
-                'slug' => $request->slug,
-                'price' => $request->price,
+                'brand_id'    => $request->brand_id,
+                'slug'        => $slug,
+                'price'       => $request->price,
                 'description' => $request->description,
-                'status' => $request->status,
-                'thumbnail' => $imagePath,
+                'status'      => $request->status,
+                'thumbnail'   => $imagePath,
             ]);
+
             // Thêm vào bảng product_images
             if ($imagePath) {
                 ProductImage::create([
@@ -137,7 +146,7 @@ class ProductController extends Controller
         $brands = Brand::all();
         $sizes = Size::all();
         $colors = Color::all();
-        return view('admin.product.update', compact('product', 'categories','brands', 'sizes', 'colors'));
+        return view('admin.product.update', compact('product', 'categories', 'brands', 'sizes', 'colors'));
     }
 
     /**
@@ -164,12 +173,20 @@ class ProductController extends Controller
                     'url' => $imagePath,
                 ]);
             }
+            // Thêm sản phẩm
+            $slug = Str::slug($request->name);
+            $originalSlug = $slug;
+            $counter = 1;
 
+            while (Product::where('slug', $slug)->exists()) {
+                $slug = $originalSlug . '-' . $counter++;
+            }
+            // Cập nhật thông tin sản phẩm
             $product->update([
                 'name' => $request->name,
                 'category_id' => $request->category_id,
                 'brand_id' => $request->brand_id,
-                'slug' => $request->slug,
+                'slug' => $slug,
                 'price' => $request->price,
                 'description' => $request->description,
                 'status' => $request->status,
