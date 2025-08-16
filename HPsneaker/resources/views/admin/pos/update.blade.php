@@ -80,7 +80,7 @@
                                 <label class="form-label">Phương Thức TT:</label>
                                 <select class="form-select" name="payment_method">
                                     <option value="Tiền mặt">Tiền mặt</option>
-                                    <option value="Chuyển khoản">Chuyển khoản</option>
+                                    <option value="VNPAY">Chuyển khoản</option>
                                 </select>
                             </div>
                             <div class="mb-3">

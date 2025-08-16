@@ -53,7 +53,7 @@ class PosOrderController extends Controller
         $order->customer_id = 1;
         $order->total_amount = 0;
         $order->note = 'Hoá đơn tạm';
-        $order->payment_method = 'Tiền mặt';
+        $order->payment_method = 'null';
         $order->created_at = now();
         $order->status = 'Đang chờ';
         $order->updated_at = now();
@@ -88,11 +88,82 @@ class PosOrderController extends Controller
         $order->total_amount = $request->total_amount;
         $order->discount_applied = $request->discount_applied;
         $order->payment_method = $request->payment_method;
-        $order->status = 'Đã thanh toán';
         $order->updated_at = now();
-        $order->save();
-        return redirect()->route('pos.bill', $order->id);
+
+        if ($order->payment_method == 'Tiền mặt') {
+            $order->status = 'Đã thanh toán';
+            $order->save();
+            return redirect()->route('pos.bill', $order->id);
+        } elseif ($order->payment_method == 'VNPAY') {
+            $order->status = 'Chờ thanh toán'; // trạng thái tạm thời
+            $order->save();
+
+            // Tạo URL thanh toán VNPAY
+            $vnp_TmnCode = "2LKOA8F9";
+            $vnp_HashSecret = "E1S54MZI38X50YDEDIK6LDCSEFHHX49L";
+            $vnp_Url = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
+            $vnp_Returnurl = route('vnpay.return'); // route xử lý callback
+
+            $vnp_TxnRef = $order->id;
+            $vnp_OrderInfo = 'Thanh toán đơn hàng #' . $order->id;
+            $vnp_OrderType = 'billpayment';
+            $vnp_Amount = $request->total_amount * 100;
+            $vnp_Locale = 'vn';
+            $vnp_IpAddr = $_SERVER['REMOTE_ADDR'];
+
+            $inputData = [
+                "vnp_Version" => "2.1.0",
+                "vnp_TmnCode" => $vnp_TmnCode,
+                "vnp_Amount" => $vnp_Amount,
+                "vnp_Command" => "pay",
+                "vnp_CreateDate" => date('YmdHis'),
+                "vnp_CurrCode" => "VND",
+                "vnp_IpAddr" => $vnp_IpAddr,
+                "vnp_Locale" => $vnp_Locale,
+                "vnp_OrderInfo" => $vnp_OrderInfo,
+                "vnp_OrderType" => $vnp_OrderType,
+                "vnp_ReturnUrl" => $vnp_Returnurl,
+                "vnp_TxnRef" => $vnp_TxnRef,
+            ];
+
+            ksort($inputData);
+            $query = "";
+            $hashdata = "";
+            $i = 0;
+            foreach ($inputData as $key => $value) {
+                $hashdata .= ($i ? '&' : '') . urlencode($key) . "=" . urlencode($value);
+                $query .= urlencode($key) . "=" . urlencode($value) . '&';
+                $i++;
+            }
+
+            $vnpSecureHash = hash_hmac('sha512', $hashdata, $vnp_HashSecret);
+            $vnp_Url .= "?" . $query . 'vnp_SecureHash=' . $vnpSecureHash;
+
+            return redirect()->away($vnp_Url);
+        } else {
+            return redirect()->route('pos.bill', $order->id)->with('error', 'Vui lòng chọn phương thức thanh toán hợp lệ!');
+        }
     }
+
+    public function vnpayReturn(Request $request)
+    {
+        $vnp_ResponseCode = $request->get('vnp_ResponseCode');
+        $vnp_TxnRef = $request->get('vnp_TxnRef');
+
+        $order = PosOrder::find($vnp_TxnRef);
+
+        if ($vnp_ResponseCode == '00') {
+            $order->status = 'Đã thanh toán';
+        } else {
+            $order->status = 'Thanh toán thất bại';
+        }
+
+        $order->save();
+
+        return redirect()->route('pos.bill', $order->id)->with('message', 'Kết quả thanh toán: ' . $order->status);
+    }
+
+
     public function bill(Request $request, $id)
     {
         $order = PosOrder::with('items.productVariant.product')->findOrFail($id);
