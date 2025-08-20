@@ -93,7 +93,14 @@
                     <option value="year" {{ request('revenue_filter')=='year'?'selected':'' }}>Năm nay</option>
                 </select>
             </form>
-            <div class="value">{{ number_format($revenue) }} ₫</div>
+            <div class="value">{{ number_format($totalRevenue) }} ₫</div>
+            <div style="margin-top:12px;">
+                <span style="color:#3b82f6;font-weight:500;">Trực tuyến:</span>
+                <span style="font-weight:600;">{{ number_format($onlineRevenue) }} ₫</span>
+                <br>
+                <span style="color:#f59e42;font-weight:500;">Tại quầy:</span>
+                <span style="font-weight:600;">{{ number_format($posRevenue) }} ₫</span>
+            </div>
         </div>
         <div class="card">
             <h3>
@@ -175,6 +182,40 @@
             </form>
             <div class="value">{{ number_format($cancelledOrders) }}</div>
         </div>
+            <!-- Số lượng hóa đơn chờ tại quầy -->
+    <div class="card">
+        <h3>
+            <svg fill="#f59e42" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M8 8h8v8H8z"/></svg>
+            Hóa đơn chờ tại quầy
+        </h3>
+        <form method="GET" style="margin-bottom:8px;">
+            <select name="pos_pending_filter" onchange="this.form.submit()" style="padding:4px 10px;border-radius:6px;border:1px solid #e0e7ff;">
+                <option value="all" {{ request('pos_pending_filter','all')=='all'?'selected':'' }}>Tất cả</option>
+                <option value="week" {{ request('pos_pending_filter')=='week'?'selected':'' }}>Tuần này</option>
+                <option value="month" {{ request('pos_pending_filter')=='month'?'selected':'' }}>Tháng này</option>
+                <option value="year" {{ request('pos_pending_filter')=='year'?'selected':'' }}>Năm nay</option>
+            </select>
+        </form>
+        <div class="value">{{ number_format($posPendingCount) }}</div>
+    </div>
+
+    <!-- Số lượng hóa đơn đã thanh toán tại quầy -->
+    <div class="card">
+        <h3>
+            <svg fill="#22c55e" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M8 8h8v8H8z"/></svg>
+            Hóa đơn đã thanh toán tại quầy
+        </h3>
+        <form method="GET" style="margin-bottom:8px;">
+            <select name="pos_paid_filter" onchange="this.form.submit()" style="padding:4px 10px;border-radius:6px;border:1px solid #e0e7ff;">
+                <option value="all" {{ request('pos_paid_filter','all')=='all'?'selected':'' }}>Tất cả</option>
+                <option value="week" {{ request('pos_paid_filter')=='week'?'selected':'' }}>Tuần này</option>
+                <option value="month" {{ request('pos_paid_filter')=='month'?'selected':'' }}>Tháng này</option>
+                <option value="year" {{ request('pos_paid_filter')=='year'?'selected':'' }}>Năm nay</option>
+            </select>
+        </form>
+        <div class="value">{{ number_format($posPaidCount) }}</div>
+    </div>
+
         <div class="card">
             <h3>
                 <!-- Top bán chạy nhất -->
@@ -199,9 +240,22 @@
         </div>
     </div>
 
+    <!-- Biểu đồ doanh thu trực tuyến hàng tháng -->
     <div class="card">
-        <h3><svg fill="#3b82f6" viewBox="0 0 24 24"><path d="M3 3v18h18"/><rect x="7" y="7" width="10" height="10"/></svg> Doanh thu hàng tháng</h3>
+        <h3>
+            <svg fill="#3b82f6" viewBox="0 0 24 24"><path d="M3 3v18h18"/><rect x="7" y="7" width="10" height="10"/></svg>
+            Doanh thu trực tuyến hàng tháng
+        </h3>
         <canvas id="monthlyChart" height="250"></canvas>
+    </div>
+
+    <!-- Biểu đồ doanh thu tại quầy theo tháng -->
+    <div class="card" style="grid-column: span 5;">
+        <h3>
+            <svg fill="#3b82f6" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M8 16v-4M12 16v-8M16 16v-2"/></svg>
+            Doanh thu tại quầy theo tháng
+        </h3>
+        <canvas id="posMonthlyChart" height="250"></canvas>
     </div>
 
     <div class="card" style="grid-column: span 5;">
@@ -238,6 +292,9 @@
         </div>
     </div>
 
+
+
+
     <script>
     const ctx = document.getElementById('monthlyChart').getContext('2d');
     new Chart(ctx, {
@@ -248,6 +305,35 @@
                 label: 'Doanh thu',
                 data: {!! json_encode($revenueData) !!},
                 backgroundColor: '#3b82f6',
+                borderRadius: 8,
+                barThickness: 28
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { display: false }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        stepSize: 1000000
+                    }
+                }
+            }
+        }
+    });
+
+    const posCtx = document.getElementById('posMonthlyChart').getContext('2d');
+    new Chart(posCtx, {
+        type: 'bar',
+        data: {
+            labels: {!! json_encode($posMonths) !!},
+            datasets: [{
+                label: 'Doanh thu tại quầy',
+                data: {!! json_encode($posRevenueData) !!},
+                backgroundColor: '#f59e42',
                 borderRadius: 8,
                 barThickness: 28
             }]

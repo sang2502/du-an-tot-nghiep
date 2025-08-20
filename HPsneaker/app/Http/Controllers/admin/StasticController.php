@@ -14,6 +14,8 @@ class StasticController extends Controller
         $revenueFilter = $request->input('revenue_filter', 'all');
         $pendingFilter = $request->input('pending_filter', 'all');
         $cancelledFilter = $request->input('cancelled_filter', 'all');
+        $posPendingFilter = $request->input('pos_pending_filter', 'all');
+        $posPaidFilter = $request->input('pos_paid_filter', 'all');
 
         // --- Tổng doanh thu ---
         $revenueQuery = DB::table('orders')->where('status', 'completed');
@@ -125,13 +127,79 @@ class StasticController extends Controller
             ->distinct()
             ->get();
 
+        // Số lượng hóa đơn chờ tại quầy
+        $posPendingQuery = DB::table('pos_orders')->where('status', 'Đang chờ');
+        if ($posPendingFilter == 'week') {
+            $posPendingQuery->whereBetween('created_at', [now()->startOfWeek(), now()->endOfWeek()]);
+        } elseif ($posPendingFilter == 'month') {
+            $posPendingQuery->whereMonth('created_at', now()->month)->whereYear('created_at', now()->year);
+        } elseif ($posPendingFilter == 'year') {
+            $posPendingQuery->whereYear('created_at', now()->year);
+        }
+        $posPendingCount = $posPendingQuery->count();
+
+        // Số lượng hóa đơn đã thanh toán tại quầy
+        $posPaidQuery = DB::table('pos_orders')->where('status', 'Đã thanh toán');
+        if ($posPaidFilter == 'week') {
+            $posPaidQuery->whereBetween('created_at', [now()->startOfWeek(), now()->endOfWeek()]);
+        } elseif ($posPaidFilter == 'month') {
+            $posPaidQuery->whereMonth('created_at', now()->month)->whereYear('created_at', now()->year);
+        } elseif ($posPaidFilter == 'year') {
+            $posPaidQuery->whereYear('created_at', now()->year);
+        }
+        $posPaidCount = $posPaidQuery->count();
+
+        // Biểu đồ doanh thu tại quầy theo tháng
+        $monthlyPosRevenue = DB::table('pos_orders')
+            ->selectRaw('MONTH(created_at) as month, SUM(total_amount) as revenue')
+            ->where('status', 'Đã thanh toán')
+            ->whereYear('created_at', now()->year)
+            ->groupBy(DB::raw('MONTH(created_at)'))
+            ->orderBy('month')
+            ->get();
+
+        $posMonths = ['Tháng 1','Tháng 2','Tháng 3','Tháng 4','Tháng 5','Tháng 6','Tháng 7','Tháng 8','Tháng 9','Tháng 10','Tháng 11','Tháng 12'];
+        $posRevenueData = array_fill(0, 12, 0);
+        foreach ($monthlyPosRevenue as $item) {
+            $posRevenueData[$item->month - 1] = $item->revenue;
+        }
+
+        // Doanh thu trực tuyến
+        $onlineRevenueQuery = DB::table('orders')->where('status', 'completed');
+        if ($revenueFilter == 'week') {
+            $onlineRevenueQuery->whereBetween('created_at', [now()->startOfWeek(), now()->endOfWeek()]);
+        } elseif ($revenueFilter == 'month') {
+            $onlineRevenueQuery->whereMonth('created_at', now()->month)->whereYear('created_at', now()->year);
+        } elseif ($revenueFilter == 'year') {
+            $onlineRevenueQuery->whereYear('created_at', now()->year);
+        }
+        $onlineRevenue = $onlineRevenueQuery->sum('total_amount');
+
+        // Doanh thu tại quầy
+        $posRevenueQuery = DB::table('pos_orders')->where('status', 'Đã thanh toán');
+        if ($revenueFilter == 'week') {
+            $posRevenueQuery->whereBetween('created_at', [now()->startOfWeek(), now()->endOfWeek()]);
+        } elseif ($revenueFilter == 'month') {
+            $posRevenueQuery->whereMonth('created_at', now()->month)->whereYear('created_at', now()->year);
+        } elseif ($revenueFilter == 'year') {
+            $posRevenueQuery->whereYear('created_at', now()->year);
+        }
+        $posRevenue = $posRevenueQuery->sum('total_amount');
+
+        // Tổng doanh thu
+        $totalRevenue = $onlineRevenue + $posRevenue;
+
         return view('admin.stastic.stastic', compact(
+            'totalRevenue', 'onlineRevenue', 'posRevenue', 'revenueFilter',
             'revenue', 'Orders', 'voucherUsed','customers',
             'months', 'revenueData',
             'activeProducts', 'outOfStockProducts',
             'pendingOrders', 'cancelledOrders',
             'bestSellerNames',
-            'outOfStockOrders'
+            'outOfStockOrders',
+            'posPendingCount', 'posPaidCount',
+            'posMonths', 'posRevenueData',
+            'posPendingFilter', 'posPaidFilter'
         ));
         
     }
