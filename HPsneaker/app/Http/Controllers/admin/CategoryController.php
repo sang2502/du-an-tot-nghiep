@@ -1,28 +1,30 @@
 <?php
 
 namespace App\Http\Controllers\admin;
+
 use App\Http\Controllers\Controller;
 
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class CategoryController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-public function index(Request $request)
-{
-    $query = Category::query();
+    public function index(Request $request)
+    {
+        $query = Category::query();
 
-    if ($request->filled('keyword')) {
-        $query->where('name', 'like', '%' . $request->keyword . '%');
+        if ($request->filled('keyword')) {
+            $query->where('name', 'like', '%' . $request->keyword . '%');
+        }
+
+        $categories = $query->orderBy('id', 'desc')->paginate(10);
+
+        return view('admin.category.index', compact('categories'));
     }
-
-    $categories = $query->orderBy('id', 'desc')->paginate(10);
-
-    return view('admin.category.index', compact('categories'));
-}
 
     /**
      * Show the form for creating a new resource.
@@ -41,7 +43,7 @@ public function index(Request $request)
         // Thêm mới danh mục
         Category::create([
             'name' => $request->name,
-            'slug' => $request->slug,
+            'slug' => Str::slug($request->name),
             'status' => $request->status,
         ]);
         return redirect()->route('category.index')->with('success', 'Thêm thành công');
