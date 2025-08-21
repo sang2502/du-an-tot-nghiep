@@ -53,12 +53,15 @@
                         <h4 class="mb-0 text-primary">📄 Thông Tin Hoá Đơn</h4>
                     </div>
                     <div class="card-body">
-                        <form method="POST" action="{{ route('pos.update', $posOrder->id) }}">
+                        @if(session('error'))
+                            <div class="alert alert-danger">{{ session('error') }}</div>
+                        @endif
+                        <form method="POST" action="{{ route('pos.update', $posOrder->id) }}" id="checkoutForm">
                             @csrf
                             @method('PUT')
                             <div class="mb-3">
                                 <label class="form-label">Ngày:</label>
-                                <input type="date" class="form-control" value="{{ date('Y-m-d') }}">
+                                <input type="date" class="form-control" value="{{ date('Y-m-d') }}" readonly>
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">Tổng Tiền:</label>
@@ -77,24 +80,22 @@
                                  <input type="number" class="form-control" id="finalAmount" name="final_amount" readonly>
                             </div>
                             <div class="mb-3">
-                                <label class="form-label">Phương Thức TT:</label>
-                                <select class="form-select" name="payment_method">
+                                <label>Phương thức thanh toán</label>
+                                <select class="form-select" id="payment_method" name="payment_method" required>
                                     <option value="Tiền mặt">Tiền mặt</option>
-                                    <option value="VNPAY">Chuyển khoản</option>
+                                    <option value="Chuyển khoản">Chuyển khoản</option>
                                 </select>
                             </div>
-                            <div class="mb-3">
-                                <label class="form-label">Tiền Khách Đưa:</label>
-                                <input type="number" class="form-control" id="customerPaid">
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Tiền Trả Lại:</label>
-                                <input type="number" class="form-control" id="changeAmount" readonly>
+                            <div class="mb-3" id="cashFields">
+                                <label>Tiền khách đưa</label>
+                                <input type="number" class="form-control" name="cash_given" id="customerPaid" min="0">
+                                <label class="mt-2">Tiền trả lại</label>
+                                <input type="number" class="form-control" name="change" id="changeAmount" min="0" readonly>
                             </div>
                             <div class="d-flex gap-2 mt-3">
                                 <button type="reset" class="btn btn-outline-danger flex-fill"><i class="bi bi-trash"></i>
                                     Xoá</button>
-                                <button type="submit" class="btn btn-success flex-fill"><i class="bi bi-cash-coin"></i>
+                                <button type="submit" class="btn btn-success flex-fill" id="btnCheckout"><i class="bi bi-cash-coin"></i>
                                     Thanh Toán</button>
                             </div>
                         </form>
@@ -169,6 +170,20 @@
             });
         });
 
+        // Ẩn/hiện trường tiền khách đưa và tiền trả lại theo phương thức thanh toán
+        function toggleCashFields() {
+            let cashFields = document.getElementById('cashFields');
+            let paymentMethod = document.getElementById('payment_method').value;
+            if (paymentMethod === 'Chuyển khoản') {
+                cashFields.style.display = 'none';
+            } else {
+                cashFields.style.display = '';
+            }
+        }
+        document.getElementById('payment_method').addEventListener('change', toggleCashFields);
+        // Gọi ngay khi trang vừa load để đúng trạng thái ban đầu
+        toggleCashFields();
+
         // Tính tổng tiền và cập nhật các trường liên quan
         function updateTotal() {
             let total = 0;
@@ -192,9 +207,17 @@
             let changeAmount = customerPaid - finalAmount;
             document.getElementById('changeAmount').value = changeAmount >= 0 ? changeAmount : 0;
         }
-
         document.addEventListener('DOMContentLoaded', updateTotal);
         document.getElementById('discountCode').addEventListener('input', updateTotal);
         document.getElementById('customerPaid').addEventListener('input', updateTotal);
+
+        // Kiểm tra hóa đơn có ít nhất 1 sản phẩm trước khi thanh toán
+        document.getElementById('checkoutForm').addEventListener('submit', function(e) {
+            let rowCount = document.querySelectorAll('#orderItemTable tbody tr').length;
+            if (rowCount < 1) {
+                e.preventDefault();
+                alert('Hóa đơn phải có ít nhất 1 sản phẩm mới được thanh toán!');
+            }
+        });
     </script>
 @endsection

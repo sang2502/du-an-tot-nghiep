@@ -40,7 +40,6 @@ class PosOrderController extends Controller
         if ($request->filled('product_id')) {
             $query->where('id', $request->product_id);
         }
-
         $products = $query->get();
         return view('admin.pos.update', compact('productVariant', 'posOrderItem', 'posOrder', 'vouchers'));
     }
