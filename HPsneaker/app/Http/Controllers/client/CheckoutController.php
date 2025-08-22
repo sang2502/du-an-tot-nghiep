@@ -297,7 +297,7 @@ class CheckoutController extends Controller
                     $cart->delete();
                 }
             } else {
-                $order->status = 'failed';
+                $order->status = 'Đã huỷ';
                 $order->save();
             }
             return redirect()->route('checkout.success', ['orderId' => $order->id]);
