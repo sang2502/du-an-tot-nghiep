@@ -10,7 +10,7 @@
             <div class="card-body">
                 <form action="{{ route('user.update', $user->id) }}" method="POST">
                     @csrf
-                    @method('POST') {{-- hoặc PUT nếu dùng Route::put --}}
+                    @method('POST') 
 
                     <div class="mb-3">
                         <label class="form-label">Tài Khoản</label>

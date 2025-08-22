@@ -19,24 +19,27 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @forelse ($posOrder as $order)
+                                    @foreach($posOrder as $order)
                                         <tr>
                                             <td>{{ $order->id }}</td>
-                                            <td>{{ $order->created_at->format('d/m/Y H:i') }}</td>
+                                            <td>{{ $order->created_at }}</td>
                                             <td>
-                                                <span class="badge bg-warning text-dark">{{ $order->status }}</span>
+                                                @if($order->status == 'Đã thanh toán')
+                                                    <span class="badge bg-success">Đã thanh toán</span>
+                                                @elseif($order->status == 'Chờ thanh toán')
+                                                    <span class="badge bg-warning text-dark">Chờ thanh toán</span>
+                                                @else
+                                                    <span class="badge bg-secondary">{{ $order->status }}</span>
+                                                @endif
                                             </td>
                                             <td>
                                                 <button type="button" class="btn btn-primary btn-sm"
                                                 onclick="window.location.href='{{ route('pos.bill', $order->id) }}'">
                                                     Chi tiết
                                                 </button>
+                                            </td>
                                         </tr>
-                                    @empty
-                                        <tr>
-                                            <td colspan="3" class="text-center text-muted">Không có hoá đơn nào.</td>
-                                        </tr>
-                                    @endforelse
+                                    @endforeach
                                 </tbody>
                             </table>
                         </div>

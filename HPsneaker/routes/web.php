@@ -269,6 +269,7 @@ Route::prefix('pos')->group(function () {
     Route::get('/delete/{id}', [PosOrderController::class, 'deleteItem'])->name('pos.deleteItem');
     Route::get('/pos/bill/{id}', [PosOrderController::class, 'bill'])->name('pos.bill');
     Route::get('/history', [PosOrderController::class, 'history'])->name('pos.history');
+    Route::post('/check-voucher', [PosOrderController::class, 'checkVoucher'])->name('pos.checkVoucher');
 
     // Thanh toán VNPAY
 Route::get('/vnpay-return', [PosOrderController::class, 'vnpayReturn'])->name('vnpay.return');
