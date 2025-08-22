@@ -73,10 +73,10 @@
                 <h2>HP Sneaker</h2>
                 <ul class="nav flex-column">
                     <li class="nav-item">
-                        <a class="nav-link active" href="{{route('pos.index')}}">🛒 Bán Hàng</a>
+                        <a class="nav-link active" href="{{route('pos.index')}}">🛒 Hoá đơn</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{route('pos.history')}}">🧾 Hoá Đơn</a>
+                        <a class="nav-link" href="{{route('pos.history')}}">🧾 Lịch sử hoá đơn</a>
                     </li>
                     {{-- <li class="nav-item"><a class="nav-link" href="#">📂 Danh Mục</a></li>
                     <li class="nav-item"><a class="nav-link" href="#">👕 Sản Phẩm</a></li>

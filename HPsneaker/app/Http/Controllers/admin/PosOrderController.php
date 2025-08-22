@@ -172,6 +172,8 @@ class PosOrderController extends Controller
             return redirect()->route('pos.bill', $order->id)->with('message', 'Thanh toán thành công!');
         } else {
             // KHÔNG đổi trạng thái, giữ là "Chờ thanh toán"
+            $order->status = 'Đã huỷ';
+            $order->save();
             return redirect()->route('pos.bill', $order->id)->with('error', 'Thanh toán thất bại hoặc bị huỷ!');
         }
     }
@@ -192,7 +194,7 @@ class PosOrderController extends Controller
 
     public function history(Request $request)
     {
-        $posOrder = PosOrder::whereIn('status', ['Đã thanh toán', 'Chờ thanh toán', 'Đang chờ'])->get();
+        $posOrder = PosOrder::whereIn('status', ['Đã thanh toán','Đã huỷ'])->get();
 
         $order = null;
         $items = collect();
@@ -215,7 +217,6 @@ class PosOrderController extends Controller
         $total = $request->input('total');
 
         $voucher = \App\Models\Voucher::where('code', $code)
-            ->where('id', 1)
             ->first();
 
         if (!$voucher) {

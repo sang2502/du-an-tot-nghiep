@@ -19,22 +19,20 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach($posOrder as $order)
+                                    @foreach ($posOrder as $order)
                                         <tr>
                                             <td>{{ $order->id }}</td>
                                             <td>{{ $order->created_at }}</td>
                                             <td>
-                                                @if($order->status == 'Đã thanh toán')
+                                                @if ($order->status == 'Đã thanh toán')
                                                     <span class="badge bg-success">Đã thanh toán</span>
-                                                @elseif($order->status == 'Chờ thanh toán')
-                                                    <span class="badge bg-warning text-dark">Chờ thanh toán</span>
                                                 @else
-                                                    <span class="badge bg-secondary">{{ $order->status }}</span>
+                                                    <span class="badge bg-danger">Đã huỷ</span>
                                                 @endif
                                             </td>
                                             <td>
                                                 <button type="button" class="btn btn-primary btn-sm"
-                                                onclick="window.location.href='{{ route('pos.bill', $order->id) }}'">
+                                                    onclick="window.location.href='{{ route('pos.bill', $order->id) }}'">
                                                     Chi tiết
                                                 </button>
                                             </td>
