@@ -75,7 +75,7 @@
                                     {{ $reviews->count() }} lượt đánh giá)</span>
                             </div>
                         </div>
-                        <div class="product__details__price mb-3 h4 text-danger">
+                        <div id="variantPrice" class="product__details__price mb-3 h4 text-danger">
                             {{ number_format($product->price ?? 0, 0, ',', '.') }} đ
                         </div>
                         @if ($product->variants && $product->variants->count())
@@ -310,6 +310,7 @@
         let selectedSize = null;
         let currentVariantStock = 0;
 
+
         // Khi chọn màu
         document.querySelectorAll('.optioncolor').forEach(function(btn) {
             btn.addEventListener('click', function() {
@@ -325,7 +326,12 @@
                 selectedSize = null;
                 document.getElementById('product_variant_id').value = '';
                 document.getElementById('addToCartBtn').disabled = true;
+
+                // Giữ nguyên giá gốc thay vì reset rỗng
+                document.getElementById('variantPrice').textContent =
+                    "{{ number_format($product->price ?? 0, 0, ',', '.') }} đ";
             });
+
         });
 
         // Render size theo màu đã chọn
@@ -337,7 +343,8 @@
                     id: v.size_id,
                     value: v.size_value,
                     variant_id: v.id,
-                    stock: v.stock // lấy stock từng biến thể
+                    stock: v.stock,
+                    price: v.price
                 }));
             // Loại bỏ size trùng
             const uniqueSizes = [];
@@ -352,6 +359,7 @@
                 if (va > vb) return 1;
                 return 0;
             });
+
             uniqueSizes.forEach(s => {
                 const label = document.createElement('label');
                 label.className = 'optionsize btn btn-outline-secondary me-2 mb-2';
@@ -369,7 +377,18 @@
                     document.getElementById('product_variant_id').value = this.getAttribute('data-variant');
                     document.getElementById('addToCartBtn').disabled = false;
                     currentVariantStock = parseInt(this.getAttribute('data-stock')) || 0;
+
+                    // Hiển thị giá tương ứng
+                    const variantId = Number(this.getAttribute('data-variant'));
+                    const selectedVariant = variants.find(v => Number(v.id) === variantId);
+
+                    if (selectedVariant && selectedVariant.price) {
+                        document.getElementById('variantPrice').textContent =
+                            Number(selectedVariant.price).toLocaleString('vi-VN') + ' đ';
+                    }
+
                 });
+
                 sizeOptions.appendChild(label);
             });
         }
