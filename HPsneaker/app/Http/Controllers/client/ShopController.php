@@ -94,6 +94,7 @@ class ShopController extends Controller
                 'size_id' => $v->size->id,
                 'size_value' => $v->size->value,
                 'stock' => $v->stock,
+                'price' => $v->price,
             ];
         })->values()->all();
         // Lấy các sản phẩm cùng danh mục, loại trừ sản phẩm hiện tại
