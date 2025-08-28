@@ -72,10 +72,16 @@ class OrderController extends Controller
      */
     public function show($id)
     {
-        // Lấy đơn hàng + danh sách sản phẩm trong đơn
-        $order = Order::with('orderItems')->findOrFail($id);
+        // Eager-load đầy đủ để render category/product/variant
+        $order = Order::with([
+            'orderItems.variant.product.category',
+            'user:id,name',          // nếu cần show tên user
+            'voucher:id,code',       // nếu cần
+        ])->findOrFail($id);
+
         return view('admin.order.show', compact('order'));
     }
+
     /**
      * Show the form for editing the specified resource.
      */
@@ -87,9 +93,20 @@ class OrderController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, order $contact)
+    public function updateStatus(Request $request, $id)
     {
-        //
+        // Validate: bắt buộc lý do nếu chọn hủy
+        $request->validate([
+            'status' => 'required|in:processing,delivering,completed,cancelled,paid',
+            'cancel_reason' => 'required_if:status,cancelled|nullable|string|max:255',
+        ]);
+
+        $order = Order::findOrFail($id);
+        $order->status = $request->input('status');
+        $order->cancel_reason = $request->input('cancel_reason'); // null cho trạng thái khác
+        $order->save();
+
+        return back()->with('success', 'Cập nhật trạng thái thành công!');
     }
 
     /**
@@ -108,15 +125,5 @@ class OrderController extends Controller
         return redirect()->route('order.index')->with('success', 'Đã xoá đơn hàng thành công.');
     }
 
-    public function updateStatus(Request $request, $id)
-    {
-        $order = Order::findOrFail($id);
-        $order->status = $request->input('status');
-        if($order->status == 'cancelled') {
-            $order->cancel_reason = $request->input('cancel_reason'); // lưu lý do hủy
-        }
-        $order->save();
-        return back()->with('success', 'Cập nhật trạng thái thành công!');
-    }
 }
 
