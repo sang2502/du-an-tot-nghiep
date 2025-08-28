@@ -14,7 +14,7 @@
                             <input
                                 type="text"
                                 name="keyword"
-                                placeholder="Nhập ID hóa đơn..."
+                                placeholder="Tìm kiếm ..."
                                 value="{{ request('keyword') }}"
                                 class="form-control"
                                 style="max-width: 180px; border-radius: 8px; border: 1px solid #e1e7f0; background: #f8faff;"
@@ -46,7 +46,9 @@
                             <thead class="table-white">
                             <tr>
                                 <th>ID</th>
-                                <th>Tổng tiền</th>
+                                <th>Họ tên</th>
+                                <th>Email</th>
+                                <th>Số điện thoại</th>
                                 <th>Voucher</th>
                                 <th>Giảm giá</th>
                                 <th>Trạng thái</th>
@@ -60,9 +62,17 @@
                             @foreach($orders as $item)
                                 <tr>
                                     <td>{{ $item->id }}</td>
-                                    <td>{{ number_format($item->total_amount, 0, ',', '.') }}₫</td>
+
+                                    {{-- Thêm 3 cột mới --}}
+                                    <td>{{ $item->name }}</td>
+                                    <td>{{ $item->email }}</td>
+                                    <td>{{ $item->phone }}</td>
+
+                                    {{-- Giữ nguyên Voucher & Giảm giá --}}
                                     <td>{{ $item->voucher_id ?? 'Không áp dụng' }}</td>
                                     <td>{{ number_format($item->discount_applied, 0, ',', '.') }}₫</td>
+
+                                    {{-- Trạng thái (giữ style như cũ) --}}
                                     <td>
                                         @php
                                             $badgeClass = match($item->status) {
@@ -84,7 +94,9 @@
                                         @endphp
                                         <span class="{{ $badgeClass }}">{{ $statusText }}</span>
                                     </td>
-                                    <td>{{ ucfirst($item->payment_method) }}</td>
+
+                                    {{-- Thanh toán / Địa chỉ / Ngày tạo / Hành động --}}
+                                    <td>{{ strtoupper($item->payment_method) }}</td>
                                     <td>{{ $item->shipping_address }}</td>
                                     <td>{{ $item->created_at }}</td>
                                     <td class="text-center">
@@ -99,6 +111,7 @@
                                         </a>
                                     </td>
                                 </tr>
+
                             @endforeach
                             </tbody>
                         </table>

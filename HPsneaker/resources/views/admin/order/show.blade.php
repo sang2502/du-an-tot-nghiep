@@ -32,15 +32,24 @@
                                     <form action="{{ route('order.updateStatus', $order->id) }}" method="POST" class="d-inline-block">
                                         @csrf
                                         @method('PUT')
-                                        <select name="status" class="form-select form-select-sm" style="min-width:140px; display: inline-block;" onchange="this.form.submit()">
+
+                                        <select name="status"
+                                                class="form-select form-select-sm order-status-dropdown"
+                                                style="min-width:160px; display:inline-block;">
                                             <option value="processing" {{ $order->status == 'processing' ? 'selected' : '' }}>Đang xử lý</option>
                                             <option value="delivering" {{ $order->status == 'delivering' ? 'selected' : '' }}>Đang giao</option>
-                                            <option value="completed" {{ $order->status == 'completed' ? 'selected' : '' }}>Hoàn tất</option>
-                                            <option value="cancelled" {{ $order->status == 'cancelled' ? 'selected' : '' }}>Đã hủy</option>
-                                            <option value="paid" {{ $order->status == 'paid' ? 'selected' : '' }}>Đã thanh toán</option>
+                                            <option value="completed"  {{ $order->status == 'completed'  ? 'selected' : '' }}>Hoàn tất</option>
+                                            <option value="cancelled"  {{ $order->status == 'cancelled'  ? 'selected' : '' }}>Đã hủy</option>
+                                            <option value="paid"       {{ $order->status == 'paid'       ? 'selected' : '' }}>Đã thanh toán</option>
                                         </select>
-                                        <input type="hidden" name="cancel_reason" class="cancel-reason-input">
+
+                                        {{-- input ẩn để nhét lý do hủy trước khi submit --}}
+                                        <input type="hidden" name="cancel_reason" class="cancel-reason-input" value="">
                                     </form>
+
+                                    @error('cancel_reason')
+                                    <div class="text-danger small mt-1">{{ $message }}</div>
+                                    @enderror
                                 </td>
                             </tr>
                         @if ($order->status == 'cancelled')
@@ -106,3 +115,63 @@
         </div>
     </div>
 @endsection
+<div class="modal fade" id="cancelReasonModal" tabindex="-1" aria-labelledby="cancelReasonLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form id="cancelReasonForm">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="cancelReasonLabel">Nhập lý do hủy đơn</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+                </div>
+                <div class="modal-body">
+                    <textarea class="form-control" id="cancelReasonInput" rows="3" placeholder="Vui lòng nhập lý do hủy..." required></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Quay lại</button>
+                    <button type="submit" class="btn btn-danger">Xác nhận hủy</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const dropdown = document.querySelector('.order-status-dropdown');
+        if (!dropdown) return;
+
+        let prevStatus = dropdown.value;
+        let currentForm = dropdown.closest('form');
+
+        dropdown.addEventListener('focus', function(){ prevStatus = this.value; });
+
+        dropdown.addEventListener('change', function () {
+            if (this.value === 'cancelled') {
+                // Mở modal để nhập lý do
+                const modalEl = document.getElementById('cancelReasonModal');
+                const bsModal = new bootstrap.Modal(modalEl);
+                bsModal.show();
+
+                // Nếu đóng modal mà không submit -> revert về trạng thái cũ
+                modalEl.addEventListener('hidden.bs.modal', function () {
+                    const reasonHidden = currentForm.querySelector('.cancel-reason-input');
+                    if (!reasonHidden.value) dropdown.value = prevStatus;
+                }, { once: true });
+            } else {
+                // Trạng thái khác hủy -> submit luôn
+                currentForm.submit();
+            }
+        });
+
+        // Submit modal: nhét lý do vào hidden input rồi submit form
+        document.getElementById('cancelReasonForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const reason = document.getElementById('cancelReasonInput').value.trim();
+            if (!reason) return;
+
+            currentForm.querySelector('.cancel-reason-input').value = reason;
+            bootstrap.Modal.getInstance(document.getElementById('cancelReasonModal')).hide();
+            currentForm.submit();
+        });
+    });
+</script>
+
