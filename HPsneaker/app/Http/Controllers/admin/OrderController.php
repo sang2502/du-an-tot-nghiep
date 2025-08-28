@@ -15,27 +15,39 @@ class OrderController extends Controller
     {
         $query = Order::query();
 
-        // Tìm kiếm theo ID (nếu nhập số)
+        // Tìm theo: name, email, phone, shipping_address
         if ($request->filled('keyword')) {
-            if (is_numeric($request->keyword)) {
-                $query->where('id', $request->keyword);
-            } else {
-                // Nếu muốn tìm kiếm theo tên hoặc email:
-                $query->whereHas('user', function($q) use ($request) {
-                    $q->where('name', 'like', '%'.$request->keyword.'%')
-                        ->orWhere('email', 'like', '%'.$request->keyword.'%');
-                });
-            }
+            $kw = trim($request->keyword);
+            $kwLike = '%'.$kw.'%';
+            $kwDigits = preg_replace('/\D+/', '', $kw); // để match SĐT có dấu/khoảng trắng
+
+            $query->where(function ($q) use ($kwLike, $kwDigits) {
+                $q->where('name', 'like', $kwLike)
+                    ->orWhere('email', 'like', $kwLike)
+                    ->orWhere('phone', 'like', $kwLike)
+                    ->orWhere('shipping_address', 'like', $kwLike);
+
+                // Match thêm biến thể SĐT (loại bỏ khoảng trắng, dấu chấm, gạch)
+                if ($kwDigits !== '') {
+                    $q->orWhereRaw(
+                        "REPLACE(REPLACE(REPLACE(phone,' ',''),'-',''),'.','') LIKE ?",
+                        ['%'.$kwDigits.'%']
+                    );
+                }
+            });
         }
 
-        // Lọc theo trạng thái
+        // Lọc trạng thái (nếu có)
         if ($request->filled('status')) {
             $query->where('status', $request->status);
         }
 
-        $orders = $query->latest()->paginate(20);
+        // Hiển thị theo ID tăng dần (1,2,3…)
+        $orders = $query->orderBy('id', 'asc')->paginate(20);
+
         return view('admin.order.index', compact('orders'));
     }
+
 
 
 
