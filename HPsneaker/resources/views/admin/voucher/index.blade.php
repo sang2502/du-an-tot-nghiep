@@ -1,7 +1,7 @@
 @extends('admin.layout.master')
 @section('main')
     {{-- Thông báo thành công --}}
-    @if(session('success'))
+    @if (session('success'))
         <div class="alert alert-success alert-dismissible fade show text-center"
             style="position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 9999; max-width: 250px;"
             role="alert">
@@ -49,13 +49,13 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($vouchers as $voucher)
+                                @foreach ($vouchers as $voucher)
                                     <tr>
                                         <td>{{ $voucher->id }}</td>
                                         <td>{{ $voucher->code }}</td>
                                         <td>{{ $voucher->description }}</td>
-                                        <td>{{ $voucher->valid_from }}</td>
-                                        <td>{{ $voucher->valid_to }}</td>
+                                        <td>{{ \Carbon\Carbon::parse($voucher->valid_from)->format('d/m/Y') }}</td>
+                                        <td>{{ \Carbon\Carbon::parse($voucher->valid_to)->format('d/m/Y') }}</td>
 
                                         <td class="text-center">
                                             <a href="{{ route('voucher.show', $voucher->id) }}"

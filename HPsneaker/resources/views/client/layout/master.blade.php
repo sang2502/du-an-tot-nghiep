@@ -23,22 +23,23 @@
     <link rel="stylesheet" href="{{ asset('css/owl.carousel.min.css') }}" type="text/css">
     <link rel="stylesheet" href="{{ asset('css/slicknav.min.css') }}" type="text/css">
     <link rel="stylesheet" href="{{ asset('css/style.css') }}" type="text/css">
+
     <style>
         body {
             font-family: 'Roboto', 'Montserrat', Arial, sans-serif;
             font-size: 16px;
             color: #111827;
-            background: #eff2f6;
-            padding-top: 100px;
+            background: #ffffff;
+            padding-top: 120px;
         }
 
         /* Nút (Buttons) */
         button,
         .btn,
         .site-btn {
-            background-color: #ffffff;
+            background-color: #6868f9;
             /* đen than */
-            color: #fff !important;
+            color: #ffffff;
             border: none;
             transition: background 0.2s, box-shadow 0.2s;
             box-shadow: 0 2px 8px rgba(17, 24, 39, 0.1);
@@ -190,7 +191,8 @@
             height: 700px;
             display: block;
             margin: 0 auto;
-            padding-top: 20px;
+            padding-top: 5px;
+            padding-bottom: 10px;
         }
 
         .input-group {
@@ -217,6 +219,7 @@
             width: 28px;
             border-radius: 5px 0 0 5px;
         }
+
         .input-group-text:hover {
             background-color: #ffffff;
             box-shadow: #ffffff 0px 0px 0px 1px inset;
@@ -233,6 +236,109 @@
             margin-bottom: 30px;
             padding-top: 40px;
         }
+
+        .optionimage.selected {
+            background-color: #e0e0e0;
+            /* màu nền khi được chọn */
+            border: 2px solid #007bff;
+            /* viền nổi bật */
+            color: #000;
+        }
+
+        .featured__item {
+            box-sizing: border-box;
+            border: 1px solid transparent;
+            transition: border-color 0.3s ease;
+
+        }
+
+        .featured__item:hover {
+            border-color: black;
+        }
+
+        .product__item {
+            box-sizing: border-box;
+            border: 1px solid transparent;
+            transition: border-color 0.3s ease;
+
+        }
+
+        .product__item:hover {
+            border-color: black;
+        }
+
+        .optionsize.active,
+        .optionsize.btn-success,
+        .optioncolor.active,
+        .optioncolor.btn-success {
+            background-color: #000000 !important;
+            color: #fff !important;
+            border-color: #000000 !important;
+        }
+        .sidebar__item__color label[style*="outline"] {
+            box-shadow: 0 0 0 2px #2563eb;
+        }
+        .sidebar__item__size label[style*="2px solid #2563eb"] {
+            box-shadow: 0 0 0 2px #2563eb;
+        }
+        .color-label {
+    width: 30px;
+    height: 30px;
+    display: inline-block;
+    border-radius: 50%;
+    margin-right: 7px;
+    cursor: pointer;
+    position: relative;
+    border: 2px solid #eee;
+    transition: border 0.2s, box-shadow 0.2s;
+}
+.color-label.active,
+.color-label:hover {
+    border: 2.5px solid #2563eb;
+    box-shadow: 0 0 0 3px #e3f0fc;
+}
+
+.size-label {
+    display: inline-block;
+    padding: 7px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-right: 7px;
+    margin-bottom: 7px;
+    border: 1.5px solid #ccc;
+    background: #fff;
+    font-weight: 500;
+    transition: border 0.2s, background 0.2s, color 0.2s;
+}
+.size-label.active,
+.size-label:hover {
+    border: 2px solid #2563eb;
+    background: #e3f0fc;
+    color: #2563eb;
+}
+.sidebar__item__size {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+.size-label {
+    display: inline-block;
+    padding: 7px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    border: 1.5px solid #ccc;
+    background: #fff;
+    font-weight: 500;
+    transition: border 0.2s, background 0.2s, color 0.2s;
+    margin-bottom: 6px;
+}
+.size-label.active,
+.size-label:hover {
+    border: 2px solid #2563eb;
+    background: #e3f0fc;
+    color: #2563eb;
+}
     </style>
 
 </head>
@@ -256,15 +362,6 @@
             </ul>
         </div>
         <div class="humberger__menu__widget">
-            <div class="header__top__right__language">
-                <img src="{{ asset('img/language.png') }}" alt="">
-                <div>Tiếng Việt</div>
-                <span class="arrow_carrot-down"></span>
-                <ul>
-                    <li><a href="#">English</a></li>
-                    <li><a href="#">Tiếng Việt</a></li>
-                </ul>
-            </div>
             <div class="header__top__right__auth">
                 <a href="#"><i class="fa fa-user"></i> Đăng nhập</a>
             </div>
@@ -273,19 +370,20 @@
             <ul>
                 <li class="active"><a href="{{ url('/') }}">Trang chủ</a></li>
                 <li><a href="{{ url('/shop') }}">Cửa hàng</a></li>
-                <li><a href="#">Trang</a>
+                {{-- <li><a href="#">Trang</a>
                     <ul class="header__menu__dropdown">
                         <li><a href="{{ url('/shop-details') }}">Chi tiết sản phẩm</a></li>
                         <li><a href="{{ url('/shopping-cart') }}">Giỏ hàng</a></li>
                         <li><a href="{{ url('/checkout') }}">Thanh toán</a></li>
                         <li><a href="{{ url('/blog-details') }}">Chi tiết tin tức</a></li>
                     </ul>
-                </li>
-                <li><a href="{{ url('/blog') }}">Tin tức</a></li>
-                <li><a href="{{ route('shop.contact.index') }}"">Liên hệ</a></li>
+                </li> --}}
+                <li><a href="{{ route('blog.index')  }}">Tin tức</a></li>
+                <li><a href="{{ route('shop.contact.index') }}">Liên hệ</a></li>
             </ul>
         </nav>
-        <div id="mobile-menu-wrap"></div>
+        <div id=" mobile-menu-wrap">
+        </div>
         <div class="header__top__right__social">
             <a href="#"><i class="fa fa-facebook"></i></a>
             <a href="#"><i class="fa fa-twitter"></i></a>
@@ -310,7 +408,7 @@
                         <a href="{{ url('/') }}"><img src="{{ asset('img/logo3.png') }}" alt="Logo"></a>
                     </div>
                 </div>
-                <div class="col-lg-6 col-md-6">
+                <div class="col-lg-7 col-md-6">
                     <nav class="header__menu">
                         <ul>
                             <li><a href="{{ url('/') }}">Trang chủ</a></li>
@@ -328,21 +426,13 @@
                         </ul>
                     </nav>
                 </div>
-                {{-- Tìm kiếm --}}
-                <div class="col-lg-2 col-md-6">
-                    <form class="input-group" action="{{ route('product.search') }}" method="GET">
-                        <button type="submit" class="input-group-text"><i class="fa fa-search"
-                                style="color: #222"></i></button>
-                        <input type="text" name="keyword" class="form-control" placeholder="Tìm kiếm...">
-                    </form>
-                </div>
-
+                {{-- Giỏ hàng --}}
                 <div class="col-lg-1 col-md-6">
                     <div class="header__cart">
                         <ul>
                             <li><a href="{{ url('/shop/cart') }}"><i class="fa fa-shopping-bag"
                                         style="font-size: 20px;"></i>
-                                    <span>3</span></a>
+                                    <span></span></a>
                             </li>
                         </ul>
                     </div>
@@ -350,13 +440,13 @@
                 <div class="col-lg-1 col-md-6">
                     <div class="header__top__right__auth">
                         @if (session('user'))
-                            <span
-                                style="display: flex; align-items: center; justify-content: center;margin-top: 1px;">
+                            <span style="display: flex; align-items: center; justify-content: center;margin-top: 1px;">
                                 <a href="{{ route('user.profile.show') }}"
                                     style="margin: 0 8px 0 4px; color: #222; font-weight: 60; text-decoration: none; font-size: 16px;">
                                     {{ collect(explode(' ', session('user.name')))->last() }}
                                 </a>
-                                <a href="{{ route('user.logout') }}" style="margin-left: 10px; margin-bottom:20px; color: #435EBE;"
+                                <a href="{{ route('user.logout') }}"
+                                    style="margin-left: 10px; margin-bottom:20px; color: #435EBE;"
                                     onclick="return confirm('Bạn có chắc muốn đăng xuất?')">
                                     <i class="fa fa-sign-out"></i>
                                 </a>
@@ -462,6 +552,8 @@
     <script src="{{ asset('js/mixitup.min.js') }}"></script>
     <script src="{{ asset('js/owl.carousel.min.js') }}"></script>
     <script src="{{ asset('js/main.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             document.querySelectorAll('.product__details__option .optionimage').forEach(function(btn) {

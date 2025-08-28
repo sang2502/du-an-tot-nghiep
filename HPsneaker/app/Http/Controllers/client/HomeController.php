@@ -1,18 +1,39 @@
-<?php 
+<?php
+
 namespace App\Http\Controllers\client;
+
 use App\Http\Controllers\Controller;
+use App\Models\Brand;
 use Illuminate\Http\Request;
 use App\Models\Product;
+use Illuminate\Support\Facades\DB;
 use App\Models\Category;
+
 
 class HomeController extends Controller
 {
     public function index()
     {
-        $products = Product::where('status', 1)->get();
+        $bestSellers = Product::select('products.*')
+            ->join('product_variants', 'products.id', '=', 'product_variants.product_id')
+            ->join('order_items', 'product_variants.id', '=', 'order_items.product_variant_id')
+            ->where('products.status', 1)
+            ->selectRaw('SUM(order_items.quantity) as total_quantity')
+            ->groupBy('products.id')
+            ->orderByDesc('total_quantity')
+            ->take(8)
+            ->get();
+        // Rating
+        $topRatedProducts = Product::withCount('reviews')
+            ->withAvg('reviews', 'rating')
+            ->orderByDesc('reviews_avg_rating')
+            ->limit(3)
+            ->get();
         $categories = Category::all();
         $newProducts = Product::orderBy('created_at', 'desc')->take(3)->get();
-        return view('client.home.index', compact('products', 'categories', 'newProducts'));
+        $brands = Brand::all();
+
+        return view('client.home.index', compact('bestSellers', 'categories', 'newProducts', 'brands', 'topRatedProducts'));
     }
 
     public function search(Request $request)
@@ -21,7 +42,7 @@ class HomeController extends Controller
         if (empty($query)) {
             return redirect()->route('home.index');
         }
-        
+
         $products = Product::where('name', 'like', "%$query%")->get();
         return view('client.home.search', compact('products'));
     }

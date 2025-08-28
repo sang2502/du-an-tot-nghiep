@@ -22,8 +22,8 @@
                     <div class="mb-3">
                         <label class="form-label">Trạng thái</label>
                         <select class="form-select" name="status">
-                            <option value="1" @if($contact->status == 1) selected @endif>Đang xử lý</option>
-                            <option value="0" @if($contact->status == 0) selected @endif>Đã xử lý</option>
+                            <option value="1" @if($contact->status == 1) selected @endif>Đã gửi</option>
+                            <option value="0" @if($contact->status == 0) selected @endif>Đang xử lý</option>
                         </select>
                     </div>
                     <div class="d-flex justify-content-between">

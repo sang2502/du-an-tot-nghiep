@@ -23,12 +23,27 @@
                             <span class="text-muted">Ngày gửi:</span> {{ $feedback->created_at ? $feedback->created_at->format('d/m/Y') : '' }}
                         </div>
                         <div class="mb-3 w-100 text-center">
-                            @if($feedback->img)
-                                <img src="{{ asset('storage/' . $feedback->img) }}" alt="Ảnh từ khách hàng" class="img-fluid rounded shadow"
-                                style="max-height: 300px; object-fit: contain;">
+                            @if ($feedback->img)
+                            @php
+                                $ext = strtolower(pathinfo($feedback->img, PATHINFO_EXTENSION));
+                            @endphp
+
+                            @if (in_array($ext, ['jpg', 'jpeg', 'png', 'gif', 'webp']))
+                                <img src="{{ asset('storage/' . $feedback->img) }}" alt="Ảnh từ khách hàng"
+                                    class="img-fluid rounded shadow" style="max-height: 300px; object-fit: contain;">
+                            @elseif (in_array($ext, ['mp4', 'webm', 'mov', 'avi']))
+                                <video controls class="img-fluid rounded shadow" style="max-height: 300px; object-fit: contain;">
+                                    <source src="{{ asset('storage/' . $feedback->img) }}" type="video/{{ $ext }}">
+                                    Trình duyệt không hỗ trợ định dạng video này.
+                                </video>
                             @else
-                                <div class="text-muted">Không có ảnh</div>
+                                <a href="{{ asset('storage/' . $feedback->img) }}" target="_blank" class="btn btn-outline-primary">
+                                    Xem file đính kèm
+                                </a>
                             @endif
+                        @else
+                            <div class="text-muted">Không có ảnh/video</div>
+                        @endif
                 </div>
                         <div class="mb-3">
                             <strong class="text-muted">Mô tả:</strong>

@@ -1,7 +1,7 @@
 @extends('client.layout.master')
 @section('main')
     <!-- Hero Section Begin -->
-    {{-- <section class="hero">
+    <section class="hero">
         <div class="container">
             <div class="row">
                 <!-- Danh mục bên trái -->
@@ -21,9 +21,27 @@
                     </div>
                 </div>
                 <!-- Tìm kiếm và banner -->
+                <div class="col-lg-9">
+                    <div class="hero__search">
+                        <div class="hero__search__form">
+                            <form action="{{ route('product.search') }}" method="GET">
+                                <input type="text" placeholder="Tìm kiếm sản phẩm" name="keyword">
+                                <button type="submit" class="site-btn">Tìm kiếm</button>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="hero__search__phone">
+                        <div class="hero__search__phone__icon">
+                            <i class="fa fa-phone"></i>
+                        </div>
+                        <div class="hero__search__phone__text">
+                            <h5>8888.888</h5>
+                            <span>Hỗ trợ 24/7</span>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
-    </section> --}}
+    </section>
     <!-- Hero Section End -->
     {{-- Banner --}}
     <div class="row">
@@ -34,16 +52,15 @@
     <!-- Categories Section Begin -->
     <section class="categories">
         <div class="section-title">
-                        <h2>Thương hiệu</h2>
-                    </div>
+            <h2>Thương hiệu</h2>
+        </div>
         <div class="container">
             <div class="row">
                 <div class="categories__slider owl-carousel">
-                    @foreach ($categories as $i => $category)
+                    @foreach ($brands as $i => $brand)
                         <div class="col-lg-3">
-                            <div class="categories__item set-bg"
-                                data-setbg="{{ asset('img/categories/cat-' . $i . '.jpg') }}">
-                                <h5><a href="#">{{ $category->name }}</a></h5>
+                            <div class="categories__item set-bg" data-setbg="{{ asset($brand->logo) }}"
+                                style="width: 140px;">
                             </div>
                         </div>
                     @endforeach
@@ -59,21 +76,12 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="section-title">
-                        <h2>Sản phẩm nổi bật</h2>
+                        <h2>Sản phẩm bán chạy nhất</h2>
                     </div>
-                    {{-- <div class="featured__controls">
-                        <ul>
-                            <li class="active" data-filter="*">Tất cả</li>
-                            <li data-filter=".giay-the-thao">Giày thể thao</li>
-                            <li data-filter=".giay-chay-bo">Giày chạy bộ</li>
-                            <li data-filter=".phu-kien">Phụ kiện</li>
-                        </ul>
-                    </div> --}}
                 </div>
             </div>
             <div class="row featured__filter">
-                {{-- Product --}}
-                @foreach ($products as $i => $product)
+                @foreach ($bestSellers as $product)
                     <div class="col-lg-3 col-md-4 col-sm-6 mix giay-the-thao">
                         <div class="featured__item">
                             <a
@@ -83,15 +91,17 @@
                                 </div>
                             </a>
                             <div class="featured__item__text">
-                                <h6><a
-                                        href="{{ route('shop.product.show', ['name' => Str::slug($product->name), 'id' => $product->id]) }}}}">
-                                        {{ $product->name }}</a></h6>
-                                <h5>{{ $product->price }} đ</h5>
+                                <h6>
+                                    <a
+                                        href="{{ route('shop.product.show', ['name' => Str::slug($product->name), 'id' => $product->id]) }}">
+                                        {{ $product->name }}
+                                    </a>
+                                </h6>
+                                <h5>{{ number_format($product->price, 0, ',', '.') }} đ</h5>
                             </div>
                         </div>
                     </div>
                 @endforeach
-                {{-- @endforeach --}}
             </div>
         </div>
     </section>
@@ -118,7 +128,7 @@
 
     <!-- Latest Product Section Begin -->
     <section class="latest-product spad">
-        <div class="container">
+        <div class="container" style="font-weight: 500;">
             <div class="row">
                 {{-- Cột 1: Mới nhất --}}
                 <div class="col-lg-4 col-md-6">
@@ -133,8 +143,10 @@
                                             <img src="{{ $product->thumbnail }}" alt="">
                                         </div>
                                         <div class="latest-product__item__text">
-                                            <h6>{{ $product->name }}</h6>
-                                            <span>{{ number_format($product->price, 0, ',', '.') }} đ</span>
+                                            <h6 style="font-weight: 500;">{{ $product->name }}</h6>
+                                            <span
+                                                style="font-weight: 300;">{{ number_format($product->price, 0, ',', '.') }}
+                                                đ</span>
                                         </div>
                                     </a>
                                 @endforeach
@@ -149,15 +161,20 @@
                         <div class="latest-product__slider owl-carousel">
                             <div class="latest-prdouct__slider__item">
 
-                                <a href="#" class="latest-product__item">
-                                    <div class="latest-product__item__pic">
-                                        <img src="{{ $product->thumbnail }}" alt="">
-                                    </div>
-                                    <div class="latest-product__item__text">
-                                        <h6>{{ $product->name }}</h6>
-                                        <span>{{ number_format($product->price, 0, ',', '.') }} đ</span>
-                                    </div>
-                                </a>
+                                @foreach ($bestSellers->take(3) as $product)
+                                    <a href="{{ route('shop.product.show', ['name' => Str::slug($product->name), 'id' => $product->id]) }}}}"
+                                        class="latest-product__item">
+                                        <div class="latest-product__item__pic">
+                                            <img src="{{ $product->thumbnail }}" alt="">
+                                        </div>
+                                        <div class="latest-product__item__text">
+                                            <h6 style="font-weight: 500;">{{ $product->name }}</h6>
+                                            <span
+                                                style="font-weight: 300;">{{ number_format($product->price, 0, ',', '.') }}
+                                                đ</span>
+                                        </div>
+                                    </a>
+                                @endforeach
 
                             </div>
                         </div>
@@ -170,16 +187,22 @@
                         <div class="latest-product__slider owl-carousel">
                             <div class="latest-prdouct__slider__item">
 
-                                <a href="#" class="latest-product__item">
-                                    <div class="latest-product__item__pic">
-                                        <img src="{{ $product->thumbnail }}" alt="">
+                                @foreach ($topRatedProducts as $product)
+                                    <div class="latest-product__item">
+                                        <a
+                                            href="{{ route('shop.product.show', ['name' => Str::slug($product->name), 'id' => $product->id]) }}}}">
+                                            <div class="latest-product__item__pic">
+                                                <img src="{{ $product->thumbnail }}" alt="{{ $product->name }}">
+                                            </div>
+                                            <div class="latest-product__item__text">
+                                                <h6 style="font-weight: 500;">{{ $product->name }}</h6>
+                                                <span
+                                                    style="font-weight: 300;">{{ number_format($product->price, 0, ',', '.') }}
+                                                    đ</span>
+                                            </div>
+                                        </a>
                                     </div>
-                                    <div class="latest-product__item__text">
-                                        <h6>{{ $product->name }}</h6>
-                                        <span>{{ number_format($product->price, 0, ',', '.') }} đ</span>
-                                    </div>
-                                </a>
-
+                                @endforeach
                             </div>
                         </div>
                     </div>

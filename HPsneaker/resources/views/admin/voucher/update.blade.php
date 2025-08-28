@@ -8,10 +8,10 @@
                 <h4 class="mb-0 text-white">Sửa mã giảm giá</h4>
             </div>
             <div class="card-body">
-                <form action="{{ route('voucher.update', $voucher->id) }}" method="POST">
+                <form action="{{ route('voucher.update', $voucher->id) }}" method="post">
                     @csrf
-                    @method('POST') {{-- hoặc PUT nếu dùng Route::put --}}
-
+                    @method('post')
+                    <input type="text" name="id" value="{{ $voucher->id }}" hidden>
                     <div class="mb-3">
                         <label class="form-label">Mã giảm giá</label>
                         <input type="text" class="form-control" name="code" value="{{ $voucher->code }}" required>

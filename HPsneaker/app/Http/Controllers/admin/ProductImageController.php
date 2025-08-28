@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\admin;
+
 use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
@@ -17,7 +18,6 @@ class ProductImageController extends Controller
         $product = Product::findOrFail($id);
         $images = ProductImage::where('product_id', $id)->get();
         return view('admin.product.image', compact('product', 'images'));
-
     }
 
     /**
@@ -34,7 +34,7 @@ class ProductImageController extends Controller
 
         if ($request->hasFile('images')) {
             foreach ($request->file('images') as $image) {
-                $imageName = time() . '_' . uniqid() . '_' . $image->getClientOriginalName();
+                $imageName = uniqid() . '_' . $image->getClientOriginalName();
                 $image->move(public_path('uploads/products/'), $imageName);
                 $imagePath = 'uploads/products/' . $imageName;
 
@@ -45,7 +45,7 @@ class ProductImageController extends Controller
             }
         }
 
-        return redirect()->route('product.image.index',$request->product_id)->with('success', 'Thêm ảnh thành công');
+        return redirect()->route('product.image.index', $request->product_id)->with('success', 'Thêm ảnh thành công');
     }
 
     /**
@@ -53,7 +53,7 @@ class ProductImageController extends Controller
      */
 
 
-       public function destroy(string $id)
+    public function destroy(string $id)
     {
         //
         $image = ProductImage::findOrFail($id);

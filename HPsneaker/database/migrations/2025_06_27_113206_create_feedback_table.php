@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained('users');
             $table->string('name', 255);
             $table->string('mess', 255);
+            $table->boolean('status')->default(true);
             $table->string('img')->nullable();
             $table->timestamps();
             $table->softDeletes();

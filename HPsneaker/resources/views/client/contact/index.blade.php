@@ -2,15 +2,16 @@
 @section('main')
 
 <!-- Breadcrumb Section Begin -->
-    <section class="breadcrumb-section set-bg" data-setbg="img/breadcrumb.jpg">
+    <section class="breadcrumb-section set-bg" data-setbg="{{ asset('img/br2.jpg') }}">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12 text-center">
                     <div class="breadcrumb__text">
-                        <h2>Liên hệ với chúng tôi</h2>
+                        <h2>{{ $product->name ?? 'Chi tiết sản phẩm' }}</h2>
                         <div class="breadcrumb__option">
                             <a href="{{ url('/') }}">Trang chủ</a>
-                            <span>Liên hệ với chúng tôi</span>
+                            <a href="{{ url('/shop/contact') }}">Liên hệ</a>
+                            <span>{{ $product->name ?? '' }}</span>
                         </div>
                     </div>
                 </div>
@@ -27,7 +28,7 @@
                     <div class="contact__widget">
                         <span class="icon_phone"></span>
                         <h4>Số điện thoại</h4>
-                        <p>+01-3-8888-6868</p>
+                        <p>0705811079</p>
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-3 col-sm-6 text-center">
@@ -48,7 +49,7 @@
                     <div class="contact__widget">
                         <span class="icon_mail_alt"></span>
                         <h4>Email</h4>
-                        <p>hello@colorlib.com</p>
+                        <p>bebestyasuo@gmail.comcom</p>
                     </div>
                 </div>
             </div>
@@ -66,7 +67,7 @@
             <div class="inside-widget">
                 <h4>Hải Phòng</h4>
                 <ul>
-                    <li>Số điện thoại: +12-345-6789</li>
+                    <li>Số điện thoại: +0705811079</li>
                     <li>Địa chỉ: Lê Thánh Tông, Hải Phòng</li>
                 </ul>
             </div>

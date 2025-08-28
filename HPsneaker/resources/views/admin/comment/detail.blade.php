@@ -16,9 +16,9 @@
                         <div class="mb-2">
                             <span class="text-muted">Trạng thái:</span>
                             @if($comment->status == 1)
-                                <span class="badge bg-success">Đang xử lý</span>
+                                <span class="badge bg-success">Đã duyệt</span>
                             @else
-                                <span class="badge bg-secondary">Đã xử lý</span>
+                                <span class="badge bg-danger rounded-pill px-3 py-2">Không hợp lệ</span>
                             @endif
                         </div>
                         <div class="mb-2">

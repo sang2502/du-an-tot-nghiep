@@ -11,14 +11,33 @@
                     {{-- Tìm kiếm --}}
                     <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap">
                         <form method="GET" action="{{ route('order.index') }}" class="d-flex" style="gap: 8px;">
-                            <input type="text" name="keyword" placeholder="Tìm theo User ID..." value="{{ request('keyword') }}">
-                            <select name="status" onchange="this.form.submit()">
+                            <input
+                                type="text"
+                                name="keyword"
+                                placeholder="Tìm kiếm ..."
+                                value="{{ request('keyword') }}"
+                                class="form-control"
+                                style="max-width: 180px; border-radius: 8px; border: 1px solid #e1e7f0; background: #f8faff;"
+                            >
+                            <select
+                                name="status"
+                                class="form-select"
+                                style="min-width: 140px; border-radius: 8px; border: 1px solid #e1e7f0; background: #f8faff;"
+                            >
                                 <option value="">-- Tất cả trạng thái --</option>
                                 <option value="completed" {{ request('status') == 'completed' ? 'selected' : '' }}>Hoàn tất</option>
                                 <option value="processing" {{ request('status') == 'processing' ? 'selected' : '' }}>Đang xử lý</option>
+                                <option value="delivering" {{ request('status') == 'delivering' ? 'selected' : '' }}>Đang giao</option>
+                                <option value="paid" {{ request('status') == 'paid' ? 'selected' : '' }}>Đã thanh toán</option>
                                 <option value="cancelled" {{ request('status') == 'cancelled' ? 'selected' : '' }}>Đã hủy</option>
                             </select>
-                            <button type="submit">Tìm</button>
+                            <button
+                                type="submit"
+                                class="btn"
+                                style="border: 1px solid #4663b2; color: #4663b2; background: #fff; border-radius: 6px; font-weight: 500; min-width: 90px;"
+                            >
+                                Tìm kiếm
+                            </button>
                         </form>
                     </div>
 
@@ -27,8 +46,9 @@
                             <thead class="table-white">
                             <tr>
                                 <th>ID</th>
-                                <th>User ID</th>
-                                <th>Tổng tiền</th>
+                                <th>Họ tên</th>
+                                <th>Email</th>
+                                <th>Số điện thoại</th>
                                 <th>Voucher</th>
                                 <th>Giảm giá</th>
                                 <th>Trạng thái</th>
@@ -42,41 +62,121 @@
                             @foreach($orders as $item)
                                 <tr>
                                     <td>{{ $item->id }}</td>
-                                    <td>{{ $item->user_id }}</td>
-                                    <td>{{ number_format($item->total_amount, 0, ',', '.') }}₫</td>
+
+                                    {{-- Thêm 3 cột mới --}}
+                                    <td>{{ $item->name }}</td>
+                                    <td>{{ $item->email }}</td>
+                                    <td>{{ $item->phone }}</td>
+
+                                    {{-- Giữ nguyên Voucher & Giảm giá --}}
                                     <td>{{ $item->voucher_id ?? 'Không áp dụng' }}</td>
                                     <td>{{ number_format($item->discount_applied, 0, ',', '.') }}₫</td>
+
+                                    {{-- Trạng thái (giữ style như cũ) --}}
                                     <td>
-                                        @if($item->status == 'completed')
-                                            <span class="badge bg-secondary rounded-pill px-3 py-2">Hoàn tất</span>
-                                        @elseif($item->status == 'processing')
-                                            <span class="badge bg-warning text-dark rounded-pill px-3 py-2">Đang xử lý</span>
-                                        @elseif($item->status == 'cancelled')
-                                            <span class="badge bg-danger rounded-pill px-3 py-2">Đã hủy</span>
-                                        @else
-                                            <span class="badge bg-info rounded-pill px-3 py-2">{{ $item->status }}</span>
-                                        @endif
+                                        @php
+                                            $badgeClass = match($item->status) {
+                                                'processing'  => 'badge bg-warning text-dark rounded-pill px-3 py-2',
+                                                'delivering'  => 'badge bg-info rounded-pill px-3 py-2',
+                                                'completed'   => 'badge bg-success rounded-pill px-3 py-2',
+                                                'cancelled'   => 'badge bg-danger rounded-pill px-3 py-2',
+                                                'paid'        => 'badge bg-primary rounded-pill px-3 py-2',
+                                                default       => 'badge bg-secondary rounded-pill px-3 py-2',
+                                            };
+                                            $statusText = match($item->status) {
+                                                'processing'  => 'Đang xử lý',
+                                                'delivering'  => 'Đang giao',
+                                                'completed'   => 'Hoàn tất',
+                                                'cancelled'   => 'Đã hủy',
+                                                'paid'        => 'Đã thanh toán',
+                                                default       => $item->status,
+                                            };
+                                        @endphp
+                                        <span class="{{ $badgeClass }}">{{ $statusText }}</span>
                                     </td>
-                                    <td>{{ ucfirst($item->payment_method) }}</td>
+
+                                    {{-- Thanh toán / Địa chỉ / Ngày tạo / Hành động --}}
+                                    <td>{{ strtoupper($item->payment_method) }}</td>
                                     <td>{{ $item->shipping_address }}</td>
                                     <td>{{ $item->created_at }}</td>
                                     <td class="text-center">
                                         <a href="{{ route('order.show', $item->id) }}"
                                            class="btn btn-sm btn-info rounded-pill px-3 py-1">
-                                            <i class="bi bi-eye me-1"></i> Chi tiết
+                                            <i class="bi bi-eye me-1"></i>
                                         </a>
                                         <a href="{{ route('order.delete', $item->id) }}"
                                            onclick="return confirm('Bạn có chắc muốn xoá đơn hàng này?')"
                                            class="btn btn-sm btn-danger rounded-pill px-3 py-1">
-                                            <i class="bi bi-trash me-1"></i> Xoá
+                                            <i class="bi bi-trash me-1"></i>
                                         </a>
                                     </td>
                                 </tr>
+
                             @endforeach
                             </tbody>
                         </table>
                     </div>
 
+                    <!-- Modal lý do hủy -->
+                    <div class="modal fade" id="cancelReasonModal" tabindex="-1" aria-labelledby="cancelReasonLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <form id="cancelReasonForm">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="cancelReasonLabel">Nhập lý do hủy đơn</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <textarea class="form-control" name="cancel_reason" id="cancelReasonInput" rows="3" placeholder="Nhập lý do hủy..." required></textarea>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                                        <button type="submit" class="btn btn-danger">Xác nhận hủy</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- Script cho modal và xử lý submit --}}
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            let currentForm = null;
+                            let oldStatus = null;
+
+                            document.querySelectorAll('.order-status-dropdown').forEach(function(dropdown) {
+                                dropdown.addEventListener('focus', function() {
+                                    oldStatus = this.value;
+                                });
+                                dropdown.addEventListener('change', function(e) {
+                                    if (this.value === 'cancelled') {
+                                        currentForm = this.closest('form');
+                                        var cancelModal = new bootstrap.Modal(document.getElementById('cancelReasonModal'));
+                                        cancelModal.show();
+                                    } else {
+                                        this.closest('form').submit();
+                                    }
+                                });
+                            });
+
+                            document.getElementById('cancelReasonForm').addEventListener('submit', function(e) {
+                                e.preventDefault();
+                                let reason = document.getElementById('cancelReasonInput').value;
+                                if(currentForm) {
+                                    currentForm.querySelector('.cancel-reason-input').value = reason;
+                                    currentForm.submit();
+                                }
+                                bootstrap.Modal.getInstance(document.getElementById('cancelReasonModal')).hide();
+                                document.getElementById('cancelReasonInput').value = '';
+                            });
+
+                            document.getElementById('cancelReasonModal').addEventListener('hidden.bs.modal', function () {
+                                if(currentForm && currentForm.querySelector('.order-status-dropdown').value === 'cancelled' && !currentForm.querySelector('.cancel-reason-input').value) {
+                                    currentForm.querySelector('.order-status-dropdown').value = oldStatus;
+                                }
+                            });
+                        });
+                    </script>
                 </div>
             </div>
         </div>

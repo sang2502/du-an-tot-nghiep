@@ -65,7 +65,7 @@
                                         <td>{{ $product->id }}</td>
                                         <td>{{ $product->category ? $product->category->name : '' }}</td>
                                         <td>{{ $product->name }}</td>
-                                        <td>{{ $product->price }}VND</td>
+                                        <td>{{ number_format($product->price, 0, ',', '.') }}VND</td>
                                         <td>
                                             @if ($product->thumbnail)
                                                 <img src="{{ asset($product->thumbnail) }}" alt="Ảnh sản phẩm"
@@ -114,7 +114,12 @@
                             </tbody>
                         </table>
                     </div>
-                    <div class="mt-3">{{ $products->appends(request()->query())->links() }}</div>
+                    <div class="d-flex justify-content-center mt-4">
+                        <nav>
+                            {{ $products->appends(request()->query())->links('pagination::bootstrap-5') }}
+                        </nav>
+                    </div>
+
                 </div>
             </div>
         </div>

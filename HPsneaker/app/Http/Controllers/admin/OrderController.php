@@ -15,19 +15,40 @@ class OrderController extends Controller
     {
         $query = Order::query();
 
-        // Tìm kiếm theo user_id (nếu có nhập keyword)
-        if ($request->has('keyword') && $request->keyword != '') {
-            $query->where('user_id', 'like', '%' . $request->keyword . '%');
+        // Tìm theo: name, email, phone, shipping_address
+        if ($request->filled('keyword')) {
+            $kw = trim($request->keyword);
+            $kwLike = '%'.$kw.'%';
+            $kwDigits = preg_replace('/\D+/', '', $kw); // để match SĐT có dấu/khoảng trắng
+
+            $query->where(function ($q) use ($kwLike, $kwDigits) {
+                $q->where('name', 'like', $kwLike)
+                    ->orWhere('email', 'like', $kwLike)
+                    ->orWhere('phone', 'like', $kwLike)
+                    ->orWhere('shipping_address', 'like', $kwLike);
+
+                // Match thêm biến thể SĐT (loại bỏ khoảng trắng, dấu chấm, gạch)
+                if ($kwDigits !== '') {
+                    $q->orWhereRaw(
+                        "REPLACE(REPLACE(REPLACE(phone,' ',''),'-',''),'.','') LIKE ?",
+                        ['%'.$kwDigits.'%']
+                    );
+                }
+            });
         }
-        // Lọc theo trạng thái
-        if ($request->has('status') && $request->status != '') {
+
+        // Lọc trạng thái (nếu có)
+        if ($request->filled('status')) {
             $query->where('status', $request->status);
         }
-        // Sắp xếp mới nhất trước và phân trang 10 đơn mỗi trang
-        $orders = $query->orderBy('created_at', 'desc')->paginate(10);
+
+        // Hiển thị theo ID tăng dần (1,2,3…)
+        $orders = $query->orderBy('id', 'asc')->paginate(20);
 
         return view('admin.order.index', compact('orders'));
     }
+
+
 
 
     /**
@@ -51,10 +72,16 @@ class OrderController extends Controller
      */
     public function show($id)
     {
-        // Lấy đơn hàng + danh sách sản phẩm trong đơn
-        $order = Order::with('orderItems')->findOrFail($id);
+        // Eager-load đầy đủ để render category/product/variant
+        $order = Order::with([
+            'orderItems.variant.product.category',
+            'user:id,name',          // nếu cần show tên user
+            'voucher:id,code',       // nếu cần
+        ])->findOrFail($id);
+
         return view('admin.order.show', compact('order'));
     }
+
     /**
      * Show the form for editing the specified resource.
      */
@@ -66,9 +93,20 @@ class OrderController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, order $contact)
+    public function updateStatus(Request $request, $id)
     {
-        //
+        // Validate: bắt buộc lý do nếu chọn hủy
+        $request->validate([
+            'status' => 'required|in:processing,delivering,completed,cancelled,paid',
+            'cancel_reason' => 'required_if:status,cancelled|nullable|string|max:255',
+        ]);
+
+        $order = Order::findOrFail($id);
+        $order->status = $request->input('status');
+        $order->cancel_reason = $request->input('cancel_reason'); // null cho trạng thái khác
+        $order->save();
+
+        return back()->with('success', 'Cập nhật trạng thái thành công!');
     }
 
     /**
@@ -76,7 +114,14 @@ class OrderController extends Controller
      */
     public function delete($id)
     {
-        Order::destroy($id);
+        $order = Order::findOrFail($id);
+
+        // Xóa các order_items liên quan trước
+        $order->orderItems()->delete();
+
+        // Sau đó mới xóa đơn hàng
+        $order->delete();
+
         return redirect()->route('order.index')->with('success', 'Đã xoá đơn hàng thành công.');
     }
 
