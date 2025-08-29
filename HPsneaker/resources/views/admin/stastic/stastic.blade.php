@@ -86,12 +86,16 @@
                 Tổng doanh thu
             </h3>
             <form method="GET" style="margin-bottom:16px;" onsubmit="return validateDateFilter();">
-                <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
-                    <label for="start_date" style="font-weight:500;">Từ ngày:</label>
-                    <input type="date" name="start_date" id="start_date" value="{{ request('start_date') }}" required style="padding:4px 10px;border-radius:6px;border:1px solid #e0e7ff;">
-                    <label for="end_date" style="font-weight:500;">Đến ngày:</label>
-                    <input type="date" name="end_date" id="end_date" value="{{ request('end_date') }}" required style="padding:4px 10px;border-radius:6px;border:1px solid #e0e7ff;">
-                    <button type="submit" style="padding:4px 16px;border-radius:6px;border:none;background:#2563eb;color:#fff;font-weight:500;">Lọc</button>
+                <div style="display: flex; flex-direction: column; gap: 12px;">
+                    <div style="display: flex; gap: 12px; align-items: center;">
+                        <label for="start_date" style="font-weight:500;">Từ ngày:</label>
+                        <input type="date" name="start_date" id="start_date" value="{{ request('start_date') }}" required style="padding:4px 10px;border-radius:6px;border:1px solid #e0e7ff;">
+                    </div>
+                    <div style="display: flex; gap: 12px; align-items: center;">
+                        <label for="end_date" style="font-weight:500;">Đến ngày:</label>
+                        <input type="date" name="end_date" id="end_date" value="{{ request('end_date') }}" required style="padding:4px 10px;border-radius:6px;border:1px solid #e0e7ff;">
+                        <button type="submit" style="padding:4px 16px;border-radius:6px;border:none;background:#2563eb;color:#fff;font-weight:500;">Lọc</button>
+                    </div>
                 </div>
             </form>
             <div style="display:flex;flex-direction:column;align-items:flex-start;gap:8px;">

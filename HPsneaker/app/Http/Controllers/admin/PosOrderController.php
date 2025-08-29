@@ -86,7 +86,7 @@ class PosOrderController extends Controller
             $order->status = 'Đã thanh toán';
             $order->save();
 
-            // Trừ số lượng sản phẩm trong kho (dùng stock)
+            // Trừ số lượng sản phẩm trong kho 
             $items = PosOrderItem::where('pos_order_id', $order->id)->get();
             foreach ($items as $item) {
                 $variant = ProductVariant::find($item->product_variant_id);
