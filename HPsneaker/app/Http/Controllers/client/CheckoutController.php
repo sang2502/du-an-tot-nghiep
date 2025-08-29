@@ -288,7 +288,7 @@ class CheckoutController extends Controller
 
         if ($secureHash == $vnp_SecureHash && $order) {
             if (($input['vnp_ResponseCode'] ?? '') == '00') {
-                $order->status = 'paid';
+                $order->status = 'processing';
                 $order->save();
                 // XÓA CART_ITEM trước rồi mới xóa CART
                 $cart = Cart::where('user_id', $order->user_id)->first();

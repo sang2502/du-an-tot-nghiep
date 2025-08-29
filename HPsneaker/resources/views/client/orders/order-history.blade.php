@@ -21,6 +21,9 @@
                     <td>{{ $order->total_amount }} đ</td>
                     <td>
                         @switch($order->status)
+                        @case('pending')
+                                Chờ xác nhận
+                                @break
                             @case('processing')
                                 Đang xử lý
                                 @break
