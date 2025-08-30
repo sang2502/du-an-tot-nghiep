@@ -24,12 +24,12 @@
                                 class="form-select"
                                 style="min-width: 140px; border-radius: 8px; border: 1px solid #e1e7f0; background: #f8faff;"
                             >
-                                <option value="">-- Tất cả trạng thái --</option>
-                                <option value="completed" {{ request('status') == 'completed' ? 'selected' : '' }}>Hoàn tất</option>
-                                <option value="processing" {{ request('status') == 'processing' ? 'selected' : '' }}>Đang xử lý</option>
-                                <option value="delivering" {{ request('status') == 'delivering' ? 'selected' : '' }}>Đang giao</option>
-                                <option value="paid" {{ request('status') == 'paid' ? 'selected' : '' }}>Đã thanh toán</option>
-                                <option value="cancelled" {{ request('status') == 'cancelled' ? 'selected' : '' }}>Đã hủy</option>
+                                <option value="" {{ ($status === '') ? 'selected' : '' }}>-- Tất cả trạng thái --</option>
+                                <option value="processing" {{ ($status === 'processing') ? 'selected' : '' }}>Đang xử lý</option>
+                                <option value="delivering" {{ ($status === 'delivering') ? 'selected' : '' }}>Đang giao</option>
+                                <option value="completed"  {{ ($status === 'completed')  ? 'selected' : '' }}>Hoàn tất</option>
+                                <option value="paid"       {{ ($status === 'paid')       ? 'selected' : '' }}>Đã thanh toán</option>
+                                <option value="cancelled"  {{ ($status === 'cancelled')  ? 'selected' : '' }}>Đã hủy</option>
                             </select>
                             <button
                                 type="submit"
