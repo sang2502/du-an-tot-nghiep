@@ -89,6 +89,12 @@
                             </a>
                         </li>
                         <li class="sidebar-item">
+                            <a href="{{ url('admin/delivery') }}" class='sidebar-link'>
+                                <i class="bi bi-truck"></i>
+                                <span>Quản lý giao hàng</span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
                             <a href="{{ url('admin/user') }}" class='sidebar-link'>
                                 <i class="bi bi-people-fill"></i>
                                 <span>Người dùng</span>
@@ -127,12 +133,7 @@
                                 <span>Mã giảm giá</span>
                             </a>
                         </li>
-                        <li class="sidebar-item">
-                            <a href="{{ url('admin/delivery') }}" class='sidebar-link'>
-                                <i class="bi bi-truck"></i>
-                                <span>Quản lý giao hàng</span>
-                            </a>
-                        </li>
+
                         <li class="sidebar-item">
                             <a href="{{ url('admin/contact') }}" class='sidebar-link'>
                                 <i class=""></i>
