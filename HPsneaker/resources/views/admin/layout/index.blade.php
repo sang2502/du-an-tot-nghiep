@@ -73,10 +73,10 @@
                 <h2>HP Sneaker</h2>
                 <ul class="nav flex-column">
                     <li class="nav-item">
-                        <a class="nav-link active" href="{{route('pos.index')}}">🛒 Hoá đơn</a>
+                        <a class="nav-link active" href="{{ route('pos.index') }}">🛒 Hoá đơn</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{route('pos.history')}}">🧾 Lịch sử hoá đơn</a>
+                        <a class="nav-link" href="{{ route('pos.history') }}">🧾 Lịch sử hoá đơn</a>
                     </li>
                     {{-- <li class="nav-item"><a class="nav-link" href="#">📂 Danh Mục</a></li>
                     <li class="nav-item"><a class="nav-link" href="#">👕 Sản Phẩm</a></li>
@@ -92,6 +92,12 @@
                     @csrf
                     <button type="submit" class="btn btn-primary mt-3">➕ Tạo Hoá Đơn</button>
                 </form>
+                <form method="GET" action="{{ route('admin.logout') }}">    
+                    @csrf
+                    <button type="submit" class="btn btn-primary mt-3" onclick="return confirm('Bạn có chắc muốn đăng xuất?')">Đăng xuất</button>
+                </form>
+                
+
 
             </nav>
             <!-- Main Content -->

@@ -61,21 +61,30 @@
                                                     title="Xem chi tiết">
                                                     <i class="fa-solid fa-eye me-1"></i>
                                                 </a>
-                                                @if (empty($delivery->user_id))
-                                                    <a href="{{ route('delivery.accept', $delivery->id) }}"
-                                                        onclick="return confirm('Bạn có chắc muốn nhận đơn hàng này?')"
-                                                        class="btn btn-sm btn-success rounded-pill px-3 py-1 d-inline-flex align-items-center"
-                                                        title="Nhận đơn">
-                                                        <i class="bi bi-check-circle-fill me-1"></i>
-                                                    </a>
-                                                @else
-                                                    <a href="{{ route('delivery.cancel', $delivery->id) }}"
-                                                        onclick="return confirm('Bạn có chắc muốn huỷ nhận đơn hàng này?')"
-                                                        class="btn btn-sm btn-danger rounded-pill px-3 py-1 d-inline-flex align-items-center"
-                                                        title="Huỷ nhận">
-                                                        <i class="bi bi-x-circle-fill me-1"></i>
-                                                    </a>
+                                                @if (session('admin.role') != 1)
+                                                    @if (empty($delivery->user_id))
+                                                        <a href="{{ route('delivery.accept', $delivery->id) }}"
+                                                            onclick="return confirm('Bạn có chắc muốn nhận đơn hàng này?')"
+                                                            class="btn btn-sm btn-success rounded-pill px-3 py-1 d-inline-flex align-items-center"
+                                                            title="Nhận đơn">
+                                                            <i class="bi bi-check-circle-fill me-1"></i>
+                                                        </a>
+                                                    @else
+                                                        <a href="{{ route('delivery.cancel', $delivery->id) }}"
+                                                            onclick="return confirm('Bạn có chắc muốn huỷ nhận đơn hàng này?')"
+                                                            class="btn btn-sm btn-danger rounded-pill px-3 py-1 d-inline-flex align-items-center"
+                                                            title="Huỷ nhận">
+                                                            <i class="bi bi-x-circle-fill me-1"></i>
+                                                        </a>
+                                                        <a href="{{ route('delivery.success', $delivery->id) }}"
+                                                            onclick="return confirm('Xác nhận đã giao hàng thành công?')"
+                                                            class="btn btn-sm btn-success rounded-pill px-3 py-1 d-inline-flex align-items-center"
+                                                            title="Giao hàng thành công">
+                                                            <i class="bi bi-check-circle-fill me-1"></i>
+                                                        </a>
+                                                    @endif
                                                 @endif
+
                                             </td>
 
                                         </tr>

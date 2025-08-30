@@ -13,10 +13,16 @@ class AdminLoginMiddleware
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-   public function handle(Request $request, Closure $next)
+    public function handle(Request $request, Closure $next)
     {
-        if (!session()->has('admin') || session('admin')['role_id'] != 1) {
-            return redirect()->route('admin.form')->withErrors(['email' => 'Vui lòng đăng nhập admin']);
+        if (!session()->has('admin')) {
+            return redirect()->route('admin.form')->withErrors(['email' => 'Vui lòng đăng nhập']);
+        }
+
+        $role = session('admin')['role'];
+
+        if (!in_array($role, [1, 4, 3])) {
+            return redirect()->route('admin.form')->withErrors(['email' => 'Bạn không có quyền truy cập']);
         }
 
         return $next($request);

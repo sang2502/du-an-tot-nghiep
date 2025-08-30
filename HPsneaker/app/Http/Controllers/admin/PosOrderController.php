@@ -29,7 +29,7 @@ class PosOrderController extends Controller
     public function store(Request $request)
     {
         $order = new PosOrder();
-        $order->staff_id = 3;
+        $order->staff_id = session('admin')['id'];
         $order->customer_id = 1;
         $order->total_amount = 0;
         $order->note = 'Hoá đơn tạm';
@@ -194,7 +194,7 @@ class PosOrderController extends Controller
 
     public function history(Request $request)
     {
-        $posOrder = PosOrder::whereIn('status', ['Đã thanh toán','Đã huỷ'])->get();
+        $posOrder = PosOrder::whereIn('status', ['Đã thanh toán', 'Đã huỷ'])->get();
 
         $order = null;
         $items = collect();

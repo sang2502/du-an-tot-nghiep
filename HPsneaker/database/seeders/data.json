@@ -11,6 +11,10 @@
         {
             "id": 3,
             "name": "Staff"
+        },
+        {
+            "id": 4,
+            "name": "Shipper"
         }
     ],
     "users": [

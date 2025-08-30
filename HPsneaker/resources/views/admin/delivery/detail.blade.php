@@ -14,6 +14,10 @@
                                 <td>{{ $order->user->name ?? 'Chưa xác định' }}</td>
                             </tr>
                             <tr>
+                                <td><b>SĐT:</b></td>
+                                <td>{{ $order->phone ?? 'Chưa xác định' }}</td>
+                            </tr>
+                            <tr>
                                 <td><b>Tổng tiền:</b></td>
                                 <td>{{ number_format($order->total_amount, 0, ',', '.') }}₫</td>
                             </tr>

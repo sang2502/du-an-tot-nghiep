@@ -1,7 +1,7 @@
 @extends('admin.layout.master')
 @section('main')
     {{-- Thông báo thành công --}}
-    @if(session('success'))
+    @if (session('success'))
         <div class="alert alert-success alert-dismissible fade show text-center"
             style="position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 9999; max-width: 250px;"
             role="alert">
@@ -27,17 +27,18 @@
                         </a>
                         {{-- Nút tìm kiếm --}}
                         <form action="{{ route('user.index') }}" method="GET" class="d-flex w-auto"
-                        style="max-width: 400px;">
-                        <input type="text" name="keyword" class="form-control form-control-sm me-2"
-                            placeholder="Tìm theo tên..." value="{{ request('keyword') }}">
-                        <select name="role_id" class="form-select form-select-sm me-2" style="width:120px;">
-                            <option value="">Tất cả</option>
-                            <option value="1" {{ request('role_id') == 1 ? 'selected' : '' }}>Admin</option>
-                            <option value="2" {{ request('role_id') == 2 ? 'selected' : '' }}>Staff</option>
-                            <option value="3" {{ request('role_id') == 3 ? 'selected' : '' }}>Customer</option>
-                        </select>
-                        <button type="submit" class="btn btn-outline-primary btn-sm">Tìm kiếm</button>
-                    </form>
+                            style="max-width: 400px;">
+                            <input type="text" name="keyword" class="form-control form-control-sm me-2"
+                                placeholder="Tìm theo tên..." value="{{ request('keyword') }}">
+                            <select name="role_id" class="form-select form-select-sm me-2" style="width:120px;">
+                                <option value="">Tất cả</option>
+                                <option value="1" {{ request('role_id') == 1 ? 'selected' : '' }}>Admin</option>
+                                <option value="2" {{ request('role_id') == 3 ? 'selected' : '' }}>Staff</option>
+                                <option value="3" {{ request('role_id') == 2 ? 'selected' : '' }}>Customer</option>
+                                <option value="4" {{ request('role_id') == 3 ? 'selected' : '' }}>Shipper</option>
+                            </select>
+                            <button type="submit" class="btn btn-outline-primary btn-sm">Tìm kiếm</button>
+                        </form>
 
                     </div>
 
@@ -55,12 +56,25 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($users as $user)
+                                @foreach ($users as $user)
                                     <tr>
                                         <td>{{ $user->id }}</td>
-                                        <td>{{ $user->name}}</td>
+                                        <td>{{ $user->name }}</td>
                                         <td>{{ $user->email }}</td>
-                                        <td>{{ $user->role_id ? $user->role->name ?? 'Chưa phân quyền' : ''  }}</td>
+                                        <td>
+                                            @if ($user->role_id == 1)
+                                                Quan trị viên
+                                            @elseif ($user->role_id == 2)
+                                                Nhân viên
+                                            @elseif ($user->role_id == 3)
+                                                Khách hàng
+                                            @elseif ($user->role_id == 4)
+                                                Nhân viên giao hàng
+                                            @else
+                                                Chưa phân quyền
+                                            @endif
+                                        </td>
+
                                         <td>{{ $user->created_at ? $user->created_at->format('d/m/Y') : '' }}</td>
                                         <td class="text-center">
                                             <a href="{{ route('user.show', $user->id) }}"

@@ -61,8 +61,9 @@
                     <label class="form-label">Vai trò</label>
                     <select class="form-select" name="role_id">
                         <option value="1" @if($user->role_id == 1) selected @endif>Admin</option>
-                        <option value="2" @if($user->role_id == 2) selected @endif>Nhân viên</option>
-                        <option value="3" @if($user->role_id == 3) selected @endif>Người dùng</option>
+                        <option value="3" @if($user->role_id == 3) selected @endif>Nhân viên</option>
+                        <option value="2" @if($user->role_id == 2) selected @endif>Người dùng</option>
+                        <option value="4" @if($user->role_id == 4) selected @endif>Shipper</option>
                     </select>
                 </div>
         </div>

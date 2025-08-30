@@ -47,4 +47,22 @@ class DeliveryController extends Controller
         $delivery->save();
         return redirect()->route('delivery.index')->with('success', 'Đơn hàng đã được hủy thành công.');
     }
+    public function success($id)
+    {
+        // Tìm đơn giao hàng
+        $delivery = Delivery::findOrFail($id);
+
+        // Cập nhật trạng thái giao hàng
+        $delivery->status = 'completed';
+        $delivery->save();
+        // Cập nhật trạng thái đơn hàng liên quan
+        $order = Order::find($delivery->order_id);
+        if ($order) {
+            $order->status = 'completed';
+            $order->save();
+        }
+
+        return redirect()->route('delivery.index')
+            ->with('success', 'Đã xác nhận giao hàng thành công');
+    }
 }

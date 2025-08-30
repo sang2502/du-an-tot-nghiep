@@ -76,104 +76,121 @@
                 </div>
                 <div class="sidebar-menu">
                     <ul class="menu">
-                        <li class="sidebar-item">
-                            <a href="{{ url('admin/stastic') }}" class='sidebar-link'>
-                                <i class="bi bi-bar-chart-fill"></i>
-                                <span>Thống kê</span>
-                            </a>
-                        </li>
-                        <li class="sidebar-item">
-                            <a href="{{ url('admin/order') }}" class='sidebar-link'>
-                                <i class="bi bi-cart-fill"></i>
-                                <span>Đơn hàng</span>
-                            </a>
-                        </li>
-                        <li class="sidebar-item">
-                            <a href="{{ url('admin/user') }}" class='sidebar-link'>
-                                <i class="bi bi-people-fill"></i>
-                                <span>Người dùng</span>
-                            </a>
-                        </li>
-                        <!-- Quản lý sản phẩm submenu -->
-                        <li
-                            class="sidebar-item has-sub
-    {{ request()->is('admin/category*') || request()->is('admin/product*') ? 'menu-open' : '' }}">
-                            <a href="#" class='sidebar-link'>
-                                <i class="bi bi-grid-fill"></i>
-                                <span>Quản lý sản phẩm</span>
-                            </a>
-                            <ul class="submenu"
-                                style="{{ request()->is('admin/category*') || request()->is('admin/product*') ? 'display:block;' : '' }}">
-                                <li class="submenu-item {{ request()->is('admin/category*') ? 'active' : '' }}">
-                                    <a href="{{ url('admin/category') }}">Danh mục</a>
-                                </li>
-                                <li class="submenu-item {{ request()->is('admin/product*') ? 'active' : '' }}">
-                                    <a href="{{ url('admin/product') }}">Sản phẩm</a>
-                                </li>
-                                <li class="submenu-item {{ request()->is('admin/product*') ? 'active' : '' }}">
-                                    <a href="{{ url('admin/brand') }}">Thương hiệu</a>
-                                </li>
-                                <li class="submenu-item {{ request()->is('admin/product*') ? 'active' : '' }}">
-                                    <a href="{{ url('admin/product/color') }}">Màu sắc</a>
-                                </li>
-                                <li class="submenu-item {{ request()->is('admin/product*') ? 'active' : '' }}">
-                                    <a href="{{ url('admin/product/size') }}">Kích cỡ</a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="sidebar-item">
-                            <a href="{{ url('admin/voucher') }}" class='sidebar-link'>
-                                <i class="bi bi-ticket-perforated-fill"></i>
-                                <span>Mã giảm giá</span>
-                            </a>
-                        </li>
-                        <li class="sidebar-item">
-                            <a href="{{ url('admin/delivery') }}" class='sidebar-link'>
-                                <i class="bi bi-truck"></i>
-                                <span>Quản lý giao hàng</span>
-                            </a>
-                        </li>
-                        <li class="sidebar-item">
-                            <a href="{{ url('admin/contact') }}" class='sidebar-link'>
-                                <i class=""></i>
-                                <span>Contact</span>
-                            </a>
-                        </li>
-                        <li class="sidebar-item">
-                            <a href="{{ url('admin/feedback') }}" class='sidebar-link'>
-                                <i class=""></i>
-                                <span>Feedback</span>
-                            </a>
-                        </li>
-                        <li class="sidebar-item has-sub">
-                            <a href="#" class='sidebar-link'>
-                                <i class="bi bi-journal-text"></i>
-                                <span>Bài viết</span>
-                            </a>
-                            <ul class="submenu">
-                                <li class="submenu-item">
-                                    <a href="{{ url('admin/blog-category') }}">Danh mục bài viết</a>
-                                </li>
-                                <li class="submenu-item">
-                                    <a href="{{ url('admin/blog-post') }}">Bài viết</a>
-                                </li>
-                                <li class="submenu-item">
-                                    <a href="{{ url('admin/blog-tag') }}">Tag bài viết</a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="sidebar-item">
-                            <a href="{{ url('admin/comment') }}" class='sidebar-link'>
-                                <i class="bi bi-chat-left-text-fill"></i>
-                                <span>Bình luận</span>
-                            </a>
-                        </li>
-                        {{-- <li class="sidebar-item">
-                            <a href="{{ url('admin/settings') }}" class='sidebar-link'>
-                                <i class="bi bi-gear-fill"></i>
-                                <span>Cài đặt</span>
-                            </a>
-                        </li> --}}
+                        @if (session('admin') && session('admin.role') == 4)
+                            {{-- Role = 4: chỉ hiện Quản lý giao hàng --}}
+                            <li class="sidebar-item">
+                                <a href="{{ url('admin/delivery') }}" class='sidebar-link'>
+                                    <i class="bi bi-truck"></i>
+                                    <span>Quản lý giao hàng</span>
+                                </a>
+                            </li>
+                        @else
+                            {{-- Quản lý tại quầy --}}
+                            <li class="sidebar-item">
+                                <a href="{{ url('admin/pos') }}"
+                                    class="sidebar-link d-flex align-items-center p-2 rounded-3">
+                                    <i class="bi bi-cash-stack fs-5 me-2 text-success"></i>
+                                    <span class="fw-semibold">Quản lý tại quầy</span>
+                                </a>
+                            </li>
+
+                            {{-- Role = 1: admin full quyền --}}
+                            <li class="sidebar-item">
+                                <a href="{{ url('admin/stastic') }}" class='sidebar-link'>
+                                    <i class="bi bi-bar-chart-fill"></i>
+                                    <span>Thống kê</span>
+                                </a>
+                            </li>
+                            <li class="sidebar-item">
+                                <a href="{{ url('admin/order') }}" class='sidebar-link'>
+                                    <i class="bi bi-cart-fill"></i>
+                                    <span>Đơn hàng</span>
+                                </a>
+                            </li>
+                            <li class="sidebar-item">
+                                <a href="{{ url('admin/user') }}" class='sidebar-link'>
+                                    <i class="bi bi-people-fill"></i>
+                                    <span>Người dùng</span>
+                                </a>
+                            </li>
+
+                            <!-- Quản lý sản phẩm -->
+                            <li
+                                class="sidebar-item has-sub {{ request()->is('admin/category*') || request()->is('admin/product*') ? 'menu-open' : '' }}">
+                                <a href="#" class='sidebar-link'>
+                                    <i class="bi bi-grid-fill"></i>
+                                    <span>Quản lý sản phẩm</span>
+                                </a>
+                                <ul class="submenu"
+                                    style="{{ request()->is('admin/category*') || request()->is('admin/product*') ? 'display:block;' : '' }}">
+                                    <li class="submenu-item {{ request()->is('admin/category*') ? 'active' : '' }}">
+                                        <a href="{{ url('admin/category') }}">Danh mục</a>
+                                    </li>
+                                    <li class="submenu-item {{ request()->is('admin/product*') ? 'active' : '' }}">
+                                        <a href="{{ url('admin/product') }}">Sản phẩm</a>
+                                    </li>
+                                    <li class="submenu-item {{ request()->is('admin/brand*') ? 'active' : '' }}">
+                                        <a href="{{ url('admin/brand') }}">Thương hiệu</a>
+                                    </li>
+                                    <li
+                                        class="submenu-item {{ request()->is('admin/product/color*') ? 'active' : '' }}">
+                                        <a href="{{ url('admin/product/color') }}">Màu sắc</a>
+                                    </li>
+                                    <li
+                                        class="submenu-item {{ request()->is('admin/product/size*') ? 'active' : '' }}">
+                                        <a href="{{ url('admin/product/size') }}">Kích cỡ</a>
+                                    </li>
+                                </ul>
+                            </li>
+
+                            <li class="sidebar-item">
+                                <a href="{{ url('admin/voucher') }}" class='sidebar-link'>
+                                    <i class="bi bi-ticket-perforated-fill"></i>
+                                    <span>Mã giảm giá</span>
+                                </a>
+                            </li>
+
+                            <li class="sidebar-item">
+                                <a href="{{ url('admin/delivery') }}" class='sidebar-link'>
+                                    <i class="bi bi-truck"></i>
+                                    <span>Quản lý giao hàng</span>
+                                </a>
+                            </li>
+
+                            <li class="sidebar-item">
+                                <a href="{{ url('admin/contact') }}" class='sidebar-link'>
+                                    <span>Contact</span>
+                                </a>
+                            </li>
+                            <li class="sidebar-item">
+                                <a href="{{ url('admin/feedback') }}" class='sidebar-link'>
+                                    <span>Feedback</span>
+                                </a>
+                            </li>
+
+                            <li class="sidebar-item has-sub">
+                                <a href="#" class='sidebar-link'>
+                                    <i class="bi bi-journal-text"></i>
+                                    <span>Bài viết</span>
+                                </a>
+                                <ul class="submenu">
+                                    <li class="submenu-item"><a href="{{ url('admin/blog-category') }}">Danh mục bài
+                                            viết</a></li>
+                                    <li class="submenu-item"><a href="{{ url('admin/blog-post') }}">Bài viết</a></li>
+                                    <li class="submenu-item"><a href="{{ url('admin/blog-tag') }}">Tag bài viết</a>
+                                    </li>
+                                </ul>
+                            </li>
+
+                            <li class="sidebar-item">
+                                <a href="{{ url('admin/comment') }}" class='sidebar-link'>
+                                    <i class="bi bi-chat-left-text-fill"></i>
+                                    <span>Bình luận</span>
+                                </a>
+                            </li>
+                        @endif
+
+                        {{-- Luôn có đăng xuất --}}
                         <li class="sidebar-item">
                             <a href="{{ route('admin.logout') }}"
                                 onclick="return confirm('Bạn có chắc muốn đăng xuất?')" class='sidebar-link'>
@@ -183,23 +200,26 @@
                         </li>
                     </ul>
                 </div>
+
+
                 <button class="sidebar-toggler btn x"><i data-feather="x"></i></button>
             </div>
         </div>
-        <div id="main">
-            @yield('main')
-            <footer>
-                <div class="footer clearfix mb-0 text-muted fixed-bottom">
-                    <div class="float-start">
-                        <p>2021 &copy; Mazer</p>
-                    </div>
-                    <div class="float-end">
-                        <p>Crafted with <span class="text-danger"><i class="bi bi-heart"></i></span> by <a
-                                href="http://ahmadsaugi.com">A. Saugi</a></p>
-                    </div>
+    </div>
+    <div id="main">
+        @yield('main')
+        <footer>
+            <div class="footer clearfix mb-0 text-muted fixed-bottom">
+                <div class="float-start">
+                    <p>2021 &copy; Mazer</p>
                 </div>
-            </footer>
-        </div>
+                <div class="float-end">
+                    <p>Crafted with <span class="text-danger"><i class="bi bi-heart"></i></span> by <a
+                            href="http://ahmadsaugi.com">A. Saugi</a></p>
+                </div>
+            </div>
+        </footer>
+    </div>
     </div>
     <script src="{{ asset('assets/vendors/perfect-scrollbar/perfect-scrollbar.min.js') }}"></script>
     <script src="{{ asset('assets/js/bootstrap.bundle.min.js') }}"></script>
