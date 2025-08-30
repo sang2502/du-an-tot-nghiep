@@ -84,11 +84,11 @@
                             </div>
                             <button class="btn btn-primary btn-block btn-lg shadow-lg w-100 mt-3">Đăng nhập</button>
                         </form>
-                        <div class="text-center mt-4 text-lg fs-5">
+                        {{-- <div class="text-center mt-4 text-lg fs-5">
                             <p class="text-gray-600 mb-1">
                                 <a class="font-bold" href="#">Quên mật khẩu?</a>
                             </p>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
             </div>

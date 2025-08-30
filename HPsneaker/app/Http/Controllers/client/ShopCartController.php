@@ -121,18 +121,32 @@ class ShopCartController extends Controller
     public function updateQuantity(Request $request)
     {
         $item = CartItem::find($request->id);
-        if ($item) {
-            $item->quantity = max(1, (int)$request->quantity);
-            $item->save();
-            // Tính lại tổng
-            $cartItems = CartItem::whereHas('cart', function ($q) {
-                $q->where('user_id', session('user.id'));
-            })->get();
-            $subtotal = $cartItems->sum(fn($i) => ($i->variant->price ?? 0) * $i->quantity);
-            $voucher = session('voucher');
-            $discount = 0;
-            if ($voucher) {
-                if ($voucher->discount_type == 'percent') {
+
+        if (!$item) {
+            return response()->json(['success' => false]);
+        }
+        // Cập nhật số lượng sản phẩm
+        $item->quantity = max(1, (int)$request->quantity);
+        $item->save();
+        $cartItems = CartItem::whereHas('cart', function ($q) {
+            $q->where('user_id', session('user.id'));
+        })->get();
+
+        $subtotal = $cartItems->sum(fn($i) => ($i->variant->price ?? 0) * $i->quantity);
+
+        // Kiểm tra lại voucher
+        $voucher = session('voucher');
+        $discount = 0;
+
+        if ($voucher) {
+            // Nếu không còn đủ điều kiện tối thiểu → hủy mã
+            if ($voucher->min_order_value && $subtotal < $voucher->min_order_value) {
+                session()->forget('voucher');
+                session()->forget('voucher_applied');
+                $voucher = null;
+            } else {
+                // Tính lại giảm giá nếu vẫn hợp lệ
+                if ($voucher->discount_type === 'percent') {
                     $discount = round($subtotal * $voucher->discount_value / 100);
                     if ($voucher->max_discount && $discount > $voucher->max_discount) {
                         $discount = $voucher->max_discount;
@@ -140,18 +154,23 @@ class ShopCartController extends Controller
                 } else {
                     $discount = $voucher->discount_value;
                 }
-                if ($discount > $subtotal) $discount = $subtotal;
+
+                if ($discount > $subtotal) {
+                    $discount = $subtotal;
+                }
             }
-            $total = $subtotal - $discount;
-            // Render lại HTML tổng tiền
-            $cart_summary_html = view('client.shop.cart-summary', compact('subtotal', 'voucher', 'discount', 'total'))->render();
-            return response()->json([
-                'success' => true,
-                'item_total' => number_format(($item->variant->price ?? 0) * $item->quantity, 0, ',', '.'),
-                'cart_summary_html' => $cart_summary_html,
-            ]);
         }
-        return response()->json(['success' => false]);
+
+        $total = $subtotal - $discount;
+
+        // Render lại HTML tổng tiền
+        $cart_summary_html = view('client.shop.cart-summary', compact('subtotal', 'voucher', 'discount', 'total'))->render();
+
+        return response()->json([
+            'success' => true,
+            'item_total' => number_format(($item->variant->price ?? 0) * $item->quantity, 0, ',', '.') . ' đ',
+            'cart_summary_html' => $cart_summary_html,
+        ]);
     }
     public function removeVoucher()
     {
