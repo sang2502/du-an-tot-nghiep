@@ -31,7 +31,12 @@ public function login(Request $request)
         if ($user->role_id == 1) {
             session(['admin' => $user->toArray()]);
             return redirect('/admin/category')->with('success', 'Đăng nhập thành công!');
-        } else {
+        }
+        else if ($user->role_id == 3 ){
+            session(['admin' => $user->toArray()]);
+            return redirect('/pos')->with('success', 'Đăng nhập thành công!');
+        }
+         else {
             return back()->withErrors(['email' => 'Bạn không có quyền admin.']);
         }
     }
