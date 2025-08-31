@@ -95,6 +95,7 @@
                         <label for="end_date" style="font-weight:500;">Đến ngày:</label>
                         <input type="date" name="end_date" id="end_date" value="{{ request('end_date') }}" required style="padding:4px 10px;border-radius:6px;border:1px solid #e0e7ff;">
                         <button type="submit" style="padding:4px 16px;border-radius:6px;border:none;background:#2563eb;color:#fff;font-weight:500;">Lọc</button>
+                        <a href="/admin/stastic" style="padding:4px 16px;border-radius:6px;border:none;background:#e0e7ff;color:#2563eb;font-weight:500;text-decoration:none;margin-left:8px;">Reset</a>
                     </div>
                 </div>
             </form>
@@ -128,14 +129,6 @@
                 <svg fill="#2563eb" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M8 8h8v8H8z"/></svg>
                 Tổng số đơn
             </h3>
-            <form method="GET" style="margin-bottom:8px;">
-                <select name="order_filter" onchange="this.form.submit()" style="padding:4px 10px;border-radius:6px;border:1px solid #e0e7ff;">
-                    <option value="all" {{ request('order_filter','all')=='all'?'selected':'' }}>Tất cả</option>
-                    <option value="week" {{ request('order_filter')=='week'?'selected':'' }}>Tuần này</option>
-                    <option value="month" {{ request('order_filter')=='month'?'selected':'' }}>Tháng này</option>
-                    <option value="year" {{ request('order_filter')=='year'?'selected':'' }}>Năm nay</option>
-                </select>
-            </form>
             <div class="value">{{ number_format($Orders) }}</div>
         </div>
 
@@ -169,14 +162,6 @@
                 <svg fill="#f59e42" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="#f59e42" stroke-width="2" fill="none"/><path d="M12 8v4l3 3" stroke="#f59e42" stroke-width="2" fill="none"/></svg>
                 Đơn đang xử lý
             </h3>
-            <form method="GET" style="margin-bottom:8px;">
-                <select name="pending_filter" onchange="this.form.submit()" style="padding:4px 10px;border-radius:6px;border:1px solid #e0e7ff;">
-                    <option value="all" {{ request('pending_filter','all')=='all'?'selected':'' }}>Tất cả</option>
-                    <option value="week" {{ request('pending_filter')=='week'?'selected':'' }}>Tuần này</option>
-                    <option value="month" {{ request('pending_filter')=='month'?'selected':'' }}>Tháng này</option>
-                    <option value="year" {{ request('pending_filter')=='year'?'selected':'' }}>Năm nay</option>
-                </select>
-            </form>
             <div class="value">{{ number_format($pendingOrders) }}</div>
         </div>
         <div class="card">
@@ -185,14 +170,6 @@
                 <svg fill="#dc3545" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="4" stroke="#dc3545" stroke-width="2" fill="none"/><line x1="8" y1="8" x2="16" y2="16" stroke="#dc3545" stroke-width="2"/><line x1="16" y1="8" x2="8" y2="16" stroke="#dc3545" stroke-width="2"/></svg>
                 Đơn bị huỷ
             </h3>
-            <form method="GET" style="margin-bottom:8px;">
-                <select name="cancelled_filter" onchange="this.form.submit()" style="padding:4px 10px;border-radius:6px;border:1px solid #e0e7ff;">
-                    <option value="all" {{ request('cancelled_filter','all')=='all'?'selected':'' }}>Tất cả</option>
-                    <option value="week" {{ request('cancelled_filter')=='week'?'selected':'' }}>Tuần này</option>
-                    <option value="month" {{ request('cancelled_filter')=='month'?'selected':'' }}>Tháng này</option>
-                    <option value="year" {{ request('cancelled_filter')=='year'?'selected':'' }}>Năm nay</option>
-                </select>
-            </form>
             <div class="value">{{ number_format($cancelledOrders) }}</div>
         </div>
             <!-- Số lượng hóa đơn chờ tại quầy -->
@@ -201,14 +178,6 @@
             <svg fill="#f59e42" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M8 8h8v8H8z"/></svg>
             Hóa đơn chờ tại quầy
         </h3>
-        <form method="GET" style="margin-bottom:8px;">
-            <select name="pos_pending_filter" onchange="this.form.submit()" style="padding:4px 10px;border-radius:6px;border:1px solid #e0e7ff;">
-                <option value="all" {{ request('pos_pending_filter','all')=='all'?'selected':'' }}>Tất cả</option>
-                <option value="week" {{ request('pos_pending_filter')=='week'?'selected':'' }}>Tuần này</option>
-                <option value="month" {{ request('pos_pending_filter')=='month'?'selected':'' }}>Tháng này</option>
-                <option value="year" {{ request('pos_pending_filter')=='year'?'selected':'' }}>Năm nay</option>
-            </select>
-        </form>
         <div class="value">{{ number_format($posPendingCount) }}</div>
     </div>
 
@@ -218,14 +187,6 @@
             <svg fill="#22c55e" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M8 8h8v8H8z"/></svg>
             Hóa đơn đã thanh toán tại quầy
         </h3>
-        <form method="GET" style="margin-bottom:8px;">
-            <select name="pos_paid_filter" onchange="this.form.submit()" style="padding:4px 10px;border-radius:6px;border:1px solid #e0e7ff;">
-                <option value="all" {{ request('pos_paid_filter','all')=='all'?'selected':'' }}>Tất cả</option>
-                <option value="week" {{ request('pos_paid_filter')=='week'?'selected':'' }}>Tuần này</option>
-                <option value="month" {{ request('pos_paid_filter')=='month'?'selected':'' }}>Tháng này</option>
-                <option value="year" {{ request('pos_paid_filter')=='year'?'selected':'' }}>Năm nay</option>
-            </select>
-        </form>
         <div class="value">{{ number_format($posPaidCount) }}</div>
     </div>
 
