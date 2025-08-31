@@ -164,33 +164,149 @@ class StasticController extends Controller
             $posRevenueData[$item->month - 1] = $item->revenue;
         }
 
-        // Doanh thu trực tuyến
-        $onlineRevenueQuery = DB::table('orders')->where('status', 'completed');
-        $posRevenueQuery = DB::table('pos_orders')->where('status', 'Đã thanh toán');
-
         $startDate = $request->input('start_date');
         $endDate = $request->input('end_date');
 
+        // Tổng doanh thu trực tuyến
+        $onlineRevenueQuery = DB::table('orders')->where('status', 'completed');
         if ($startDate && $endDate) {
             $onlineRevenueQuery->whereBetween('created_at', [$startDate, $endDate]);
+        }
+        $onlineRevenue = $onlineRevenueQuery->sum('total_amount');
+
+        // Tổng doanh thu tại quầy
+        $posRevenueQuery = DB::table('pos_orders')->where('status', 'Đã thanh toán');
+        if ($startDate && $endDate) {
             $posRevenueQuery->whereBetween('created_at', [$startDate, $endDate]);
         }
-
-        $onlineRevenue = $onlineRevenueQuery->sum('total_amount');
         $posRevenue = $posRevenueQuery->sum('total_amount');
+
+        // Tổng doanh thu
         $totalRevenue = $onlineRevenue + $posRevenue;
 
+        // Tổng số đơn
+        $ordersQuery = DB::table('orders');
+        if ($startDate && $endDate) {
+            $ordersQuery->whereBetween('created_at', [$startDate, $endDate]);
+        }
+        $Orders = $ordersQuery->count();
+
+        // Đơn đang xử lý
+        $pendingQuery = DB::table('orders')->where('status', 'pending');
+        if ($startDate && $endDate) {
+            $pendingQuery->whereBetween('created_at', [$startDate, $endDate]);
+        }
+        $pendingOrders = $pendingQuery->count();
+
+        // Đơn bị huỷ
+        $cancelledQuery = DB::table('orders')->where('status', 'cancelled');
+        if ($startDate && $endDate) {
+            $cancelledQuery->whereBetween('created_at', [$startDate, $endDate]);
+        }
+        $cancelledOrders = $cancelledQuery->count();
+
+        // Số voucher đã dùng
+        $voucherUsedQuery = DB::table('orders')->whereNotNull('voucher_id');
+        if ($startDate && $endDate) {
+            $voucherUsedQuery->whereBetween('created_at', [$startDate, $endDate]);
+        }
+        $voucherUsed = $voucherUsedQuery->count();
+
+        // Số lượng người dùng mới
+        $customersQuery = DB::table('users')->where(['role_id' => 3]);
+        if ($startDate && $endDate) {
+            $customersQuery->whereBetween('created_at', [$startDate, $endDate]);
+        }
+        $customers = $customersQuery->count();
+
+        // Số sản phẩm đang bán (không lọc theo ngày vì là trạng thái hiện tại)
+        $activeProducts = DB::table('products')->where('status', 1)->count();
+
+        // Số sản phẩm hết hàng (không lọc theo ngày vì là trạng thái hiện tại)
+        $outOfStockProducts = DB::table('product_variants')->where('stock', 0)->count();
+
+        // Đơn đang chờ tại quầy
+        $posPendingQuery = DB::table('pos_orders')->where('status', 'Đang chờ');
+        if ($startDate && $endDate) {
+            $posPendingQuery->whereBetween('created_at', [$startDate, $endDate]);
+        }
+        $posPendingCount = $posPendingQuery->count();
+
+        // Đơn đã thanh toán tại quầy
+        $posPaidQuery = DB::table('pos_orders')->where('status', 'Đã thanh toán');
+        if ($startDate && $endDate) {
+            $posPaidQuery->whereBetween('created_at', [$startDate, $endDate]);
+        }
+        $posPaidCount = $posPaidQuery->count();
+
+        // Top bán chạy nhất (lọc theo ngày)
+        $bestSellersQuery = DB::table('order_items')
+            ->join('orders', 'order_items.order_id', '=', 'orders.id');
+        if ($startDate && $endDate) {
+            $bestSellersQuery->whereBetween('orders.created_at', [$startDate, $endDate]);
+        }
+        $bestSellers = $bestSellersQuery
+            ->select('order_items.product_variant_id', DB::raw('SUM(order_items.quantity) as total_sold'))
+            ->groupBy('order_items.product_variant_id')
+            ->orderByDesc('total_sold')
+            ->limit(5)
+            ->get();
+
+        $bestSellerNames = [];
+        foreach ($bestSellers as $item) {
+            $productVariant = DB::table('product_variants')->where('id', $item->product_variant_id)->first();
+            if ($productVariant) {
+                $product = DB::table('products')->where('id', $productVariant->product_id)->first();
+                if ($product) {
+                    $bestSellerNames[] = [
+                        'name' => $product->name . ' (' . $item->total_sold . ')',
+                        'id' => $product->id
+                    ];
+                }
+            }
+        }
+        if (empty($bestSellerNames)) {
+            $bestSellerNames[] = ['name' => 'Không có', 'id' => null];
+        }
+
+        // Đơn hàng chứa sản phẩm hết hàng (lọc theo ngày)
+        $outOfStockVariantIds = DB::table('product_variants')->where('stock', 0)->pluck('id')->toArray();
+        $outOfStockOrdersQuery = DB::table('order_items')
+            ->whereIn('product_variant_id', $outOfStockVariantIds)
+            ->join('orders', 'order_items.order_id', '=', 'orders.id');
+        if ($startDate && $endDate) {
+            $outOfStockOrdersQuery->whereBetween('orders.created_at', [$startDate, $endDate]);
+        }
+        $outOfStockOrders = $outOfStockOrdersQuery
+            ->select('orders.id', 'orders.name', 'orders.email', 'orders.phone', 'orders.status', 'orders.created_at')
+            ->distinct()
+            ->get();
+
+        // Biểu đồ doanh thu tại quầy theo tháng
+        $monthlyPosRevenue = DB::table('pos_orders')
+            ->selectRaw('MONTH(created_at) as month, SUM(total_amount) as revenue')
+            ->where('status', 'Đã thanh toán')
+            ->whereYear('created_at', now()->year)
+            ->groupBy(DB::raw('MONTH(created_at)'))
+            ->orderBy('month')
+            ->get();
+
+        $posMonths = ['Tháng 1','Tháng 2','Tháng 3','Tháng 4','Tháng 5','Tháng 6','Tháng 7','Tháng 8','Tháng 9','Tháng 10','Tháng 11','Tháng 12'];
+        $posRevenueData = array_fill(0, 12, 0);
+        foreach ($monthlyPosRevenue as $item) {
+            $posRevenueData[$item->month - 1] = $item->revenue;
+        }
+
         return view('admin.stastic.stastic', compact(
-            'totalRevenue', 'onlineRevenue', 'posRevenue', 'revenueFilter',
-            'revenue', 'Orders', 'voucherUsed','customers',
+            'totalRevenue', 'onlineRevenue', 'posRevenue',
+            'Orders', 'voucherUsed','customers',
             'months', 'revenueData',
             'activeProducts', 'outOfStockProducts',
             'pendingOrders', 'cancelledOrders',
             'bestSellerNames',
             'outOfStockOrders',
             'posPendingCount', 'posPaidCount',
-            'posMonths', 'posRevenueData',
-            'posPendingFilter', 'posPaidFilter'
+            'posMonths', 'posRevenueData'
         ));
         
     }
