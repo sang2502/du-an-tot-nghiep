@@ -255,10 +255,16 @@
                             <td style="padding:8px;">{{ $order->phone }}</td>
                             <td style="padding:8px;">{{ $order->status }}</td>
                             <td style="padding:8px;">{{ $order->created_at }}</td>
+                            <td style="padding:8px;">
+            <a href="{{ route('order.show', $order->id) }}" target="_blank"
+               style="padding:4px 12px;border-radius:6px;background:#2563eb;color:#fff;font-weight:500;text-decoration:none;">
+                Chi tiết
+            </a>
+        </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6" style="text-align:center;padding:8px;">Không có đơn hàng nào chứa sản phẩm hết hàng.</td>
+                            <td colspan="7" style="text-align:center;padding:8px;">Không có đơn hàng nào chứa sản phẩm hết hàng.</td>
                         </tr>
                     @endforelse
                 </tbody>
