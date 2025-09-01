@@ -10,6 +10,7 @@
                     <th>Ngày đặt</th>
                     <th>Tổng tiền</th>
                     <th>Trạng thái</th>
+                    <th>Thanh toán</th>
                     <th>Hành động</th>
                 </tr>
             </thead>
@@ -42,6 +43,17 @@
                             @default
                                 {{ $order->status }}
                         @endswitch
+                    </td>
+                    <td>
+                        @php
+                            $paymentStatus = 'Chưa thanh toán';
+                            if ($order->payment_method === 'VNPAY' && $order->status !== 'pending') {
+                                $paymentStatus = 'Đã thanh toán';
+                            } elseif ($order->payment_method === 'COD') {
+                                $paymentStatus = 'Chưa thanh toán';
+                            }
+                        @endphp
+                        <span class="fw-bold text-{{ $paymentStatus === 'Đã thanh toán' ? 'success' : 'danger' }}">{{ $paymentStatus }}</span></p>
                     </td>
                     <td class="text-center">
                         <a href="{{ route('profile.orders.show', $order->id) }}"

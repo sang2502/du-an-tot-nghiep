@@ -37,6 +37,29 @@
                     <p><b>Ngày đặt:</b> {{ $order->created_at->format('d/m/Y H:i') }}</p>
                 </div>
                 <div class="col-md-6">
+                    @php
+                        if ($order->payment_method === 'COD') {
+                            $paymentLabel = 'Thanh toán khi nhận hàng';
+                            $showStatus = false;
+                        } elseif ($order->payment_method === 'VNPAY') {
+                            $paymentLabel = 'VNPAY';
+                            $paymentStatus = $order->status === 'pending' ? 'Chưa thanh toán' : 'Đã thanh toán';
+                            $showStatus = true;
+                        } else {
+                            $paymentLabel = $order->payment_method;
+                            $paymentStatus = 'Không xác định';
+                            $showStatus = true;
+                        }
+                    @endphp
+
+                    <p><b>Thanh toán:</b> {{ $paymentLabel }}
+                        @if($showStatus)
+                            - <span class="fw-bold text-{{ $paymentStatus === 'Đã thanh toán' ? 'success' : 'danger' }}">{{ $paymentStatus }}</span>
+                        @endif
+                    </p>
+
+                </div>
+                <div class="col-md-6">
                     <p><b>Tổng tiền:</b> <span class="text-danger fw-bold">{{ number_format($order->total_amount, 0, ',', '.') }} đ</span></p>
                 </div>
             </div>
