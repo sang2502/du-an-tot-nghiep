@@ -16,6 +16,7 @@ return new class extends Migration
     $table->foreignId('blog_post_id')->constrained('blog_posts')->onDelete('cascade');
     $table->foreignId('blog_tag_id')->constrained('blog_tags')->onDelete('cascade');
     $table->timestamps();
+    $table->softDeletes();
         });
     }
 

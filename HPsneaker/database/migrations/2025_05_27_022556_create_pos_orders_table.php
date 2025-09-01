@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('status')->default('pending');
             $table->text('note')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

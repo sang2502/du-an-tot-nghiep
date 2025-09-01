@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreignId('user_id')->nullable()->constrained('users');
             $table->string('status')->default('pending');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
     /**

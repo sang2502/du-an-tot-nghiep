@@ -24,6 +24,7 @@ return new class extends Migration
             $table->dateTime('valid_from');
             $table->dateTime('valid_to');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
