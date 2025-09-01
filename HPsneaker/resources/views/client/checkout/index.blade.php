@@ -139,7 +139,6 @@
                         })
                         .catch(() => alert("Không thể kết nối tới VNPAY!"));
                 }
-                // Nếu không phải VNPAY thì submit bình thường
             });
         });
     </script>

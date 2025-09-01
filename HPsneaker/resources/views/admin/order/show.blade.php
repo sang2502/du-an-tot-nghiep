@@ -60,8 +60,22 @@
                             @endif
                             <tr>
                                 <td><b>Thanh toán:</b></td>
-                                <td>{{ ucfirst($order->payment_method) }}</td>
+                                <td>
+                                    @php
+                                        $pm = strtoupper((string) $order->payment_method);
+                                        $st = (string) $order->status;
+                                        // VNPay và đơn không pending/cancelled ⇒ coi như đã thanh toán (hiển thị)
+                                        $isPaidByDisplay = ($pm === 'VNPAY') && !in_array($st, ['pending','cancelled','Đã huỷ'], true);
+                                    @endphp
+
+                                    @if($isPaidByDisplay)
+                                        <span class="badge bg-success">Đã thanh toán</span>
+                                    @else
+                                        {{ ucfirst($order->payment_method) }}
+                                    @endif
+                                </td>
                             </tr>
+
                             <tr>
                                 <td><b>Địa chỉ giao:</b></td>
                                 <td>{{ $order->shipping_address }}</td>
