@@ -253,11 +253,6 @@ class CheckoutController extends Controller
         $query   = http_build_query($inputData, '', '&', PHP_QUERY_RFC3986);
         $vnp_Url = $vnp_Url . "?" . $query . "&vnp_SecureHash=" . $vnpSecureHash;
 
-        Log::info('VNPAY HASH SECRET', [$vnp_HashSecret]);
-        Log::info('VNPAY INPUT', $inputData);
-        Log::info('VNPAY HASH STRING', [$hashdata]);
-        Log::info('VNPAY SECURE HASH', [$vnpSecureHash]);
-        Log::info('VNPAY URL', [$vnp_Url]);
         return response()->json(['redirect' => $vnp_Url]);
     }
 
