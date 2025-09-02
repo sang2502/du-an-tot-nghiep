@@ -123,6 +123,7 @@ class StasticController extends Controller
         $outOfStockOrders = DB::table('order_items')
             ->whereIn('product_variant_id', $outOfStockVariantIds)
             ->join('orders', 'order_items.order_id', '=', 'orders.id')
+            ->where('orders.status', '!=', 'cancelled')
             ->select('orders.id', 'orders.name', 'orders.email', 'orders.phone', 'orders.status', 'orders.created_at')
             ->distinct()
             ->get();
@@ -166,27 +167,18 @@ class StasticController extends Controller
 
         // Doanh thu trực tuyến
         $onlineRevenueQuery = DB::table('orders')->where('status', 'completed');
-        if ($revenueFilter == 'week') {
-            $onlineRevenueQuery->whereBetween('created_at', [now()->startOfWeek(), now()->endOfWeek()]);
-        } elseif ($revenueFilter == 'month') {
-            $onlineRevenueQuery->whereMonth('created_at', now()->month)->whereYear('created_at', now()->year);
-        } elseif ($revenueFilter == 'year') {
-            $onlineRevenueQuery->whereYear('created_at', now()->year);
-        }
-        $onlineRevenue = $onlineRevenueQuery->sum('total_amount');
-
-        // Doanh thu tại quầy
         $posRevenueQuery = DB::table('pos_orders')->where('status', 'Đã thanh toán');
-        if ($revenueFilter == 'week') {
-            $posRevenueQuery->whereBetween('created_at', [now()->startOfWeek(), now()->endOfWeek()]);
-        } elseif ($revenueFilter == 'month') {
-            $posRevenueQuery->whereMonth('created_at', now()->month)->whereYear('created_at', now()->year);
-        } elseif ($revenueFilter == 'year') {
-            $posRevenueQuery->whereYear('created_at', now()->year);
-        }
-        $posRevenue = $posRevenueQuery->sum('total_amount');
 
-        // Tổng doanh thu
+        $startDate = $request->input('start_date');
+        $endDate = $request->input('end_date');
+
+        if ($startDate && $endDate) {
+            $onlineRevenueQuery->whereBetween('created_at', [$startDate, $endDate]);
+            $posRevenueQuery->whereBetween('created_at', [$startDate, $endDate]);
+        }
+
+        $onlineRevenue = $onlineRevenueQuery->sum('total_amount');
+        $posRevenue = $posRevenueQuery->sum('total_amount');
         $totalRevenue = $onlineRevenue + $posRevenue;
 
         return view('admin.stastic.stastic', compact(

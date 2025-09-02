@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreignId('product_variant_id')->constrained('product_variants');
             $table->integer('quantity');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

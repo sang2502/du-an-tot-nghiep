@@ -5,13 +5,12 @@
 <div class="container mt-4">
     <div class="card shadow-sm mb-4">
         <div class="card-header bg-primary text-white">
-            <h4 class="mb-0">Chi tiết đơn hàng #HPS{{ $order->id }}</h4>
+            <h4 class="mb-0">Chi tiết đơn hàng #{{ $order->id }}</h4>
         </div>
         <div class="card-body">
-
-            {{-- Order Tracking Progress Bar --}}
             @php
                 $steps = [
+                    'pending'     => 'Chờ xác nhận',
                     'processing'  => 'Đang xử lý',
                     'delivering'  => 'Đang giao hàng',
                     'completed'   => 'Hoàn thành',
@@ -36,28 +35,29 @@
             <div class="row mb-3">
                 <div class="col-md-6">
                     <p><b>Ngày đặt:</b> {{ $order->created_at->format('d/m/Y H:i') }}</p>
-                    {{-- <p>
-                        <b>Trạng thái:</b>
-                        @switch($order->status)
-                            @case('delivering')
-                                <span class="badge bg-warning text-dark">Đang giao hàng</span>
-                                @break
-                            @case('processing')
-                                <span class="badge bg-warning text-dark">Đang xử lý</span>
-                                @break
-                            @case('completed')
-                                <span class="badge bg-success">Hoàn thành</span>
-                                @break
-                            @case('cancelled')
-                                <span class="badge bg-danger">Đã hủy</span>
-                                @break
-                            @case('paid')
-                                <span class="badge bg-info text-dark">Đã thanh toán</span>
-                                @break
-                            @default
-                                <span class="badge bg-secondary">{{ $order->status }}</span>
-                        @endswitch
-                    </p> --}}
+                </div>
+                <div class="col-md-6">
+                    @php
+                        if ($order->payment_method === 'COD') {
+                            $paymentLabel = 'Thanh toán khi nhận hàng';
+                            $showStatus = false;
+                        } elseif ($order->payment_method === 'VNPAY') {
+                            $paymentLabel = 'VNPAY';
+                            $paymentStatus = $order->status === 'pending' ? 'Chưa thanh toán' : 'Đã thanh toán';
+                            $showStatus = true;
+                        } else {
+                            $paymentLabel = $order->payment_method;
+                            $paymentStatus = 'Không xác định';
+                            $showStatus = true;
+                        }
+                    @endphp
+
+                    <p><b>Thanh toán:</b> {{ $paymentLabel }}
+                        @if($showStatus)
+                            - <span class="fw-bold text-{{ $paymentStatus === 'Đã thanh toán' ? 'success' : 'danger' }}">{{ $paymentStatus }}</span>
+                        @endif
+                    </p>
+
                 </div>
                 <div class="col-md-6">
                     <p><b>Tổng tiền:</b> <span class="text-danger fw-bold">{{ number_format($order->total_amount, 0, ',', '.') }} đ</span></p>
@@ -95,7 +95,7 @@
                 </table>
 
                 {{-- Nút huỷ đơn hàng --}}
-                @if($order->status === 'processing')
+                @if($order->status === 'processing' || $order->status === 'processing' ||$order->status === 'paid')
                     <button id="btnCancelOrder" class="btn-cancel">Huỷ đơn hàng</button>
                 @elseif($order->status !== 'cancelled')
                     <div class="alert alert-info mt-3">Đơn hàng đang trong quá trình vận chuyển hoặc đã hoàn thành, không thể huỷ!</div>

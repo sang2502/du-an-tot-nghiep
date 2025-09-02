@@ -9,16 +9,16 @@
                 <div class="row g-0">
                     <div class="col-md-5 bg-light d-flex flex-column align-items-center justify-content-center p-4">
                         <div class="mb-3 w-100 text-center">
-                            @if($product->thumbnail)
-                                <img src="{{ asset($product->thumbnail) }}" alt="Ảnh sản phẩm" class="img-fluid rounded shadow"
-                                    style="max-height: 320px; object-fit: contain;">
+                            @if ($product->thumbnail)
+                                <img src="{{ asset($product->thumbnail) }}" alt="Ảnh sản phẩm"
+                                    class="img-fluid rounded shadow" style="max-height: 320px; object-fit: contain;">
                             @else
                                 <div class="text-muted">Không có ảnh</div>
                             @endif
                         </div>
-                        {{-- @if($product->images && $product->images->count())
+                        {{-- @if ($product->images && $product->images->count())
                             <div class="d-flex flex-wrap gap-2 justify-content-center">
-                                @foreach($product->images as $img)
+                                @foreach ($product->images as $img)
                                     <img src="{{ asset($img->url) }}" alt="Ảnh phụ" class="rounded border"
                                         style="width: 60px; height: 60px; object-fit: cover; transition: 0.2s;">
                                 @endforeach
@@ -36,7 +36,8 @@
                             </div>
                             <div class="mb-2">
                                 <span class="text-muted">Thương hiệu:</span>
-                                <span class="text-muted">{{ $product->brand ? $product->brand->name : 'Không có thương hiệu' }}</span>
+                                <span
+                                    class="text-muted">{{ $product->brand ? $product->brand->name : 'Không có thương hiệu' }}</span>
                             </div>
                             <div class="mb-2">
                                 <span class="text-muted">Mã sản phẩm:</span>
@@ -44,10 +45,13 @@
                             </div>
                             <div class="mb-2">
                                 <span class="text-muted">Kích cỡ:</span>
-                                @if($product->variants && $product->variants->count())
-                                    @foreach($product->variants->sortBy('size.value') as $variant)
-                                        <span class="text-muted">{{ $variant->size->label ?? $variant->size->value ?? '-'}}</span>
-                                        @if(!$loop->last) - @endif
+                                @if ($product->variants && $product->variants->count())
+                                    @foreach ($product->variants->sortBy('size.value') as $variant)
+                                        <span
+                                            class="text-muted">{{ $variant->size->label ?? ($variant->size->value ?? '-') }}</span>
+                                        @if (!$loop->last)
+                                            -
+                                        @endif
                                     @endforeach
                                 @else
                                     <span class="text-muted">-</span>
@@ -58,9 +62,10 @@
                                 <span class="text-muted ">{{ $variant->color->name }}</span>
                             </div>
                             <div class="mb-2">
-                                <span class="text-muted">Số lượng:</span>
-                                <span class="text-muted">{{ $variant->stock }}</span>
+                                <span class="text-muted">Tổng số lượng:</span>
+                                <span class="text-muted">{{ $product->variants->sum('stock') }}</span>
                             </div>
+
                             <div class="mb-2">
                                 <span class="text-muted">Giá:</span>
                                 <span class="text-danger fs-5 fw-bold">{{ number_format($product->price, 0, ',', '.') }}
@@ -69,7 +74,7 @@
 
                             <div class="mb-2">
                                 <span class="text-muted">Trạng thái:</span>
-                                @if($product->status == 1)
+                                @if ($product->status == 1)
                                     <span class="badge bg-success">Hiển thị</span>
                                 @else
                                     <span class="badge bg-secondary">Ẩn</span>

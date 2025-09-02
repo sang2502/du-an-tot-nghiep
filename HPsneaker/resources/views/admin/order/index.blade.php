@@ -24,12 +24,12 @@
                                 class="form-select"
                                 style="min-width: 140px; border-radius: 8px; border: 1px solid #e1e7f0; background: #f8faff;"
                             >
-                                <option value="">-- Tất cả trạng thái --</option>
-                                <option value="completed" {{ request('status') == 'completed' ? 'selected' : '' }}>Hoàn tất</option>
-                                <option value="processing" {{ request('status') == 'processing' ? 'selected' : '' }}>Đang xử lý</option>
-                                <option value="delivering" {{ request('status') == 'delivering' ? 'selected' : '' }}>Đang giao</option>
-                                <option value="paid" {{ request('status') == 'paid' ? 'selected' : '' }}>Đã thanh toán</option>
-                                <option value="cancelled" {{ request('status') == 'cancelled' ? 'selected' : '' }}>Đã hủy</option>
+                                <option value="" {{ ($status === '') ? 'selected' : '' }}>-- Tất cả trạng thái --</option>
+                                <option value="processing" {{ ($status === 'processing') ? 'selected' : '' }}>Đang xử lý</option>
+                                <option value="delivering" {{ ($status === 'delivering') ? 'selected' : '' }}>Đang giao</option>
+                                <option value="completed"  {{ ($status === 'completed')  ? 'selected' : '' }}>Hoàn tất</option>
+                                <option value="paid"       {{ ($status === 'paid')       ? 'selected' : '' }}>Đã thanh toán</option>
+                                <option value="cancelled"  {{ ($status === 'cancelled')  ? 'selected' : '' }}>Đã hủy</option>
                             </select>
                             <button
                                 type="submit"
@@ -63,16 +63,13 @@
                                 <tr>
                                     <td>{{ $item->id }}</td>
 
-                                    {{-- Thêm 3 cột mới --}}
                                     <td>{{ $item->name }}</td>
                                     <td>{{ $item->email }}</td>
                                     <td>{{ $item->phone }}</td>
 
-                                    {{-- Giữ nguyên Voucher & Giảm giá --}}
                                     <td>{{ $item->voucher_id ?? 'Không áp dụng' }}</td>
                                     <td>{{ number_format($item->discount_applied, 0, ',', '.') }}₫</td>
 
-                                    {{-- Trạng thái (giữ style như cũ) --}}
                                     <td>
                                         @php
                                             $badgeClass = match($item->status) {
@@ -95,7 +92,6 @@
                                         <span class="{{ $badgeClass }}">{{ $statusText }}</span>
                                     </td>
 
-                                    {{-- Thanh toán / Địa chỉ / Ngày tạo / Hành động --}}
                                     <td>{{ strtoupper($item->payment_method) }}</td>
                                     <td>{{ $item->shipping_address }}</td>
                                     <td>{{ $item->created_at }}</td>

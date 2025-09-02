@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('sku')->unique();
             $table->string('image')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

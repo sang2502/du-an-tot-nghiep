@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('slug');
             $table->boolean('status')->default(true); // visible/hidden
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

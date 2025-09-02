@@ -79,27 +79,48 @@
         }
     </style>
     <div class="cards">
-        <div class="card">
+        <div class="card" style="grid-column: span 2;">
             <h3>
                 <!-- Doanh thu -->
                 <svg fill="#2563eb" viewBox="0 0 24 24"><path d="M12 3v18M3 12h18"/><circle cx="12" cy="12" r="10" stroke="#2563eb" stroke-width="2" fill="none"/></svg>
                 Tổng doanh thu
             </h3>
-            <form method="GET" style="margin-bottom:8px;">
-                <select name="revenue_filter" onchange="this.form.submit()" style="padding:4px 10px;border-radius:6px;border:1px solid #e0e7ff;">
-                    <option value="all" {{ request('revenue_filter','all')=='all'?'selected':'' }}>Tất cả</option>
-                    <option value="week" {{ request('revenue_filter')=='week'?'selected':'' }}>Tuần này</option>
-                    <option value="month" {{ request('revenue_filter')=='month'?'selected':'' }}>Tháng này</option>
-                    <option value="year" {{ request('revenue_filter')=='year'?'selected':'' }}>Năm nay</option>
-                </select>
+            <form method="GET" style="margin-bottom:16px;" onsubmit="return validateDateFilter();">
+                <div style="display: flex; flex-direction: column; gap: 12px;">
+                    <div style="display: flex; gap: 12px; align-items: center;">
+                        <label for="start_date" style="font-weight:500;">Từ ngày:</label>
+                        <input type="date" name="start_date" id="start_date" value="{{ request('start_date') }}" required style="padding:4px 10px;border-radius:6px;border:1px solid #e0e7ff;">
+                    </div>
+                    <div style="display: flex; gap: 12px; align-items: center;">
+                        <label for="end_date" style="font-weight:500;">Đến ngày:</label>
+                        <input type="date" name="end_date" id="end_date" value="{{ request('end_date') }}" required style="padding:4px 10px;border-radius:6px;border:1px solid #e0e7ff;">
+                        <button type="submit" style="padding:4px 16px;border-radius:6px;border:none;background:#2563eb;color:#fff;font-weight:500;">Lọc</button>
+                        <a href="/admin/stastic" style="padding:4px 16px;border-radius:6px;border:none;background:#e0e7ff;color:#2563eb;font-weight:500;text-decoration:none;margin-left:8px;">Reset</a>
+                    </div>
+                </div>
             </form>
-            <div class="value">{{ number_format($totalRevenue) }} ₫</div>
-            <div style="margin-top:12px;">
-                <span style="color:#3b82f6;font-weight:500;">Trực tuyến:</span>
-                <span style="font-weight:600;">{{ number_format($onlineRevenue) }} ₫</span>
-                <br>
-                <span style="color:#f59e42;font-weight:500;">Tại quầy:</span>
-                <span style="font-weight:600;">{{ number_format($posRevenue) }} ₫</span>
+            <div style="display:flex;flex-direction:column;align-items:flex-start;gap:8px;">
+                <div style="font-size:34px;font-weight:700;color:#2563eb;">
+                    {{ number_format($totalRevenue) }} ₫
+                </div>
+                <button type="button" onclick="toggleRevenueDetail()" id="toggleRevenueBtn"
+                    style="margin:8px 0 0 0;padding:4px 14px;border-radius:6px;border:1px solid #e0e7ff;background:#f3f4f6;color:#2563eb;font-weight:500;cursor:pointer;">
+                    Xem chi tiết ▼
+                </button>
+                <div id="revenueDetail" style="display:none;transition:all 0.3s;">
+                    <div style="display:flex;gap:32px;margin-top:4px;">
+                        <div style="display:flex;align-items:center;gap:6px;">
+                            <svg fill="#3b82f6" viewBox="0 0 24 24" style="width:18px;height:18px;"><circle cx="12" cy="12" r="10" stroke="#3b82f6" stroke-width="2" fill="none"/><path d="M8 12h8v8H8z"/></svg>
+                            <span style="color:#3b82f6;font-weight:500;">Trực tuyến:</span>
+                            <span style="font-weight:600;">{{ number_format($onlineRevenue) }} ₫</span>
+                        </div>
+                        <div style="display:flex;align-items:center;gap:6px;">
+                            <svg fill="#f59e42" viewBox="0 0 24 24" style="width:18px;height:18px;"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M8 16v-4M12 16v-8M16 16v-2" stroke="#f59e42" stroke-width="2"/></svg>
+                            <span style="color:#f59e42;font-weight:500;">Tại quầy:</span>
+                            <span style="font-weight:600;">{{ number_format($posRevenue) }} ₫</span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="card">
@@ -108,24 +129,9 @@
                 <svg fill="#2563eb" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M8 8h8v8H8z"/></svg>
                 Tổng số đơn
             </h3>
-            <form method="GET" style="margin-bottom:8px;">
-                <select name="order_filter" onchange="this.form.submit()" style="padding:4px 10px;border-radius:6px;border:1px solid #e0e7ff;">
-                    <option value="all" {{ request('order_filter','all')=='all'?'selected':'' }}>Tất cả</option>
-                    <option value="week" {{ request('order_filter')=='week'?'selected':'' }}>Tuần này</option>
-                    <option value="month" {{ request('order_filter')=='month'?'selected':'' }}>Tháng này</option>
-                    <option value="year" {{ request('order_filter')=='year'?'selected':'' }}>Năm nay</option>
-                </select>
-            </form>
             <div class="value">{{ number_format($Orders) }}</div>
         </div>
-        <div class="card">
-            <h3>
-                <!-- Voucher đã dùng -->
-                <svg fill="#22c55e" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="7.5" cy="12" r="1.5"/><circle cx="16.5" cy="12" r="1.5"/><path d="M12 7v10"/></svg>
-                Voucher đã dùng
-            </h3>
-            <div class="value">{{ $voucherUsed }}</div>
-        </div>
+
         <div class="card">
             <h3>
                 <!-- Người dùng -->
@@ -156,14 +162,6 @@
                 <svg fill="#f59e42" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="#f59e42" stroke-width="2" fill="none"/><path d="M12 8v4l3 3" stroke="#f59e42" stroke-width="2" fill="none"/></svg>
                 Đơn đang xử lý
             </h3>
-            <form method="GET" style="margin-bottom:8px;">
-                <select name="pending_filter" onchange="this.form.submit()" style="padding:4px 10px;border-radius:6px;border:1px solid #e0e7ff;">
-                    <option value="all" {{ request('pending_filter','all')=='all'?'selected':'' }}>Tất cả</option>
-                    <option value="week" {{ request('pending_filter')=='week'?'selected':'' }}>Tuần này</option>
-                    <option value="month" {{ request('pending_filter')=='month'?'selected':'' }}>Tháng này</option>
-                    <option value="year" {{ request('pending_filter')=='year'?'selected':'' }}>Năm nay</option>
-                </select>
-            </form>
             <div class="value">{{ number_format($pendingOrders) }}</div>
         </div>
         <div class="card">
@@ -172,14 +170,6 @@
                 <svg fill="#dc3545" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="4" stroke="#dc3545" stroke-width="2" fill="none"/><line x1="8" y1="8" x2="16" y2="16" stroke="#dc3545" stroke-width="2"/><line x1="16" y1="8" x2="8" y2="16" stroke="#dc3545" stroke-width="2"/></svg>
                 Đơn bị huỷ
             </h3>
-            <form method="GET" style="margin-bottom:8px;">
-                <select name="cancelled_filter" onchange="this.form.submit()" style="padding:4px 10px;border-radius:6px;border:1px solid #e0e7ff;">
-                    <option value="all" {{ request('cancelled_filter','all')=='all'?'selected':'' }}>Tất cả</option>
-                    <option value="week" {{ request('cancelled_filter')=='week'?'selected':'' }}>Tuần này</option>
-                    <option value="month" {{ request('cancelled_filter')=='month'?'selected':'' }}>Tháng này</option>
-                    <option value="year" {{ request('cancelled_filter')=='year'?'selected':'' }}>Năm nay</option>
-                </select>
-            </form>
             <div class="value">{{ number_format($cancelledOrders) }}</div>
         </div>
             <!-- Số lượng hóa đơn chờ tại quầy -->
@@ -188,14 +178,6 @@
             <svg fill="#f59e42" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M8 8h8v8H8z"/></svg>
             Hóa đơn chờ tại quầy
         </h3>
-        <form method="GET" style="margin-bottom:8px;">
-            <select name="pos_pending_filter" onchange="this.form.submit()" style="padding:4px 10px;border-radius:6px;border:1px solid #e0e7ff;">
-                <option value="all" {{ request('pos_pending_filter','all')=='all'?'selected':'' }}>Tất cả</option>
-                <option value="week" {{ request('pos_pending_filter')=='week'?'selected':'' }}>Tuần này</option>
-                <option value="month" {{ request('pos_pending_filter')=='month'?'selected':'' }}>Tháng này</option>
-                <option value="year" {{ request('pos_pending_filter')=='year'?'selected':'' }}>Năm nay</option>
-            </select>
-        </form>
         <div class="value">{{ number_format($posPendingCount) }}</div>
     </div>
 
@@ -205,14 +187,6 @@
             <svg fill="#22c55e" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M8 8h8v8H8z"/></svg>
             Hóa đơn đã thanh toán tại quầy
         </h3>
-        <form method="GET" style="margin-bottom:8px;">
-            <select name="pos_paid_filter" onchange="this.form.submit()" style="padding:4px 10px;border-radius:6px;border:1px solid #e0e7ff;">
-                <option value="all" {{ request('pos_paid_filter','all')=='all'?'selected':'' }}>Tất cả</option>
-                <option value="week" {{ request('pos_paid_filter')=='week'?'selected':'' }}>Tuần này</option>
-                <option value="month" {{ request('pos_paid_filter')=='month'?'selected':'' }}>Tháng này</option>
-                <option value="year" {{ request('pos_paid_filter')=='year'?'selected':'' }}>Năm nay</option>
-            </select>
-        </form>
         <div class="value">{{ number_format($posPaidCount) }}</div>
     </div>
 
@@ -281,10 +255,16 @@
                             <td style="padding:8px;">{{ $order->phone }}</td>
                             <td style="padding:8px;">{{ $order->status }}</td>
                             <td style="padding:8px;">{{ $order->created_at }}</td>
+                            <td style="padding:8px;">
+            <a href="{{ route('order.show', $order->id) }}" target="_blank"
+               style="padding:4px 12px;border-radius:6px;background:#2563eb;color:#fff;font-weight:500;text-decoration:none;">
+                Chi tiết
+            </a>
+        </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6" style="text-align:center;padding:8px;">Không có đơn hàng nào chứa sản phẩm hết hàng.</td>
+                            <td colspan="7" style="text-align:center;padding:8px;">Không có đơn hàng nào chứa sản phẩm hết hàng.</td>
                         </tr>
                     @endforelse
                 </tbody>
@@ -353,5 +333,27 @@
             }
         }
     });
+
+    function validateDateFilter() {
+        const start = document.getElementById('start_date').value;
+        const end = document.getElementById('end_date').value;
+        if (start && end && end <= start) {
+            alert('Ngày kết thúc phải lớn hơn ngày bắt đầu!');
+            return false;
+        }
+        return true;
+    }
+
+    function toggleRevenueDetail() {
+        const detail = document.getElementById('revenueDetail');
+        const btn = document.getElementById('toggleRevenueBtn');
+        if (detail.style.display === 'none' || detail.style.display === '') {
+            detail.style.display = 'block';
+            btn.textContent = 'Ẩn chi tiết ▲';
+        } else {
+            detail.style.display = 'none';
+            btn.textContent = 'Xem chi tiết ▼';
+        }
+    }
     </script>
 @endsection

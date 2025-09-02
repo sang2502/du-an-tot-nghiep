@@ -36,10 +36,24 @@
                                 <td>{{ $order->payment_method }}</td>
                             </tr>
                             <tr>
-                                <th>Trạng thái:</th>
-                                <td>{{ ucfirst($order->status) }}</td>
+                                <th>Thanh toán:</th>
+                                <td>
+                                    @php
+                                        // Điều kiện "ĐÃ THANH TOÁN" chỉ dựa vào phương thức là VNPAY và đơn không bị hủy
+                                        $isPaidByDisplay =
+                                            strtoupper((string)$order->payment_method) === 'VNPAY'
+                                            && !in_array((string)$order->status, ['Đã huỷ', 'pending', 'cancelled'], true);
+                                    @endphp
+
+                                    @if($isPaidByDisplay)
+                                        <span class="badge bg-success">Đã thanh toán</span>
+                                    @else
+                                        <span class="badge bg-warning text-dark">Chưa thanh toán</span>
+                                    @endif
+                                </td>
                             </tr>
-                            @if($order->voucher)
+
+                        @if($order->voucher)
                                 <tr>
                                     <th>Mã giảm giá:</th>
                                     <td>{{ $order->voucher->code }}</td>
