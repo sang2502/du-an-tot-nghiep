@@ -1,6 +1,15 @@
 <!-- Modal Thêm Danh Mục -->
 <div class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="addCategoryModalLabel" aria-hidden="true">
     <div class="modal-dialog">
+        @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul class="mb-0">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+        @endif
         <form action="{{ route('user.store') }}" method="POST">
             @csrf
             <div class="modal-content">

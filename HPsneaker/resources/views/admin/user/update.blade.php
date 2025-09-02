@@ -8,9 +8,18 @@
                 <h4 class="mb-0 text-white">Sửa thông tin người dùng</h4>
             </div>
             <div class="card-body">
+                @if ($errors->any())
+                <div class="alert alert-danger">
+                    <ul class="mb-0">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+                @endif
                 <form action="{{ route('user.update', $user->id) }}" method="POST">
                     @csrf
-                    @method('POST') 
+                    @method('POST')
 
                     <div class="mb-3">
                         <label class="form-label">Tài Khoản</label>
