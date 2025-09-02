@@ -35,13 +35,15 @@
 
                                         <select name="status"
                                                 class="form-select form-select-sm order-status-dropdown"
-                                                style="min-width:160px; display:inline-block;">
+                                                style="min-width:160px; display:inline-block;"
+                                                {{ $order->status == 'completed' ? 'disabled' : '' }}>
                                             <option value="processing" {{ $order->status == 'processing' ? 'selected' : '' }}>Đang xử lý</option>
                                             <option value="delivering" {{ $order->status == 'delivering' ? 'selected' : '' }}>Đang giao</option>
                                             <option value="completed"  {{ $order->status == 'completed'  ? 'selected' : '' }}>Hoàn tất</option>
                                             <option value="cancelled"  {{ $order->status == 'cancelled'  ? 'selected' : '' }}>Đã hủy</option>
                                             <option value="paid"       {{ $order->status == 'paid'       ? 'selected' : '' }}>Đã thanh toán</option>
                                         </select>
+
 
                                         {{-- input ẩn để nhét lý do hủy trước khi submit --}}
                                         <input type="hidden" name="cancel_reason" class="cancel-reason-input" value="">
